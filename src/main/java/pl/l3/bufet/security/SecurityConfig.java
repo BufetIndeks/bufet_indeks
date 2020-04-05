@@ -16,14 +16,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http
+                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/registerSuccess").permitAll()
                 .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
-                .and().formLogin();
+                .and().formLogin()
+                .and().httpBasic();
     }
+
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
