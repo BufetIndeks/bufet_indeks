@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController()
 @RequestMapping("/menu")
-@CrossOrigin(origins={ "http://localhost:3000", "http://localhost:4200", "http://bufetindeks.duckdns.org:2024" })
+@CrossOrigin(origins={ "http://localhost:3000", "http://localhost:4200", "http://bufetindeks.duckdns.org:2023" })
 public class DishController {
 
     DishService dishService;
