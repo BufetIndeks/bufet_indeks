@@ -17,7 +17,7 @@ return(
                         <Route path="/" exact component={LoginComponent} />
                         <Route path="/login" exact component={LoginComponent} />
                         <AuthenticatedRoute path="/logout" exact component={LogoutComponent} />
-                        <Route path="/list" exact component={DishList} />
+                        <AuthenticatedRoute path="/list" exact component={DishList} />
                     </Switch>
             </Router>
     )
