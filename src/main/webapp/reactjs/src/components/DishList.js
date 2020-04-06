@@ -18,18 +18,15 @@ componentDidMount(){
 
 getDishes()
 {
-    axios.get("http://localhost:8080/menu/dishes",
-        { headers: { authorization: 'Basic ' + window.btoa('admin' + ":" + 'admin') } })
+    axios.get("http://localhost:8080/menu/dishes")
         .then(response => console.log(response.data))
 
-     //   .then((data) => {
-     //       this.setState({dishes: data});
-   //     });
 }
 
     render() {
     return(
-        'hello'
+
+        'Tu bedzie lista dań'
     );}
 
 
