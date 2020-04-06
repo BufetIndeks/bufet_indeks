@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = '127.0.0.1'
+const API_URL = '127.0.0.1:8080'
 
     export const USER_NAME_SESSION_ATTRIBUTE_NAME = 'authenticatedUser'
 
