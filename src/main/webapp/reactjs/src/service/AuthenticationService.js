@@ -7,7 +7,7 @@ const API_URL = 'http://127.0.0.1:8080'
 class AuthenticationService {
 
     executeBasicAuthenticationService(username, password) {
-        return axios.get(`${API_URL}/basicauth`,
+        return axios.get(`/basicauth`,
             { headers:{ authorization: this.createBasicAuthToken(username, password)},  })
     }
 
