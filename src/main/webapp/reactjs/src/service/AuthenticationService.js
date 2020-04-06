@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = 'http://localhost:8080'
+const API_URL = 'http://bufetindeks.duckdns.org:2024'
 
     export const USER_NAME_SESSION_ATTRIBUTE_NAME = 'authenticatedUser'
 
