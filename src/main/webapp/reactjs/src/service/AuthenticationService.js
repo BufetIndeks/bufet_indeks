@@ -7,7 +7,7 @@ const API_URL = 'http://bufetindeks.duckdns.org:2023'
 class AuthenticationService {
 
     executeBasicAuthenticationService(username, password) {
-        return axios.get(`${API_URL}/basicauth`,
+        return axios.get(`/basicauth`,
             { headers:{ authorization: this.createBasicAuthToken(username, password)},  })
     }
 
