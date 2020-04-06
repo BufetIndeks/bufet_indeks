@@ -18,7 +18,7 @@ componentDidMount(){
 
 getDishes()
 {
-    axios.get("http://127.0.0.1:8080/menu/dishes")
+    axios.get("/menu/dishes")
         .then(response => console.log(response.data))
 
 }
