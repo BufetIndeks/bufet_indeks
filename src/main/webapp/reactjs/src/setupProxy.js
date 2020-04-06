@@ -6,9 +6,10 @@ module.exports = function(app) {
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         next();
     });
-    app.get('/', function(req, res, next) {
+    app.get('/*', function(req, res, next) {
+
     });
 
-    app.post('/', function(req, res, next) {
+    app.post('/*', function(req, res, next) {
     });
 };
