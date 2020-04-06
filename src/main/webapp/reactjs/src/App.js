@@ -7,7 +7,6 @@ import LogoutComponent from './components/LogoutComponent';
 import AuthenticatedRoute from './components/AuthenticatedRoute';
 
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
-import {AxiosInterceptorManager as app} from "axios";
 
 export default function App() {
 return(
@@ -25,8 +24,3 @@ return(
 
 
 }
-app.use(function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-    next();
-});
