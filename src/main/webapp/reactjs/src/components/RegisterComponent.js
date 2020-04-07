@@ -14,9 +14,6 @@ class LoginComponent extends Component {
             hasCreationFailed: false,
             showSuccessMessage: false,
         }
-
-       // this.handleChange = this.handleChange.bind(this)
-       // this.loginClicked = this.loginClicked.bind(this)
     }
 
     handleChange = (event) => {
@@ -33,6 +30,18 @@ class LoginComponent extends Component {
             login: this.state.username,
             password: this.state.password,
             role: this.state.role
+          })
+          .then((response) =>{
+              this.setState({
+                    showSuccessMessage: true,
+                    hasCreationFailed: false
+              })
+          })
+          .catch( (error) => {
+                this.setState({
+                    showSuccessMessage: false,
+                    hasCreationFailed: true
+                })
           })
     }
 
@@ -64,7 +73,9 @@ class LoginComponent extends Component {
                         <input type="password" id="password" name="password" value={this.state.password} onChange={this.handleChange} />
                     </div>
                     
-                    <button className="btn blue col l12" onClick={this.submitClicked}>Zarejestruj użytkownika</button>
+                    <button className="btn blue col l12 waves-effect waves-light" onClick={this.submitClicked}>Zarejestruj użytkownika</button>
+                    {this.state.showSuccessMessage && <div className="green-text">Rejestracja zakończona powodzeniem</div>}
+                    {this.state.hasCreationFailed && <div className="red-text">Rejestracja nie powiodła się</div>}
                 </div>
             </div>
         )
