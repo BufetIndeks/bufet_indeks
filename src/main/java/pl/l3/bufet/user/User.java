@@ -2,7 +2,9 @@ package pl.l3.bufet.user;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -52,12 +54,16 @@ public class User { @Id
     public void setPassword(String password) {
         this.password = password;
     }
-    public Set<UserRole> getRoles() {
-        return roles;
-    }
+
     public void setRoles(Set<UserRole> roles) {
         this.roles = roles;
     }
+
+    public Set<UserRole> getRoles() {
+        return roles;
+    }
+
+
     @Override
     public String toString() {
         return "User [id=" + id

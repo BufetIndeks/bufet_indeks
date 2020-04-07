@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import axios from 'axios';
 import M from "materialize-css";
 
-class LoginComponent extends Component {
+class RegisterComponent extends Component {
 
     constructor(props) {
         super(props)
@@ -10,7 +10,7 @@ class LoginComponent extends Component {
         this.state = {
             username: '',
             password: '',
-            role: '',
+            role: 'ROLE_ADMIN',
             hasCreationFailed: false,
             showSuccessMessage: false,
         }
@@ -29,11 +29,12 @@ class LoginComponent extends Component {
     }
 
     submitClicked = () => {
-        axios.post('/user', {
-            login: this.state.username,
-            password: this.state.password,
-            role: this.state.role
-          })
+        axios.post('http://localhost:8080/admin/register',{
+
+                login: this.state.username,
+                password: this.state.password,
+                role: this.state.role
+          },)
     }
 
     componentDidMount() {
@@ -52,15 +53,15 @@ class LoginComponent extends Component {
                         <select value={this.state.role} onChange={this.handleChange} name="role">
                             <option value='ROLE_ADMIN'>Administrator</option>
                             <option value='ROLE_TABLE'>Klient</option>
-                            <option selected value='ROLE_WORKER'>Pracownik</option>
+                            <option value='ROLE_WORKER'>Pracownik</option>
                         </select>
                     </div>
                     <div className="input-field">
                         <input className="validate" type="text" id="username" name="username" value={this.state.username} onChange={this.handleChange}/>
-                        <label for="username">Username</label>
+                        <label htmlFor="username">Username</label>
                     </div>
                     <div className="input-field">
-                        <label for="password">Password</label>
+                        <label htmlFor="password">Password</label>
                         <input type="password" id="password" name="password" value={this.state.password} onChange={this.handleChange} />
                     </div>
                     
@@ -71,4 +72,4 @@ class LoginComponent extends Component {
     }
 }
 
-export default LoginComponent
+export default RegisterComponent

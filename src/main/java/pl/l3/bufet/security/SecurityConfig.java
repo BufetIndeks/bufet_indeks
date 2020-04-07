@@ -20,10 +20,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http    .cors().and().httpBasic().and()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/").permitAll()
-                .antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
-                .antMatchers("/registerSuccess").permitAll()
-                .anyRequest().authenticated();
+                .antMatchers("/**").permitAll()
+                .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+                .anyRequest().permitAll();
 
 
 
