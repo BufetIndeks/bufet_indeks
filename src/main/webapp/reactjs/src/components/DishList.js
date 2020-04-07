@@ -18,7 +18,7 @@ componentDidMount(){
 
 getDishes()
 {
-    axios.get("http://localhost:8080/menu/dishes")
+    axios.get("http://bufetindeks.duckdns.org:2023/menu/dishes")
         .then(response => console.log(response.data))
 
 }
