@@ -22,6 +22,7 @@ getDishes()
         .then(response => {
             this.setState({
                 dishes:response})
+            console.log(this.state);
         })
 
 }
@@ -31,6 +32,7 @@ getDishes()
         <ul>
             {
                 this.state.dishes.map((dish)=>{
+                    console.log(dish);
                     return (<li>(dish.dishName)</li>)
                 })
             }
