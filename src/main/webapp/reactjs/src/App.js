@@ -7,6 +7,7 @@ import LogoutComponent from './components/LogoutComponent';
 import AuthenticatedRoute from './components/AuthenticatedRoute';
 
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import 'materialize-css/dist/css/materialize.min.css';
 
 export default function App() {
 return(

@@ -10,7 +10,7 @@ class MenuComponent extends Component {
         return (
 
             <header>
-                <nav>
+                <nav className="green lighten-1">
                     <ul>
                         <li><Link className="nav-link" to="/list">Lista dań</Link></li>
                     </ul>

@@ -8,17 +8,17 @@ class LoginComponent extends Component {
         super(props)
 
         this.state = {
-            username: 'admin',
-            password: 'admin',
+            username: '',
+            password: '',
             hasLoginFailed: false,
             showSuccessMessage: false,
         }
 
-        this.handleChange = this.handleChange.bind(this)
-        this.loginClicked = this.loginClicked.bind(this)
+       // this.handleChange = this.handleChange.bind(this)
+       // this.loginClicked = this.loginClicked.bind(this)
     }
 
-    handleChange(event) {
+    handleChange = (event) => {
         this.setState(
             {
                 [event.target.name]
@@ -27,7 +27,7 @@ class LoginComponent extends Component {
         )
     }
 
-    loginClicked() {
+    loginClicked = () => {
         AuthenticationService
             .executeBasicAuthenticationService(this.state.username, this.state.password)
             .then(() => {
@@ -41,14 +41,20 @@ class LoginComponent extends Component {
 
     render() {
         return (
-            <div>
-                <h1>Login</h1>
-                <div className="container">
+            <div className="row container">
+                <div className=" col m12 l4 offset-l4">
+                    <div className="red-text accent-2"><h1>Login</h1></div>
                     {this.state.hasLoginFailed && <div className="alert alert-warning">Invalid Credentials</div>}
                     {this.state.showSuccessMessage && <div>Login Sucessful</div>}
-                    User Name: <input type="text" name="username" value={this.state.username} onChange={this.handleChange} />
-                    Password: <input type="password" name="password" value={this.state.password} onChange={this.handleChange} />
-                    <button className="btn btn-success" onClick={this.loginClicked}>Login</button>
+                    <div className="input-field">
+                        <input className="validate" type="text" id="username" value={this.state.username} onChange={this.handleChange}/>
+                        <label for="username">Username</label>
+                    </div>
+                    <div className="input-field">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" value={this.state.password} onChange={this.handleChange} />
+                    </div>
+                    <button className="btn blue right" onClick={this.loginClicked}>Zaloguj się</button>
                 </div>
             </div>
         )
