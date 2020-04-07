@@ -57,8 +57,6 @@ class RegisterComponent extends Component {
             <div className="row container">
                 <div className=" col l4 offset-l4">
                     <div className="purple-text accent-2"><h5>Create New Account</h5></div>
-                    {this.state.hasLoginFailed && <div className="alert alert-warning">Invalid Credentials</div>}
-                    {this.state.showSuccessMessage && <div>Login Sucessful</div>}
                     <div className="input-field">
                         <select value={this.state.role} onChange={this.handleChange} name="role">
                             <option value='ROLE_ADMIN'>Administrator</option>
