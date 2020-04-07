@@ -29,7 +29,7 @@ class RegisterComponent extends Component {
     }
 
     submitClicked = () => {
-        axios.post('http://localhost:8080/admin/register',{
+        axios.post('http://bufetindeks.duckdns.org:2023/admin/register',{
 
                 login: this.state.username,
                 password: this.state.password,
