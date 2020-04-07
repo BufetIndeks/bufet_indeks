@@ -26,14 +26,14 @@ class RegisterComponent extends Component {
     }
 
     submitClicked = () => {
-<<<<<<< HEAD
+
         axios.post('http://bufetindeks.duckdns.org:2023/admin/register',{
 
                 login: this.state.username,
                 password: this.state.password,
                 role: this.state.role
           },)
-=======
+
         axios.post('/user', {
             login: this.state.username,
             password: this.state.password,
@@ -51,7 +51,7 @@ class RegisterComponent extends Component {
                     hasCreationFailed: true
                 })
           })
->>>>>>> dev-gk
+
     }
 
     componentDidMount() {

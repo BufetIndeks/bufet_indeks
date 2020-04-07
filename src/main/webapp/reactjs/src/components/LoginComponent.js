@@ -13,9 +13,6 @@ class LoginComponent extends Component {
             hasLoginFailed: false,
             showSuccessMessage: false,
         }
-
-       // this.handleChange = this.handleChange.bind(this)
-       // this.loginClicked = this.loginClicked.bind(this)
     }
 
     handleChange = (event) => {
@@ -47,20 +44,19 @@ class LoginComponent extends Component {
                     {this.state.hasLoginFailed && <div className="alert alert-warning">Invalid Credentials</div>}
                     {this.state.showSuccessMessage && <div>Login Sucessful</div>}
                     <div className="input-field">
-<<<<<<< HEAD
+
                         <input className="validate" name="username" type="text" id="username" value={this.state.username} onChange={this.handleChange}/>
-=======
-                        <input className="validate" type="text" id="username" name="username" value={this.state.username} onChange={this.handleChange}/>
->>>>>>> dev-gk
+
+
                         <label htmlFor="username">Username</label>
                     </div>
                     <div className="input-field">
                         <label htmlFor="password">Password</label>
-<<<<<<< HEAD
+
                         <input name="password" type="password" id="password" value={this.state.password} onChange={this.handleChange} />
-=======
+
                         <input type="password" id="password" name="password" value={this.state.password} onChange={this.handleChange} />
->>>>>>> dev-gk
+
                     </div>
                     <button className="btn blue right" onClick={this.loginClicked}>Zaloguj się</button>
                 </div>
