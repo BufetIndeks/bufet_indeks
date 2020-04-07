@@ -36,13 +36,16 @@ class RegisterComponent extends Component {
               this.setState({
                     showSuccessMessage: true,
                     hasCreationFailed: false
-              })
+              }
+              )
+              console.log(response)
           })
           .catch( (error) => {
                 this.setState({
                     showSuccessMessage: false,
                     hasCreationFailed: true
                 })
+              console.log(error)
           })
 
     }

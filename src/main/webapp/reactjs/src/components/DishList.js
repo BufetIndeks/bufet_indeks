@@ -30,8 +30,8 @@ getDishes()
     return(
         <ul>
             {
-                this.state.dishes.map((dish)=>{
-                    return (<li>{dish.dishName}</li>)
+                this.state.dishes.map((dish,i)=>{
+                    return (<li >{dish.dishName}</li>)
                 })
             }
         </ul>
