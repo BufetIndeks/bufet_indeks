@@ -21,7 +21,7 @@ getDishes()
     axios.get("http://bufetindeks.duckdns.org:2023/menu/dishes")
         .then(response => {
             this.setState({
-                dishes:response})
+                dishes:response.data})
             console.log(this.state);
         })
 
