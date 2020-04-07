@@ -19,14 +19,22 @@ componentDidMount(){
 getDishes()
 {
     axios.get("http://bufetindeks.duckdns.org:2023/menu/dishes")
-        .then(response => console.log(response.data))
+        .then(response => {
+            this.setState({
+                dishes:response})
+        })
 
 }
 
     render() {
     return(
-
-        'Tu bedzie lista dań'
+        <ul>
+            {
+                this.state.dishes.map((dish)=>{
+                    return (<li>(dish.dishName)</li>)
+                })
+            }
+        </ul>
     );}
 
 
