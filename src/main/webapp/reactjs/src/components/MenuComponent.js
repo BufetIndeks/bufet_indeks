@@ -15,7 +15,7 @@ class MenuComponent extends Component {
                         <li><Link className="nav-link" to="/list">Lista dań</Link></li>
                     </ul>
                     <ul>
-                        {isUserLoggedIn && <li><Link className="nav-link" to="/register">Rejestracja</Link></li>}
+                        {isUserLoggedIn && <li><Link className="nav-link" to="/admin/register">Rejestracja</Link></li>}
                         {!isUserLoggedIn && <li><Link className="nav-link" to="/login">Zaloguj</Link></li>}
                         {isUserLoggedIn && <li><Link className="nav-link" to="/logout" onClick={AuthenticationService.logout}>Logout</Link></li>}
                     </ul>

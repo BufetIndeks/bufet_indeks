@@ -21,7 +21,7 @@ return(
                         {!isUserLoggedIn && <Route path="/login" exact component={LoginComponent} />}
                         <AuthenticatedRoute path="/logout" exact component={LogoutComponent} />
                         <Route path="/list" exact component={DishList} />
-                        <AuthenticatedRoute path="/register" exact component={RegisterComponent} />
+                        <AuthenticatedRoute path="/admin/register" exact component={RegisterComponent} />
                     </Switch>
             </Router>
     )

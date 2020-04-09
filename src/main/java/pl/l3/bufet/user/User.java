@@ -1,5 +1,7 @@
 package pl.l3.bufet.user;
 
+import pl.l3.bufet.order.Order;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
@@ -8,8 +10,10 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name="user")
+@Table(name = "uzytkownik")
 public class User {
+    //Fields
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -18,13 +22,18 @@ public class User {
     @Column(name = "login", unique = true)
     private String login;
     @NotEmpty
-    @Column(name = "password")
+    @Column(name = "haslo")
     private String password;
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    @JoinTable(name = "user_role",
-            joinColumns = {@JoinColumn(name="user_id", referencedColumnName="user_id")},
-            inverseJoinColumns = {@JoinColumn(name="role_id", referencedColumnName="role_id")})
+    @JoinTable(name = "uzytkownik_rola",
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "role_id")})
     private Set<UserRole> roles = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    List<Order> orders = new ArrayList<>();
+
+    //Consturtors
 
     public User(){}
 
@@ -32,6 +41,10 @@ public class User {
         this.login = login;
         this.password = password;
     }
+
+
+
+    //Getters, setters
 
     public String getLogin() {
         return login;
@@ -44,12 +57,15 @@ public class User {
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
+
     public String getPassword() {
         return password;
     }
+
     public void setPassword(String password) {
         this.password = password;
     }
@@ -62,11 +78,23 @@ public class User {
         return roles;
     }
 
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
 
     @Override
     public String toString() {
-        return "User [id=" + id
-                + ", password=" + password
-                + ", roles=" + roles + "]";
+        return "User{" +
+                "id=" + id +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", roles=" + roles +
+                ", orders=" + orders +
+                '}';
     }
 }

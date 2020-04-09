@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Component
@@ -23,13 +24,13 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-        User user = userRepository.findByLogin(login);
-        if (user == null)
+        Optional<User> user = userRepository.findByLogin(login);
+        if (user.isEmpty())
             throw new UsernameNotFoundException("User not found");
         return new org.springframework.security.core.userdetails.User(
-                user.getLogin(),
-                user.getPassword(),
-                convertAuthorities(user.getRoles())
+                user.get().getLogin(),
+                user.get().getPassword(),
+                convertAuthorities(user.get().getRoles())
         );
     }
 

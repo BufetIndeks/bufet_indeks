@@ -14,20 +14,20 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    public static final String ADMIN = "ROLE_ADMIN";
+    public static final String TABLE = "ROLE_TABLE";
+    public static final String WORKER = "ROLE_WORKER";
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
         http    .cors().and().httpBasic().and()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
-                .anyRequest().permitAll();
-
-
-
-
+                .antMatchers("/**").permitAll();
 
     }
+
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {

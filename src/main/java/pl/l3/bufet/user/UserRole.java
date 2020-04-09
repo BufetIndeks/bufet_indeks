@@ -4,17 +4,17 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 
 @Entity
-@Table(name = "roles")
+@Table(name = "rola")
 public class UserRole {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="role_id")
     private Long id;
-    @Column(name = "role")
+    @Column(name = "rola")
     @NotEmpty
     private String role;
-    @Column(name="description")
+    @Column(name="opis")
     @NotEmpty
     private String description;
 
