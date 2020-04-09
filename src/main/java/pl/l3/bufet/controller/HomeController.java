@@ -27,14 +27,14 @@ public class HomeController {
     @RequestMapping("/")
     public String home() throws DataAccessException {
         //Tworze sobie admina na starcie
-        if(userService.findUserByLogin("admin")==null){
+
             User user = new User();
             user.setLogin("admin");
             user.setPassword("admin");
             UserRole userRole = userService.getRole();
             user.getRoles().add(userRole);
             userService.addUserWithRole(user);
-        }
+
         return "index";
     }
 

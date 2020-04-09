@@ -10,10 +10,12 @@ class LoginComponent extends Component {
         this.state = {
             username: '',
             password: '',
+            role: '',
             hasLoginFailed: false,
             showSuccessMessage: false,
         }
     }
+
 
     handleChange = (event) => {
         this.setState(

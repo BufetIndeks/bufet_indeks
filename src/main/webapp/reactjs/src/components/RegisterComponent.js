@@ -28,7 +28,7 @@ class RegisterComponent extends Component {
         console.log({login: this.state.username,
             password: this.state.password,
             roles: [{"role":this.state.role}]})
-        axios.post('http://bufetindeks.duckdns.org:2023/admin/register', {
+        axios.post('http://localhost:8080/admin/register', {
             login: this.state.username,
             password: this.state.password,
             roles: [{"role":this.state.role}]

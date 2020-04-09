@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = 'http://bufetindeks.duckdns.org:2023'
+const API_URL = 'http://localhost:8080'
 
     export const USER_NAME_SESSION_ATTRIBUTE_NAME = 'authenticatedUser'
 
@@ -9,8 +9,13 @@ class AuthenticationService {
 
 
     executeBasicAuthenticationService(username, password) {
-        return axios.get(`${API_URL}/basicauth`,
-            { headers:{ authorization: this.createBasicAuthToken(username, password)},  })
+        return axios(`${API_URL}/basicauth`,{
+            method: 'POST',
+            auth:{
+                username : username,
+                password : password
+            }
+            })
     }
 
 
@@ -19,7 +24,8 @@ class AuthenticationService {
     }
 
     registerSuccessfulLogin(username, password) {
-        sessionStorage.setItem(USER_NAME_SESSION_ATTRIBUTE_NAME, username)
+        sessionStorage.setItem(USER_NAME_SESSION_ATTRIBUTE_NAME, username);
+        sessionStorage.setItem("role","ROLE_TABLE");
         this.setupAxiosInterceptors(this.createBasicAuthToken(username, password))
     }
 

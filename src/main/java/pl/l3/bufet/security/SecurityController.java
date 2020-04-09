@@ -14,14 +14,10 @@ import java.util.List;
 @RestController
 public class SecurityController {
 
-    @GetMapping(path = "/basicauth")
-    public List<String> authenticate(Authentication authentication) {
-        List <String> roleList = new ArrayList<>();
-        for (GrantedAuthority authority : authentication.getAuthorities()) {
-            roleList.add(authority.toString());
-        }
-        return roleList;
+    @PostMapping(path = "/basicauth")
+    public Principal authenticate(Principal principal) {
 
+        return principal;
     }
 
 }
