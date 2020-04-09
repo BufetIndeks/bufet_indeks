@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import '../App.css'
 import axios from 'axios';
+import {API_URL} from "../ApiUrl";
 
 export default class DishList extends Component{
 
@@ -18,7 +19,7 @@ componentDidMount(){
 
 getDishes()
 {
-    axios.get("http://bufetindeks.duckdns.org:2023/menu/dishes")
+    axios.get(API_URL + "/menu/dishes")
         .then(response => {
             this.setState({
                 dishes:response.data})
