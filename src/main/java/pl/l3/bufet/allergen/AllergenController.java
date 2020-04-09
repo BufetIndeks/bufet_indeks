@@ -1,8 +1,10 @@
 package pl.l3.bufet.allergen;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -35,4 +37,11 @@ public class AllergenController {
         return ResponseEntity.ok("Dodano alergen");
     }
 
+    @GetMapping(path="/delete/{id}",consumes=MediaType.APPLICATION_JSON_VALUE) //@RequestParam(required=false,name="allergenName") String allergenName
+    public ResponseEntity<String> removeAllergen(@PathVariable int id) {
+       // LoggerFactory.getLogger(AllergenController.class).info(allergenName);
+        System.out.println(id);
+       // return allergenService.deleteAllergenByName(allergenName);
+        return ResponseEntity.ok("a");
+    }
 }

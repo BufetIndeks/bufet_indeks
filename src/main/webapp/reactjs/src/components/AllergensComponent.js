@@ -3,12 +3,13 @@ import axios from 'axios';
 import M from "materialize-css";
 import {API_URL} from "../ApiUrl";
 
-class IngredientsComponent extends Component {
+class AllergensComponent extends Component {
 
     constructor(props) {
         super(props)
 
         this.state={
+            newAllergenName: '',
             allergens:[]
         };
     }
@@ -25,6 +26,12 @@ class IngredientsComponent extends Component {
     }
 
     componentDidMount() {
+        M.AutoInit()
+        this.getAllergens()
+    }
+
+    getAllergens()
+    {
         axios.get(API_URL + "/admin/allergens")
             .then(response => {
                 this.setState({
@@ -32,20 +39,86 @@ class IngredientsComponent extends Component {
             })
     }
 
+    add()
+    {
+        console.log(this.state.newAllergenName)
+        axios.post(API_URL + "/admin/allergens", {
+            allergenName: this.state.newAllergenName
+        },)
+            .then((response) => {
+                console.log(this.state.allergens)
+                /*let newAllergen = {
+                    id: 0,
+                    allergenName: this.state.newAllergenName
+                }
+                this.setState({allergens: {...this.state.allergens, newAllergen}})*/
+                this.getAllergens()
+                this.forceUpdate()
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+
+    }
+
+    remove(name) {
+        console.log(name);
+        axios.post(API_URL + "/admin/allergens/delete", {
+            allergenName: name
+        },)
+            .then((response) => {
+                console.log(response)
+                this.forceUpdate()
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }
+
+    edit(name) {
+
+
+    }
+
     render() {
         return (
-            <div className="row container">
+                <div>
+                    <div>
+                    <input className="validate" type="text" id="newAllergenName" name="newAllergenName"
+                             value={this.state.newAllergenName} onChange={this.handleChange}/>
+                    </div>
+                    <button className="btn green waves-effect waves-light"
+                            onClick={() => this.add()}>Dodaj
+                    </button>
 
-                <ul>
+
+                    <tbody>
                     {
                         this.state.allergens.map((allergen,i)=>{
-                            return (<li>{allergen.allergenName}</li>)
+                            return (
+                                <tr>
+                                    <th>{allergen.allergenName}</th>
+                                    <th>
+                                        <div>
+                                        <button className="btn blue waves-effect waves-light"
+                                                onClick={() => this.edit(allergen.allergenName)}>Edytuj
+                                        </button>
+                                        </div>
+                                    </th>
+                                    <th>
+                                    <div>
+                                        <button className="btn red waves-effect waves-light"
+                                            onClick={() => this.remove(allergen.allergenName)}>Usuń</button>
+                                    </div>
+                                    </th>
+                                </tr>
+                            )
                         })
                     }
-                </ul>
-            </div>
+                    </tbody>
+                </div>
         )
     }
 }
 
-export default IngredientsComponent
+export default AllergensComponent
