@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 public class SecurityController {
 
-    @GetMapping(path = "/basicauth")
+    @PostMapping(path = "/basicauth")
     public List<String> authenticate(Authentication authentication) {
         List <String> roleList = new ArrayList<>();
         for (GrantedAuthority authority : authentication.getAuthorities()) {
