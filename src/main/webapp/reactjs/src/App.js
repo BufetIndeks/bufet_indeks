@@ -8,6 +8,7 @@ import AuthenticatedRoute from './components/AuthenticatedRoute';
 import RegisterComponent from './components/RegisterComponent';
 import AuthenticationService from './service/AuthenticationService';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import HomeComponent from "./components/HomeComponent";
 import 'materialize-css/dist/css/materialize.min.css';
 
 export default function App() {
@@ -17,7 +18,7 @@ return(
             <Router>
                     <MenuComponent />
                     <Switch>
-                        <Route path="/" exact component={LoginComponent} />
+                        <Route path="/" exact component={HomeComponent} />
                         {!isUserLoggedIn && <Route path="/login" exact component={LoginComponent} />}
                         <AuthenticatedRoute path="/logout" exact component={LogoutComponent} />
                         <Route path="/list" exact component={DishList} />

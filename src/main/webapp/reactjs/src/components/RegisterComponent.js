@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import axios from 'axios';
 import M from "materialize-css";
 
@@ -19,34 +19,35 @@ class RegisterComponent extends Component {
     handleChange = (event) => {
         this.setState(
             {
-                [event.target.name]
-                    : event.target.value
+                [event.target.name]: event.target.value
             }
         )
     }
 
     submitClicked = () => {
-
-        axios.post('http://localhost:8080/admin/register',{
-                login: this.state.username,
-                password: this.state.password,
-                role: this.state.role
-          },)
-          .then((response) =>{
-              this.setState({
-                    showSuccessMessage: true,
-                    hasCreationFailed: false
-              }
-              )
-              console.log(response)
-          })
-          .catch( (error) => {
+        console.log({login: this.state.username,
+            password: this.state.password,
+            roles: [{"role":this.state.role}]})
+        axios.post('http://bufetindeks.duckdns.org:2023/admin/register', {
+            login: this.state.username,
+            password: this.state.password,
+            roles: [{"role":this.state.role}]
+        },)
+            .then((response) => {
+                this.setState({
+                        showSuccessMessage: true,
+                        hasCreationFailed: false
+                    }
+                )
+                console.log(response)
+            })
+            .catch((error) => {
                 this.setState({
                     showSuccessMessage: false,
                     hasCreationFailed: true
                 })
-              console.log(Response)
-          })
+                console.log(error)
+            })
 
     }
 
@@ -58,7 +59,7 @@ class RegisterComponent extends Component {
     render() {
         return (
             <div className="row container">
-                <div className=" col l4 offset-l4">
+                <div className="col s10 offset-l1 l4 offset-l4">
                     <div className="purple-text accent-2"><h5>Create New Account</h5></div>
                     <div className="input-field">
                         <select value={this.state.role} onChange={this.handleChange} name="role">
@@ -68,16 +69,21 @@ class RegisterComponent extends Component {
                         </select>
                     </div>
                     <div className="input-field">
-                        <input className="validate" type="text" id="username" name="username" value={this.state.username} onChange={this.handleChange}/>
+                        <input className="validate" type="text" id="username" name="username"
+                               value={this.state.username} onChange={this.handleChange}/>
                         <label htmlFor="username">Username</label>
                     </div>
                     <div className="input-field">
                         <label htmlFor="password">Password</label>
-                        <input type="password" id="password" name="password" value={this.state.password} onChange={this.handleChange} />
+                        <input type="password" id="password" name="password" value={this.state.password}
+                               onChange={this.handleChange}/>
                     </div>
-                    
-                    <button className="btn blue col l12 waves-effect waves-light" onClick={this.submitClicked}>Zarejestruj użytkownika</button>
-                    {this.state.showSuccessMessage && <div className="green-text">Rejestracja zakończona powodzeniem</div>}
+
+                    <button className="btn blue col l12 waves-effect waves-light"
+                            onClick={this.submitClicked}>Zarejestruj użytkownika
+                    </button>
+                    {this.state.showSuccessMessage &&
+                    <div className="green-text">Rejestracja zakończona powodzeniem</div>}
                     {this.state.hasCreationFailed && <div className="red-text">Rejestracja nie powiodła się</div>}
                 </div>
             </div>
