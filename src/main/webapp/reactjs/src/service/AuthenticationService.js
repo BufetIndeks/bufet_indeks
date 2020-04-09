@@ -1,21 +1,15 @@
 import axios from 'axios'
+import {API_URL} from "../ApiUrl";
 
-const API_URL = 'http://localhost:8080'
-
-    export const USER_NAME_SESSION_ATTRIBUTE_NAME = 'authenticatedUser'
+export const USER_NAME_SESSION_ATTRIBUTE_NAME = 'authenticatedUser'
 
 class AuthenticationService {
 
 
 
     executeBasicAuthenticationService(username, password) {
-        return axios(`${API_URL}/basicauth`,{
-            method: 'POST',
-            auth:{
-                username : username,
-                password : password
-            }
-            })
+        return axios.get(`${API_URL}/basicauth`,
+            { headers:{ authorization: this.createBasicAuthToken(username, password)},  })
     }
 
 
@@ -24,8 +18,7 @@ class AuthenticationService {
     }
 
     registerSuccessfulLogin(username, password) {
-        sessionStorage.setItem(USER_NAME_SESSION_ATTRIBUTE_NAME, username);
-        sessionStorage.setItem("role","ROLE_TABLE");
+        sessionStorage.setItem(USER_NAME_SESSION_ATTRIBUTE_NAME, username)
         this.setupAxiosInterceptors(this.createBasicAuthToken(username, password))
     }
 

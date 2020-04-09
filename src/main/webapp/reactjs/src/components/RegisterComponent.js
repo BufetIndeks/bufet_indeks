@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import axios from 'axios';
 import M from "materialize-css";
+import {API_URL} from "../ApiUrl";
 
 class RegisterComponent extends Component {
 
@@ -28,7 +29,7 @@ class RegisterComponent extends Component {
         console.log({login: this.state.username,
             password: this.state.password,
             roles: [{"role":this.state.role}]})
-        axios.post('http://localhost:8080/admin/register', {
+        axios.post(API_URL + '/admin/register', {
             login: this.state.username,
             password: this.state.password,
             roles: [{"role":this.state.role}]
