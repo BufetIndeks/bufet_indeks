@@ -8,8 +8,13 @@ class AuthenticationService {
 
 
     executeBasicAuthenticationService(username, password) {
-        return axios.get(`${API_URL}/basicauth`,
-            { headers:{ authorization: this.createBasicAuthToken(username, password)},  })
+        return axios(`${API_URL}/basicauth`,{
+            method: 'POST',
+            auth:{
+                username : username,
+                password : password
+            }
+        })
     }
 
 
@@ -33,11 +38,6 @@ class AuthenticationService {
         return true
     }
 
-    getLoggedInUserName() {
-        let user = sessionStorage.getItem(USER_NAME_SESSION_ATTRIBUTE_NAME)
-        if (user === null) return ''
-        return user
-    }
 
     setupAxiosInterceptors(token) {
         axios.interceptors.request.use(
