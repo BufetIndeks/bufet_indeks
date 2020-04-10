@@ -11,7 +11,7 @@ class LogoutComponent extends Component {
     }
 
     componentDidMount() {
-        axios.get(API_URL + "/logoutt")
+        axios.get(API_URL + "/logout")
             .then((response) => {
                 console.log("ok");
             })
