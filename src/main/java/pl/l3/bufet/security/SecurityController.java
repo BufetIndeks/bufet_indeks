@@ -19,12 +19,13 @@ import java.util.List;
 @RestController
 public class SecurityController {
 
-    @PostMapping(path = "/basicauth")
+    @PostMapping(path = "/login")
     public List<String> authenticate(Authentication authentication) {
         List <String> roleList = new ArrayList<>();
         for (GrantedAuthority authority : authentication.getAuthorities()) {
             roleList.add(authority.toString());
         }
+        System.out.println(roleList);
         return roleList;
 
     }

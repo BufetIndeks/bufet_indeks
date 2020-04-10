@@ -28,13 +28,17 @@ class AuthenticationService {
     }
 
     executeBasicAuthenticationService(username, password) {
-        return axios(`${API_URL}/basicauth`,{
+     /*   return axios(`${API_URL}/login`,{
             method: 'POST',
             auth:{
                 username : username,
                 password : password
             }
-        })
+        }).then(respones=>{
+            console.log(respones.headers)
+            console.log(respones.data)
+            console.log(respones.config)
+        })*/
     }
 
 
@@ -50,10 +54,7 @@ class AuthenticationService {
 
 
     logout() {
-        axios.post(`${API_URL}/logout`);//, (req, res) => {
-        //    req.session.destroy();
-        //    res.redirect('/');
-     //   });
+        axios.post(`${API_URL}/logout`);
         sessionStorage.removeItem(USER_NAME_SESSION_ATTRIBUTE_NAME)
         axios.interceptors.request.eject(this.reqInt)
     }
@@ -66,6 +67,8 @@ class AuthenticationService {
 
 
     setupAxiosInterceptors(token) {
+        console.log("FASFSAFSAFASFSAF")
+        console.log(token)
         this.reqInt = axios.interceptors.request.use(
             (config) => {
                 if (this.isUserLoggedIn()) {

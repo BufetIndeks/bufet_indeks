@@ -58,8 +58,7 @@ class RegisterComponent extends Component {
         M.AutoInit();
     }
 
-    render() {
-        return (
+    render() {return (
             <div className="row container">
                 <div className="col s10 offset-s1 l4 offset-l4">
                     <div className="purple-text accent-2"><h5>Create New Account</h5></div>
