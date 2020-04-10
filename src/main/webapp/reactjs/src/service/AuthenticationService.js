@@ -29,15 +29,10 @@ class AuthenticationService {
 
 
     logout() {
-        axios.post(`${API_URL}/logout`)//, (req, res) => {
-        //     res.header('Access-Control-Allow-Origin', '*');
-        //     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-        //
-        // }).then(er=>{console.log(er)})
-        //     .catch(er=>{console.log(er)})
-        axios.interceptors.request.use(e=>{
-            e.cancelToken(0)
-        })
+        axios.post(`${API_URL}/logout`);//, (req, res) => {
+        //    req.session.destroy();
+        //    res.redirect('/');
+     //   });
         sessionStorage.removeItem(USER_NAME_SESSION_ATTRIBUTE_NAME);
         axios.interceptors.request.eject(this.reqInt)
     }
