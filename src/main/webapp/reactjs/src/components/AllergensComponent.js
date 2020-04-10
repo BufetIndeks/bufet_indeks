@@ -68,7 +68,6 @@ class AllergensComponent extends Component {
         },)
             .then((response) => {
                 console.log(response)
-                this.getAllergens()
                 this.forceUpdate()
             })
             .catch((error) => {

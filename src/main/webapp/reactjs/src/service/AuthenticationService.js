@@ -8,8 +8,13 @@ class AuthenticationService {
 
 
     executeBasicAuthenticationService(username, password) {
-        return axios.get(`${API_URL}/basicauth`,
-            { headers:{ authorization: this.createBasicAuthToken(username, password)},  })
+        return axios(`${API_URL}/basicauth`,{
+            method: 'POST',
+            auth:{
+                username : username,
+                password : password
+            }
+        })
     }
 
 
@@ -24,6 +29,15 @@ class AuthenticationService {
 
 
     logout() {
+        axios.post(`${API_URL}/logout`)//, (req, res) => {
+        //     res.header('Access-Control-Allow-Origin', '*');
+        //     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+        //
+        // }).then(er=>{console.log(er)})
+        //     .catch(er=>{console.log(er)})
+        axios.interceptors.request.use(e=>{
+            e.cancelToken(0)
+        })
         sessionStorage.removeItem(USER_NAME_SESSION_ATTRIBUTE_NAME);
     }
 
@@ -33,11 +47,6 @@ class AuthenticationService {
         return true
     }
 
-    getLoggedInUserName() {
-        let user = sessionStorage.getItem(USER_NAME_SESSION_ATTRIBUTE_NAME)
-        if (user === null) return ''
-        return user
-    }
 
     setupAxiosInterceptors(token) {
         axios.interceptors.request.use(

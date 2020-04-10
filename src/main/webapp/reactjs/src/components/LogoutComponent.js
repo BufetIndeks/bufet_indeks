@@ -6,10 +6,11 @@ class LogoutComponent extends Component {
             <>
                 <h1>You are logged out</h1>
                 <div className="container">
-                    No i elo
+                    Thank You for Using Our Application.
                 </div>
             </>
         )
     }
 }
+
 export default LogoutComponent
