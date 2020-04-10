@@ -5,11 +5,36 @@ export const USER_NAME_SESSION_ATTRIBUTE_NAME = 'authenticatedUser'
 
 class AuthenticationService {
 
+    constructor()
+    {
+        this.reload();
+    }
 
+    persist(username, password)
+    {
+        localStorage.setItem("auth-token", this.createBasicAuthToken(username, password))
+        localStorage.setItem("jsession", document.cookie)
+    }
+
+    reload()
+    {
+        console.log("reload")
+        if(this.isUserLoggedIn())
+        {
+            this.setupAxiosInterceptors(localStorage.getItem("auth-token"))
+            document.cookie = localStorage.getItem("jsession")
+            console.log("session reloaded")
+        }
+    }
 
     executeBasicAuthenticationService(username, password) {
-        return axios.get(`${API_URL}/basicauth`,
-            { headers:{ authorization: this.createBasicAuthToken(username, password)},  })
+        return axios(`${API_URL}/basicauth`,{
+            method: 'POST',
+            auth:{
+                username : username,
+                password : password
+            }
+        })
     }
 
 
@@ -20,11 +45,16 @@ class AuthenticationService {
     registerSuccessfulLogin(username, password) {
         sessionStorage.setItem(USER_NAME_SESSION_ATTRIBUTE_NAME, username)
         this.setupAxiosInterceptors(this.createBasicAuthToken(username, password))
+        this.persist(username, password)
     }
 
 
     logout() {
-        sessionStorage.removeItem(USER_NAME_SESSION_ATTRIBUTE_NAME);
+        axios.post(`${API_URL}/logout`);//, (req, res) => {
+        //    req.session.destroy();
+        //    res.redirect('/');
+     //   });
+        sessionStorage.removeItem(USER_NAME_SESSION_ATTRIBUTE_NAME)
         axios.interceptors.request.eject(this.reqInt)
     }
 
@@ -34,11 +64,6 @@ class AuthenticationService {
         return true
     }
 
-    getLoggedInUserName() {
-        let user = sessionStorage.getItem(USER_NAME_SESSION_ATTRIBUTE_NAME)
-        if (user === null) return ''
-        return user
-    }
 
     setupAxiosInterceptors(token) {
         this.reqInt = axios.interceptors.request.use(

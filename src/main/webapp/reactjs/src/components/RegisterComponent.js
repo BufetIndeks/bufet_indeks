@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import axios from 'axios';
 import M from "materialize-css";
 import {API_URL} from "../ApiUrl";
+import AuthenticationService from '../service/AuthenticationService';
 
 class RegisterComponent extends Component {
 

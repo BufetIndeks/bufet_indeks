@@ -35,8 +35,8 @@ class LoginComponent extends Component {
             this.setState({ hasLoginFailed: true })
         })
     }
-
     render() {
+
         return (
             <div className="row container">
                 <div className=" col s10 offset-s1 l4 offset-l4">
