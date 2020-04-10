@@ -41,12 +41,6 @@ public class AllergenController {
 
     @PostMapping(path="/delete",consumes=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> removeAllergen(@RequestBody(required=false) Map<String, String> allergenName) {
-       // LoggerFactory.getLogger(AllergenController.class).info(allergenName);
-
-
-        System.out.println(allergenName.get(allergenName));
-
-       // return allergenService.deleteAllergenByName(allergenName);
-        return ResponseEntity.ok("a");
+        return allergenService.deleteAllergenByName(allergenName.get("allergenName"));
     }
 }
