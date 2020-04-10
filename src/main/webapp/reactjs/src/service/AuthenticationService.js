@@ -7,7 +7,8 @@ class AuthenticationService {
 
     constructor()
     {
-        this.reload();
+        this.reqInt = null
+        this.reload()
     }
 
     persist(username, password)
@@ -55,7 +56,7 @@ class AuthenticationService {
         //    res.redirect('/');
      //   });
         sessionStorage.removeItem(USER_NAME_SESSION_ATTRIBUTE_NAME)
-        axios.interceptors.request.eject(this.reqInt)
+        //axios.interceptors.request.eject(this.reqInt)
     }
 
     isUserLoggedIn() {
@@ -66,6 +67,9 @@ class AuthenticationService {
 
 
     setupAxiosInterceptors(token) {
+        if(this.reqInt !== null) {
+            axios.interceptors.request.eject(this.reqInt)
+        }
         this.reqInt = axios.interceptors.request.use(
             (config) => {
                 if (this.isUserLoggedIn()) {
