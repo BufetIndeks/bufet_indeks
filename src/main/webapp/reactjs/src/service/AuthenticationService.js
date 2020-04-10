@@ -5,7 +5,27 @@ export const USER_NAME_SESSION_ATTRIBUTE_NAME = 'authenticatedUser'
 
 class AuthenticationService {
 
+    constructor()
+    {
+        this.reload();
+    }
 
+    persist(username, password)
+    {
+        localStorage.setItem("auth-token", this.createBasicAuthToken(username, password))
+        localStorage.setItem("jsession", document.cookie)
+    }
+
+    reload()
+    {
+        console.log("reload")
+        if(this.isUserLoggedIn())
+        {
+            this.setupAxiosInterceptors(localStorage.getItem("auth-token"))
+            document.cookie = localStorage.getItem("jsession")
+            console.log("session reloaded")
+        }
+    }
 
     executeBasicAuthenticationService(username, password) {
         return axios(`${API_URL}/basicauth`,{
@@ -25,6 +45,7 @@ class AuthenticationService {
     registerSuccessfulLogin(username, password) {
         sessionStorage.setItem(USER_NAME_SESSION_ATTRIBUTE_NAME, username)
         this.setupAxiosInterceptors(this.createBasicAuthToken(username, password))
+        this.persist(username, password)
     }
 
 
@@ -33,7 +54,7 @@ class AuthenticationService {
         //    req.session.destroy();
         //    res.redirect('/');
      //   });
-        sessionStorage.removeItem(USER_NAME_SESSION_ATTRIBUTE_NAME);
+        sessionStorage.removeItem(USER_NAME_SESSION_ATTRIBUTE_NAME)
         axios.interceptors.request.eject(this.reqInt)
     }
 
