@@ -39,6 +39,7 @@ class AuthenticationService {
             e.cancelToken(0)
         })
         sessionStorage.removeItem(USER_NAME_SESSION_ATTRIBUTE_NAME);
+        axios.interceptors.request.eject(this.reqInt)
     }
 
     isUserLoggedIn() {
@@ -49,7 +50,7 @@ class AuthenticationService {
 
 
     setupAxiosInterceptors(token) {
-        axios.interceptors.request.use(
+        this.reqInt = axios.interceptors.request.use(
             (config) => {
                 if (this.isUserLoggedIn()) {
                     config.headers.authorization = token
