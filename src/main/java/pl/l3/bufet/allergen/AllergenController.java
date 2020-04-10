@@ -37,11 +37,8 @@ public class AllergenController {
         return ResponseEntity.ok("Dodano alergen");
     }
 
-    @GetMapping(path="/delete/{id}",consumes=MediaType.APPLICATION_JSON_VALUE) //@RequestParam(required=false,name="allergenName") String allergenName
-    public ResponseEntity<String> removeAllergen(@PathVariable int id) {
-       // LoggerFactory.getLogger(AllergenController.class).info(allergenName);
-        System.out.println(id);
-       // return allergenService.deleteAllergenByName(allergenName);
-        return ResponseEntity.ok("a");
+    @PostMapping(path="/delete",consumes=MediaType.APPLICATION_JSON_VALUE) //@RequestParam(required=false,name="allergenName") String allergenName
+    public ResponseEntity<String> removeAllergen(@RequestBody Allergen allergen) {
+       return allergenService.deleteAllergenByName(allergen.getAllergenName());
     }
 }
