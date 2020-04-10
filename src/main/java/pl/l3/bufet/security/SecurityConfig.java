@@ -29,10 +29,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout().and()
                 .csrf().disable()
                 .authorizeRequests()
-               .antMatchers(HttpMethod.POST,"/admin/register", "/admin/**").hasAuthority(ADMIN)
+                .antMatchers(HttpMethod.POST,"/admin/register", "/admin/**").hasAuthority(ADMIN)
                 .anyRequest().permitAll()
                 .and().httpBasic()
-               .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout", "POST"))
+                .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout", "POST"))
                 .logoutSuccessUrl("/logoutSuccess").
                 deleteCookies("JESSIONID")
                 .invalidateHttpSession(true);
