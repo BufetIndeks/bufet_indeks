@@ -2,10 +2,9 @@ package pl.l3.bufet.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import pl.l3.bufet.user.User;
 import pl.l3.bufet.user.UserRole;
 import pl.l3.bufet.user.UserService;
@@ -14,7 +13,7 @@ import java.io.IOException;
 import java.sql.SQLIntegrityConstraintViolationException;
 
 @CrossOrigin(origins={ "http://localhost:3000", "http://localhost:4200", "http://bufetindeks.duckdns.org:2024" })
-@Controller
+@RestController
 public class HomeController {
 
     private UserService userService;
@@ -24,7 +23,7 @@ public class HomeController {
         this.userService = userService;
     }
 
-    @RequestMapping("/")
+    @GetMapping("/getadmin")
     public String home() throws DataAccessException {
         //Tworze sobie admina na starcie
 
@@ -38,11 +37,7 @@ public class HomeController {
         return "nothing";
     }
 
-    @RequestMapping("/secured")
-    @ResponseBody
-    public String secured() {
-        return "secured page";
-    }
+
 
 
 }

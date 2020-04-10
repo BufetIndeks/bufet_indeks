@@ -7,17 +7,13 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -25,30 +21,42 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public static final String ADMIN = "ROLE_ADMIN";
     public static final String TABLE = "ROLE_TABLE";
     public static final String WORKER = "ROLE_WORKER";
-
-    /*public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
-        public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
-                throws IOException, ServletException {
-            super.onLogoutSuccess(request, response, authentication);
-            // handle success here
-        }
-    }*/
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http    .cors().and().httpBasic().and()
+        http
+                .cors().and()
+                .logout().and()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/admin").hasRole("ADMIN")
-                .antMatchers("/admin/register").hasRole("ADMIN")
-                .antMatchers("/**").permitAll()
-                .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).clearAuthentication(true)
-                .invalidateHttpSession(true)
-                //.logoutSuccessHandler(new CustomLogoutSuccessHandler())
-                .deleteCookies("JSESSIONID");
+               .antMatchers(HttpMethod.POST,"/admin/register", "/admin/**").hasAuthority(ADMIN)
+                .anyRequest().permitAll()
+                .and().httpBasic()
+               .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout", "POST"))
+                .logoutSuccessUrl("/logoutSuccess").
+                deleteCookies("JESSIONID")
+                .invalidateHttpSession(true);
+
+
+
     }
 
+    @Bean
+    public CorsFilter corsFilter() {
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true); // you USUALLY want this
+        // likely you should limit this to specific origins
+        config.addAllowedOrigin("*");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("GET");
+        config.addAllowedMethod("POST");
+        config.addAllowedMethod("PUT");
+        config.addAllowedMethod("DELETE");
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
