@@ -8,7 +8,9 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/admin/allergens")
@@ -37,10 +39,13 @@ public class AllergenController {
         return ResponseEntity.ok("Dodano alergen");
     }
 
-    @GetMapping(path="/delete/{id}",consumes=MediaType.APPLICATION_JSON_VALUE) //@RequestParam(required=false,name="allergenName") String allergenName
-    public ResponseEntity<String> removeAllergen(@PathVariable int id) {
+    @PostMapping(path="/delete",consumes=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> removeAllergen(@RequestBody(required=false) Map<String, String> allergenName) {
        // LoggerFactory.getLogger(AllergenController.class).info(allergenName);
-        System.out.println(id);
+
+
+        System.out.println(allergenName.get(allergenName));
+
        // return allergenService.deleteAllergenByName(allergenName);
         return ResponseEntity.ok("a");
     }

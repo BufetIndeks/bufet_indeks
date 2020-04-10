@@ -3,7 +3,6 @@ import './App.css';
 import DishList from './components/DishList';
 import LoginComponent from './components/LoginComponent';
 import MenuComponent from './components/MenuComponent';
-import LogoutComponent from './components/LogoutComponent';
 import AuthenticatedRoute from './components/AuthenticatedRoute';
 import RegisterComponent from './components/RegisterComponent';
 import AllergensComponent from './components/AllergensComponent';
@@ -21,7 +20,6 @@ return(
                     <Switch>
                         <Route path="/" exact component={HomeComponent} />
                         {!isUserLoggedIn && <Route path="/login" exact component={LoginComponent} />}
-                        <AuthenticatedRoute path="/logout" exact component={LogoutComponent} />
                         <Route path="/list" exact component={DishList} />
                         <Route path="/allergens" exact component={AllergensComponent} />
                         <AuthenticatedRoute path="/admin/register" exact component={RegisterComponent} />

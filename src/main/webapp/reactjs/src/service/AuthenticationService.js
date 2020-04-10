@@ -29,6 +29,10 @@ class AuthenticationService {
 
 
     logout() {
+        axios.post(`${API_URL}/logout`);//, (req, res) => {
+        //    req.session.destroy();
+        //    res.redirect('/');
+     //   });
         sessionStorage.removeItem(USER_NAME_SESSION_ATTRIBUTE_NAME);
     }
 
