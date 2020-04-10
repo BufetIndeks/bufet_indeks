@@ -7,5 +7,4 @@ import java.util.Optional;
 public interface AllergenRepository extends JpaRepository<Allergen, Long> {
 
      Optional<Allergen> findByAllergenName(String allergenName);
-
 }
