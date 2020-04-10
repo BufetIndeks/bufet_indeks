@@ -20,11 +20,12 @@ return(
                     <MenuComponent />
                     <Switch>
                         <Route path="/" exact component={HomeComponent} />
-                        {!isUserLoggedIn && <Route path="/login" exact component={LoginComponent} />}
+                        <Route path="/login" exact component={LoginComponent} />
                         <AuthenticatedRoute path="/logout" exact component={LogoutComponent} />
                         <Route path="/list" exact component={DishList} />
-                        <Route path="/allergens" exact component={AllergensComponent} />
+                        <AuthenticatedRoute path="/allergens" exact component={AllergensComponent} />
                         <AuthenticatedRoute path="/admin/register" exact component={RegisterComponent} />
+                        <AuthenticatedRoute path="/admin"/>
                     </Switch>
             </Router>
     )

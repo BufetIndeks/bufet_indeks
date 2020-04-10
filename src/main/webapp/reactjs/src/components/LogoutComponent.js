@@ -11,7 +11,7 @@ class LogoutComponent extends Component {
     }
 
     componentDidMount() {
-        axios.get(API_URL + "/logout")
+        axios.post(API_URL + "/logout")
             .then((response) => {
                 console.log("ok");
             })
@@ -19,15 +19,13 @@ class LogoutComponent extends Component {
                 console.log("error")
             })
         AuthenticationService.logout()
+        this.props.history.push("")
     }
 
     render() {
         return (
             <>
-                <h1>You are logged out</h1>
-                <div className="container">
-                    No i elo
-                </div>
+
             </>
         )
     }

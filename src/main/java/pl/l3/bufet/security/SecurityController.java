@@ -1,5 +1,6 @@
 package pl.l3.bufet.security;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,11 @@ public class SecurityController {
         }
         return roleList;
 
+    }
+
+    @GetMapping("/logoutSuccess")
+    public ResponseEntity<String> secured() {
+        return ResponseEntity.ok("Wylogowanie się powiodło");
     }
 
 }
