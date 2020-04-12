@@ -1,8 +1,6 @@
 import axios from 'axios'
 import {API_URL} from "../ApiUrl";
-import {Cookies } from 'react-cookie';
 
-export const USER_NAME_SESSION_ATTRIBUTE_NAME = 'authenticatedUser'
 
 class AuthenticationService {
 
