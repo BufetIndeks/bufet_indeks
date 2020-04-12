@@ -10,9 +10,13 @@ class LoginComponent extends Component {
         this.state = {
             username: '',
             password: '',
+            rememberMe: true,
             hasLoginFailed: false,
             showSuccessMessage: false,
         }
+        this.handleInputChange = this.handleInputChange.bind(this);
+
+
     }
 
     handleChange = (event) => {
@@ -25,19 +29,29 @@ class LoginComponent extends Component {
     }
 
     loginClicked = () => {
-      /*  AuthenticationService
-            .executeBasicAuthenticationService(this.state.username, this.state.password)
-            .then(() => {*/
-                AuthenticationService.registerSuccessfulLogin(this.state.username, this.state.password)
-                this.props.history.push(`/list`)
-    /*        }).catch(() => {
-            this.setState({ showSuccessMessage: false })
-            this.setState({ hasLoginFailed: true })
-        })*/
+       AuthenticationService
+           .executeBasicAuthenticationService(this.state.username, this.state.password, this.state.rememberMe)
+           .then(response=>{
+             if(response.status===200)
+                 this.props.history.push(`/`)
+               else
+                 this.props.history.push(`/login`)
+           })
+
+
+
+    }
+    handleInputChange(event) {
+        const target = event.target;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const name = target.name;
+
+        this.setState({
+            [name]: value
+        });
     }
     render() {
-
-        return (
+            return (
             <div className="row container">
                 <div className=" col s10 offset-s1 l4 offset-l4">
                     <div className="red-text accent-2"><h1>Login</h1></div>
@@ -51,6 +65,18 @@ class LoginComponent extends Component {
                         <label htmlFor="password">Password</label>
                         <input name="password" type="password" id="password" value={this.state.password} onChange={this.handleChange} />
                     </div>
+                    <div>
+                        <label>
+                            Zapamiętaj mnie na tym komputerze
+                            <input
+                                name="rememberMe"
+                                type="checkbox"
+                                checked={this.state.rememberMe}
+                                onChange={this.handleInputChange} />
+                            <span></span>
+                        </label>
+                    </div>
+
                     <button className="btn blue right" onClick={this.loginClicked}>Zaloguj się</button>
                 </div>
             </div>

@@ -43,5 +43,10 @@ public class UserController {
          return ResponseEntity.status(HttpStatus.CREATED).body("Dodano użytkownika");
     }
 
+    @GetMapping(path = "/register")
+    public String f(){
+        return "registerForm";
+    }
+
 
 }

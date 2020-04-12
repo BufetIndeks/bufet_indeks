@@ -1,5 +1,6 @@
 package pl.l3.bufet.security;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,24 +16,32 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
-@CrossOrigin(origins={ "http://localhost:3000", "http://localhost:4200", "http://bufetindeks.duckdns.org:2024" })
-@RestController
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:4200", "http://bufetindeks.duckdns.org:2024"})
+@Controller
 public class SecurityController {
 
-    @PostMapping(path = "/login")
-    public List<String> authenticate(Authentication authentication) {
-        List <String> roleList = new ArrayList<>();
-        for (GrantedAuthority authority : authentication.getAuthorities()) {
-            roleList.add(authority.toString());
-        }
-        System.out.println(roleList);
-        return roleList;
 
+    @PostMapping(path = "/login")
+    public void login(){}
+
+    @GetMapping(path="/loginsuccess")
+    @ResponseBody
+    public ResponseEntity<String> loginSuccess(){
+        return ResponseEntity.ok("Pomyślnie zalogowano");
     }
 
     @GetMapping("/logoutSuccess")
     public ResponseEntity<String> secured() {
         return ResponseEntity.ok("Wylogowanie się powiodło");
+    }
+
+    @GetMapping(path = "/logout")
+    public void logout(){}
+
+    @GetMapping(path = "/logged_in", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Authentication isLoggedIn(Authentication authentication){
+        return authentication;
     }
 
 }

@@ -32,7 +32,7 @@ class AllergensComponent extends Component {
 
     getAllergens()
     {
-        axios.get(API_URL + "/admin/allergens")
+        axios.get(API_URL + "/admin/allergens",{withCredentials:true})
             .then(response => {
                 this.setState({
                     allergens:response.data})
@@ -44,7 +44,7 @@ class AllergensComponent extends Component {
         console.log(this.state.newAllergenName)
         axios.post(API_URL + "/admin/allergens", {
             allergenName: this.state.newAllergenName
-        },)
+        })
             .then((response) => {
                 console.log(this.state.allergens)
                 /*let newAllergen = {
@@ -58,14 +58,13 @@ class AllergensComponent extends Component {
             .catch((error) => {
                 console.log(error)
             })
-
     }
 
     remove(name) {
         console.log(name);
         axios.post(API_URL + "/admin/allergens/delete", {
             allergenName: name
-        },)
+        })
             .then((response) => {
                 console.log(response)
                 this.getAllergens()
@@ -74,11 +73,6 @@ class AllergensComponent extends Component {
             .catch((error) => {
                 console.log(error)
             })
-    }
-
-    edit(name) {
-
-
     }
 
     render() {
