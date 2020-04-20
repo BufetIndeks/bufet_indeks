@@ -1,13 +1,23 @@
 import React, { Component } from 'react'
+import axios from 'axios';
+import {API_URL} from "../ApiUrl";
 
 class LogoutComponent extends Component {
+    constructor(props) {
+        super(props)
+
+
+    }
+
+    componentDidMount() {
+        axios.get(`${API_URL}/logout`)
+        this.props.history.push(``)
+    }
+
     render() {
         return (
             <>
-                <h1>You are logged out</h1>
-                <div className="container">
-                    No i elo
-                </div>
+
             </>
         )
     }

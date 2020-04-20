@@ -5,39 +5,35 @@ import {API_URL} from "../ApiUrl";
 
 export default class DishList extends Component{
 
-constructor(props){
-    super(props);
-    this.state={
-        dishes:[]
-    };
-}
+    constructor(props){
+        super(props);
+        this.state={
+            dishes:[]
+        };
+    }
 
-componentDidMount(){
+    componentDidMount(){
 
-    this.getDishes();
-}
+        this.getDishes();
+    }
 
-getDishes()
-{
-    axios.get(API_URL + "/menu/dishes")
-        .then(response => {
-            this.setState({
-                dishes:response.data})
-        })
-
-}
+    getDishes()
+    {
+        axios.get(API_URL + "/menu/dishes")
+            .then(response => {
+                this.setState({
+                    dishes:response.data})
+            })
+    }
 
     render() {
-    return(
-        <ul>
-            {
-                this.state.dishes.map((dish,i)=>{
-                    return (<li >{dish.dishName}</li>)
-                })
-            }
-        </ul>
-    );}
-
-
-
+        return(
+            <ul>
+                {
+                    this.state.dishes.map((dish,i)=>{
+                        return (<li >{dish.dishName}</li>)
+                    })
+                }
+            </ul>
+        );}
 }

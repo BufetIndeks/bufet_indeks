@@ -35,9 +35,9 @@ public class UserService {
         Optional<User> testUser = userRepository.findByLogin(user.getLogin());
         if(userRole.isEmpty())
             throw new NoRoleFoundException();
-        else if(user.getLogin()==null)
+        else if(user.getLogin()==null || user.getLogin() == "")
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Brak loginu");
-        else if(user.getPassword()==null)
+        else if(user.getPassword()==null || user.getPassword() == "")
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Brak hasła");
         else if(user.getId()!=null)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Użytkownik nie może mieć ustawionego ID");

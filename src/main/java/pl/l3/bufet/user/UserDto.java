@@ -1,11 +1,5 @@
 package pl.l3.bufet.user;
 
-import pl.l3.bufet.order.Order;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 public class UserDto {
 

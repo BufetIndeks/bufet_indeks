@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import { Link, withRouter } from 'react-router-dom'
-import AuthenticationService from '../service/AuthenticationService';
+import AuthenticatedRoute from "./AuthenticatedRoute";
 
 class MenuComponent extends Component {
 
     render() {
-        const isUserLoggedIn = AuthenticationService.isUserLoggedIn();
 
         return (
 
@@ -15,9 +14,10 @@ class MenuComponent extends Component {
                         <li><Link className="nav-link" to="/list">Lista dań</Link></li>
                     </ul>
                     <ul>
-                        {isUserLoggedIn && <li><Link className="nav-link" to="/admin/register">Rejestracja</Link></li>}
-                        {!isUserLoggedIn && <li><Link className="nav-link" to="/login">Zaloguj</Link></li>}
-                        {isUserLoggedIn && <li><Link className="nav-link" to="/" onClick={AuthenticationService.logout}>Logout</Link></li>}
+                         <li><Link className="nav-link" to="/login">Zaloguj</Link></li>
+                         <li>< Link className="nav-link" to="/allergens">Składniki</Link></li>
+                        <li>< Link className="nav-link" to="/admin/register">Rejestracja</Link></li>
+                         <li>< Link className="nav-link" to="/logout" >Logout</Link></li>
                     </ul>
                 </nav>
             </header>
