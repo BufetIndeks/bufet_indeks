@@ -11,16 +11,20 @@ class AuthenticatedRoute extends Component {
     constructor(props) {
         super(props)
 
+
+
         this.state = {
-            authorized: false
+            authorized: false,
+            role: props.role,
+            url: props.url
         }
     }
 
     //Sprawdzam czy jest zautoryzowany i jaką ma role
     checkAuthorizationStatus(){
-        axios.get(API_URL+`/logged_in`)
+        axios.get(API_URL + this.state.url)
             .then(response=>{
-                if(response.data.authenticated === true && response.data.principal.authorities[0].authority===`ROLE_ADMIN`){
+                if(response.data.authenticated === true && response.data.principal.authorities[0].authority=== this.state.role){
                     this.setState({authorized:true})
                 }
                 else{
@@ -39,7 +43,7 @@ class AuthenticatedRoute extends Component {
 
 
     render() {
-        const{authorized} = this.state
+        const {authorized} = this.state
         return (
             <React.Fragment>
                 {authorized ?(

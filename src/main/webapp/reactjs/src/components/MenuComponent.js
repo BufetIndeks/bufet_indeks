@@ -11,13 +11,13 @@ class MenuComponent extends Component {
             <header>
                 <nav className="green lighten-1">
                     <ul>
+                        <li><Link className="nav-link" to="/">Home</Link></li>
+                        <li><Link className="nav-link" to="/admin/dashboard">Dashboard</Link></li>
+                        <li><Link className="nav-link" to="/login">Zaloguj</Link></li>
+                        <li><Link className="nav-link" to="/admin/register">Rejestracja</Link></li>
+                        <li><Link className="nav-link" to="/logout" >Logout</Link></li>
                         <li><Link className="nav-link" to="/list">Lista dań</Link></li>
-                    </ul>
-                    <ul>
-                         <li><Link className="nav-link" to="/login">Zaloguj</Link></li>
-                         <li>< Link className="nav-link" to="/allergens">Składniki</Link></li>
-                        <li>< Link className="nav-link" to="/admin/register">Rejestracja</Link></li>
-                         <li>< Link className="nav-link" to="/logout" >Logout</Link></li>
+                        <li><Link className="nav-link" to="/allergens">Składniki</Link></li>
                     </ul>
                 </nav>
             </header>

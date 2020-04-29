@@ -6,6 +6,7 @@ import pl.l3.bufet.ingredient.Ingredient;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,9 @@ public class Dish {
     @NotEmpty
     @Column(name = "nazwa", unique = true)
     private String dishName;
+    @Lob
+    @Column(name="obraz")
+    private Blob dishImage;
 
     @ManyToMany
     @JoinTable(name = "alergen_danie",

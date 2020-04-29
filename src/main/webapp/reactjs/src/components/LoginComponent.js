@@ -52,7 +52,6 @@ class LoginComponent extends Component {
     }
     render() {
             return (
-            <div className="row container">
                 <div className=" col s10 offset-s1 l4 offset-l4">
                     <div className="red-text accent-2"><h1>Login</h1></div>
                     {this.state.hasLoginFailed && <div className="alert alert-warning">Invalid Credentials</div>}
@@ -79,7 +78,6 @@ class LoginComponent extends Component {
 
                     <button className="btn blue right" onClick={this.loginClicked}>Zaloguj się</button>
                 </div>
-            </div>
         )
     }
 }

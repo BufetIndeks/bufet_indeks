@@ -37,6 +37,11 @@ public class HomeController {
         return "nothing";
     }
 
+    @GetMapping("")
+    public String start(){
+        return "index";
+    }
+
 
 
 
