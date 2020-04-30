@@ -22,11 +22,12 @@ public class SecurityController {
 
 
     @PostMapping(path = "/login")
-    public void login(){}
+    public void login() {
+    }
 
-    @GetMapping(path="/loginsuccess")
+    @GetMapping(path = "/loginsuccess")
     @ResponseBody
-    public ResponseEntity<String> loginSuccess(){
+    public ResponseEntity<String> loginSuccess() {
         return ResponseEntity.ok("Pomyślnie zalogowano");
     }
 
@@ -36,11 +37,24 @@ public class SecurityController {
     }
 
     @GetMapping(path = "/logout")
-    public void logout(){}
+    public void logout() {
+    }
 
-    @GetMapping(path = "/logged_in", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/adminLogged", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Authentication isLoggedIn(Authentication authentication){
+    public Authentication isAdminLoggedIn(Authentication authentication) {
+        return authentication;
+    }
+
+    @GetMapping(path = "/tableLogged", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Authentication isTableLoggedIn(Authentication authentication) {
+        return authentication;
+    }
+
+    @GetMapping(path = "/workerLogged", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Authentication isWorkerLoggedIn(Authentication authentication) {
         return authentication;
     }
 

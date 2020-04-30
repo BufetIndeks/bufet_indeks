@@ -7,23 +7,17 @@ import javax.validation.constraints.NotEmpty;
 @Table(name = "alergen")
 public class Allergen {
 
-    //Fields
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "alergen_id")
     private Long id;
-
-    //Constructors
-
     @NotEmpty
-    @Column(name="nazwa_alergenu", unique = true)
+    @Column(name="nazwa", unique = true, nullable = false)
     private String allergenName;
 
     //Getters setters
 
-    public Allergen() {
-    }
+    public Allergen() {}
 
     public Long getId() {
         return id;
@@ -41,10 +35,4 @@ public class Allergen {
         this.allergenName = allergenName;
     }
 
-    @Override
-    public String toString() {
-        return "Allergen{" +
-                "allergenName='" + allergenName + '\'' +
-                '}';
-    }
 }

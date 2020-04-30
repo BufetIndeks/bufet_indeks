@@ -1,16 +1,15 @@
 package pl.l3.bufet.dish;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
-@RestController()
-@RequestMapping("/menu")
+@RestController
 @CrossOrigin(origins={ "http://localhost:3000", "http://localhost:4200", "http://bufetindeks.duckdns.org:2024" })
 public class DishController {
 
@@ -21,9 +20,27 @@ public class DishController {
         this.dishService = dishService;
     }
 
-    @GetMapping(path = "/dishes", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/menu", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Dish> getDishes(){
         return dishService.getAllDishes();
     }
 
+    @PostMapping(path="admin/addDish")
+    public ResponseEntity<String> addDish(@RequestBody Dish dish){
+        if(dish.getId()!=null)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Zapisywane danie nie może mieć ustawionego id");
+        return dishService.addDish(dish);
+    }
+
+    @PostMapping(path = "admin/setActiveDish")
+    public ResponseEntity<String> setActive(@RequestParam (name="id") Long id, @RequestParam(name = "active") Boolean active){
+        return dishService.setActive(id,active);
+    }
+
+    @PostMapping(path = "admin/updateDish")
+    public ResponseEntity<String> updateDish(@RequestBody Dish dish){
+        if(dish.getId()==null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Danie nie ma id, więc nie istnieje w bazie");
+        return dishService.updateDish(dish);
+    }
 }

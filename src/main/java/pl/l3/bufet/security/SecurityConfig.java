@@ -24,6 +24,8 @@ import pl.l3.bufet.user.CustomUserDetailsService;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     public static final String ADMIN = "ROLE_ADMIN";
+    public static final String WORKER = "ROLE_WORKER";
+    public static final String TABLE = "ROLE_TABLE";
     @Autowired
     CustomUserDetailsService customUserDetailsService;
 
@@ -33,11 +35,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
 
-                .antMatchers("/login*").permitAll()
-                .antMatchers("/getadmin").permitAll()
-                .antMatchers("/menu/dishes").permitAll()
+                .antMatchers("/admin/**").hasAuthority(ADMIN)
                 .antMatchers("/logout").authenticated()
-                .anyRequest().hasAuthority("ROLE_ADMIN")
+                .antMatchers("/adminLogged").hasAuthority(ADMIN)
+                .antMatchers("/tableLogged").hasAuthority(TABLE)
+                .antMatchers("/workerLogged").hasAuthority(WORKER)
+                .anyRequest().permitAll()
 
                 .and()
                 .formLogin()
@@ -46,13 +49,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .logout().logoutUrl("/logout").deleteCookies("JSESSIONID")
-                .deleteCookies("remember-me")
                 .logoutSuccessHandler(customLogoutSuccessHandler())
-
 
                 .and()
                 .rememberMe()
-                .key("uniqueAndSecret").tokenValiditySeconds(280)
+                .key("uniqueAndSecret").tokenValiditySeconds(280000)
                 .userDetailsService(customUserDetailsService);
 
         ;
@@ -82,7 +83,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public CustomLogoutSuccessHandler customLogoutSuccessHandler(){
+    public CustomLogoutSuccessHandler customLogoutSuccessHandler() {
         return new CustomLogoutSuccessHandler();
     }
 

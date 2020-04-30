@@ -9,6 +9,7 @@ import javax.validation.constraints.NotEmpty;
 import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "danie")
@@ -19,18 +20,22 @@ public class Dish {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "danie_id")
     private Long id;
-    @NotEmpty
-    @Column(name = "nazwa", unique = true)
+    @Column(name = "nazwa", unique = true, nullable = false, length = 128)
     private String dishName;
     @Lob
     @Column(name="obraz")
     private Blob dishImage;
+    @Column(name="cena", nullable = false)
+    private Double price;
+    @Column(name="opis", length = 512)
+    private String description;
+    @Column(name="danie_dnia",nullable = false)
+    private boolean dishDay = false;
+    @Column(name="usuniety",nullable = false)
+    private boolean active = false;
 
-    @ManyToMany
-    @JoinTable(name = "alergen_danie",
-            joinColumns = {@JoinColumn(name = "danie_id", referencedColumnName = "danie_id")},
-            inverseJoinColumns = {@JoinColumn(name = "alergen_id", referencedColumnName = "alergen_id")})
-    List<Allergen> allergenList = new ArrayList<>();
+
+
 
     @NotEmpty
     @ManyToMany
@@ -45,37 +50,9 @@ public class Dish {
             joinColumns = {@JoinColumn(name = "danie_id", referencedColumnName = "danie_id")},
             inverseJoinColumns = {@JoinColumn(name = "kategoria_dania_id", referencedColumnName = "kategoria_dania_id")})
     List<DishCategory> dishCategoryList = new ArrayList<>();
-
     //Constructor
     public Dish() {}
-
     //Getter setter
-
-
-    public List<DishCategory> getDishCategoryList() {
-        return dishCategoryList;
-    }
-
-    public void setDishCategoryList(List<DishCategory> dishCategoryList) {
-        this.dishCategoryList = dishCategoryList;
-    }
-
-    public List<Ingredient> getIngredientsList() {
-        return ingredientsList;
-    }
-
-    public void setIngredientsList(List<Ingredient> ingredientsList) {
-        this.ingredientsList = ingredientsList;
-    }
-
-    public List<Allergen> getAllergenList() {
-        return allergenList;
-    }
-
-    public void setAllergenList(List<Allergen> allergenList) {
-        this.allergenList = allergenList;
-    }
-
     public Long getId() {
         return id;
     }
@@ -92,14 +69,80 @@ public class Dish {
         this.dishName = dishName;
     }
 
-    @Override
-    public String toString() {
-        return "Dish{" +
-                "id=" + id +
-                ", dishName='" + dishName + '\'' +
-                ", allergenList=" + allergenList +
-                ", ingredientList="+ingredientsList+
-                '}';
+    public Blob getDishImage() {
+        return dishImage;
     }
 
+    public void setDishImage(Blob dishImage) {
+        this.dishImage = dishImage;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public boolean isDishDay() {
+        return dishDay;
+    }
+
+    public void setDishDay(boolean dishDay) {
+        this.dishDay = dishDay;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public List<Ingredient> getIngredientsList() {
+        return ingredientsList;
+    }
+
+    public void setIngredientsList(List<Ingredient> ingredientsList) {
+        this.ingredientsList = ingredientsList;
+    }
+
+    public List<DishCategory> getDishCategoryList() {
+        return dishCategoryList;
+    }
+
+    public void setDishCategoryList(List<DishCategory> dishCategoryList) {
+        this.dishCategoryList = dishCategoryList;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Dish dish = (Dish) o;
+        return dishDay == dish.dishDay &&
+                active == dish.active &&
+                Objects.equals(id, dish.id) &&
+                Objects.equals(dishName, dish.dishName) &&
+                Objects.equals(dishImage, dish.dishImage) &&
+                Objects.equals(price, dish.price) &&
+                Objects.equals(description, dish.description) &&
+                Objects.equals(ingredientsList, dish.ingredientsList) &&
+                Objects.equals(dishCategoryList, dish.dishCategoryList);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, dishName, dishImage, price, description, dishDay, active, ingredientsList, dishCategoryList);
+    }
 }

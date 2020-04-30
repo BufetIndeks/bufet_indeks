@@ -13,7 +13,7 @@ public class DishCategory {
     private Long id;
 
     @NotEmpty
-    @Column(name="nazwa", unique = true)
+    @Column(name="nazwa", unique = true, nullable = false)
     private String name;
 
     public DishCategory() {

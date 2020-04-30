@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/admin/allergens")
+@RequestMapping("/admin")
 @CrossOrigin(origins={ "http://localhost:3000", "http://localhost:4200", "http://bufetindeks.duckdns.org:2024" })
 public class AllergenController {
 
@@ -24,23 +24,28 @@ public class AllergenController {
         this.allergenService = allergenService;
     }
 
-    @GetMapping("")
+    @GetMapping("/allergen")
     public List<Allergen> findAllAllergens() {
         return allergenService.findAllAllergens();
     }
 
-    @PostMapping("")
+    @PostMapping("/addAllergen")
     public ResponseEntity<String> addAllergen(@RequestBody Allergen allergen) {
         if (allergen.getId() != null)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Zapisywany alergen nie może mieć ustawionego id");
-        else if(allergen.getAllergenName()==null)
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Allergen musi mieć ustawioną nazwe");
-        allergenService.addAllergen(allergen);
-        return ResponseEntity.ok("Dodano alergen");
+        return allergenService.addAllergen(allergen);
     }
 
-    @PostMapping(path="/delete",consumes=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> removeAllergen(@RequestBody(required=false) Map<String, String> allergenName) {
-        return allergenService.deleteAllergenByName(allergenName.get("allergenName"));
+    @PostMapping(path="/deleteAllergen",consumes=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> removeAllergen(@RequestBody Allergen allergen) {
+        return allergenService.deleteAllergenByName(allergen.getAllergenName());
     }
+
+    @PostMapping(path = "/updateAllergen")
+    public ResponseEntity<String> updateAllergen(@RequestBody Allergen allergen){
+        if(allergen.getId()==null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Taki alergen nie istnieje");
+        return allergenService.updateAllergen(allergen);
+    }
+
 }
