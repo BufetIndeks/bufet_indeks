@@ -13,6 +13,8 @@ import HomeComponent from "./components/HomeComponent";
 import AuthenticatedRoute from "./components/AuthenticatedRoute";
 import DishEditTemplate from "./templates/DishEditTemplate";
 import AdminDashboard from "./components/AdminDashboard";
+import ErrorTemplate from "./templates/ErrorTemplate"
+import DishShowTemplate from './templates/DishShowTemplate';
 
 export default function App() {
 
@@ -21,18 +23,20 @@ export default function App() {
 
     return(
         <Router>
-            <MenuComponent />
+            <MenuComponent role={role}/>
             <div className="row container">
             <Switch>
                 <Route exact path="/" component={HomeComponent} />
                 <Route exact path="/login" component={LoginComponent} />
                 <AuthenticatedRoute role={role} url={url} exact path="/logout" component={LogoutComponent} />
                 <Route path="/list" exact component={DishList} />
+                <Route path="/list/:d" exact component={DishShowTemplate} />
                 <AuthenticatedRoute role={role} url={url} exact path="/allergens" component={AllergensComponent} />
                 <AuthenticatedRoute role={role} url={url} exact path="/admin/register" component={RegisterComponent} />
                 <AuthenticatedRoute role={role} url={url} exact path="/admin/dashboard" component={AdminDashboard} />
                 <AuthenticatedRoute role={role} url={url} exact path="/admin/dishes" component={DishList} />
                 <AuthenticatedRoute role={role} url={url} exact path="/admin/dishes/:id" component={DishEditTemplate} />
+                <Route path="/*"><ErrorTemplate /></Route>
             </Switch>
             </div>
         </Router>
