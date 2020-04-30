@@ -29,7 +29,10 @@ public class DishService {
         this.dishCategoryRepository = dishCategoryRepository;
     }
 
-    public List<Dish> getAllDishes() {
+    public List<Dish> getAllActiveDishes() {
+        return dishRepository.findAllByActiveIsTrue();
+    }
+    public List<Dish> getAllDishes(){
         return dishRepository.findAll();
     }
 

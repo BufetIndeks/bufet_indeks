@@ -9,7 +9,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin")
 public class DishCategoryController {
 
     DishCategoryService dishCategoryService;
@@ -24,21 +23,21 @@ public class DishCategoryController {
         return dishCategoryService.getCategories();
     }
 
-    @PostMapping("/addCategory")
+    @PostMapping("/admin/addCategory")
     public ResponseEntity<String> addCategory(@RequestBody DishCategory dishCategory){
         if(dishCategory.getId()!=null)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Kategoria nie może mieć ustawionego id");
         return dishCategoryService.addCategory(dishCategory);
     }
 
-    @PostMapping("/updateCategory")
+    @PostMapping("/admin/updateCategory")
     public ResponseEntity<String> updateCategory(@RequestBody DishCategory dishCategory){
         if(dishCategory.getId()==null)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Kategoria nie ma ustawionego id");
         return dishCategoryService.updateCategory(dishCategory);
     }
 
-    @PostMapping("/deleteCategory")
+    @PostMapping("/admin/deleteCategory")
     public ResponseEntity<String> deleteCategory(@RequestBody DishCategory dishCategory){
         if(dishCategory.getId()==null)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Kategoria nie ma ustawionego id");

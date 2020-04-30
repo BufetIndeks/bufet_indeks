@@ -21,23 +21,28 @@ public class DishController {
     }
 
     @GetMapping(path = "/menu", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Dish> getDishes(){
+    public List<Dish> getDishesForTable(){
+        return dishService.getAllActiveDishes();
+    }
+
+    @GetMapping(path = "/admin/menu", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Dish> getAllDishes(){
         return dishService.getAllDishes();
     }
 
-    @PostMapping(path="admin/addDish")
+    @PostMapping(path="/admin/addDish")
     public ResponseEntity<String> addDish(@RequestBody Dish dish){
         if(dish.getId()!=null)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Zapisywane danie nie może mieć ustawionego id");
         return dishService.addDish(dish);
     }
 
-    @PostMapping(path = "admin/setActiveDish")
+    @PostMapping(path = "/admin/setActiveDish")
     public ResponseEntity<String> setActive(@RequestParam (name="id") Long id, @RequestParam(name = "active") Boolean active){
         return dishService.setActive(id,active);
     }
 
-    @PostMapping(path = "admin/updateDish")
+    @PostMapping(path = "/admin/updateDish")
     public ResponseEntity<String> updateDish(@RequestBody Dish dish){
         if(dish.getId()==null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Danie nie ma id, więc nie istnieje w bazie");
