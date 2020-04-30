@@ -22,7 +22,7 @@ export default function App() {
 
     return(
         <Router>
-            <MenuComponent />
+            <MenuComponent role={role}/>
             <div className="row container">
             <Switch>
                 <Route exact path="/" component={HomeComponent} />

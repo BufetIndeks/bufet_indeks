@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import M from "materialize-css";
+import Chip from '@material-ui/core/Chip';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
 
 class DishEditTemplate extends Component{
     constructor(props) {
@@ -17,10 +21,13 @@ class DishEditTemplate extends Component{
             dishImage: dish.dishImage ? dish.dishImage : '',
             dishName: dish.dishName ? dish.dishName : '',
             dishDescription: dish.dishDescription ? dish.dishDescription : '',
+            dishPrice: dish.dishPrice ? dish.dishPrice : '',
+            dishIngredients: dish.dishIngredients ? dish.dishIngredients : '',
             dishCategory: dish.dishCategory ? dish.dishCategory : '',
             dishOfTheDay: dish.dishOfTheDay ? dish.dishOfTheDay : false,
             dishCategories: ["ramen","woda","picie"],
-            deleteMode: deleteMode ? true : false
+            deleteMode: deleteMode ? true : false,
+            ingredients : ["cola", "makaron"]
         }
     }
 
@@ -70,8 +77,27 @@ class DishEditTemplate extends Component{
                     <textarea className="materialize-textarea" id="dishDescription" value={this.state.dishDescription} onChange={this.handleChange} />
                 </div>
 
-                <div className="input-field col s12">
+                <div className="col s12">
+                        <Autocomplete
+                            multiple
+                            id="dishIngredients"
+                            options={this.state.ingredients}
+                            filterSelectedOptions
+                            renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Składniki"
+                            />
+                            )}
+                        />
+                </div>
 
+                <div className="input-field col s12">
+                    <label htmlFor="dishPrice">Cena dania</label>
+                    <input data={this.state.ingredients} className="validate active" id="dishPrice" type="text" max="5" min="3" value={this.state.dishPrice} onChange={this.handleChange} />
+                </div>
+
+                <div className="input-field col s12">
                     <select id="dishCategory" value={this.state.dishCategory} onChange={this.handleChange} >
                         {this.state.dishCategories.map( (el, index) => <option key={el} value={el}>{el}</option>)}
                     </select>

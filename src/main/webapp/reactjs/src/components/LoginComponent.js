@@ -12,7 +12,7 @@ class LoginComponent extends Component {
             password: '',
             rememberMe: true,
             hasLoginFailed: false,
-            showSuccessMessage: false,
+            showSuccessMessage: false
         }
         this.handleInputChange = this.handleInputChange.bind(this);
 
@@ -32,8 +32,9 @@ class LoginComponent extends Component {
        AuthenticationService
            .executeBasicAuthenticationService(this.state.username, this.state.password, this.state.rememberMe)
            .then(response=>{
-             if(response.status===200)
+             if(response.status===200){
                  this.props.history.push(`/`)
+             }
                else
                  this.props.history.push(`/login`)
            })
