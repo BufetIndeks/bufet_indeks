@@ -14,6 +14,7 @@ import AuthenticatedRoute from "./components/AuthenticatedRoute";
 import DishEditTemplate from "./templates/DishEditTemplate";
 import AdminDashboard from "./components/AdminDashboard";
 import ErrorTemplate from "./templates/ErrorTemplate"
+import DishShowTemplate from './templates/DishShowTemplate';
 
 export default function App() {
 
@@ -29,6 +30,7 @@ export default function App() {
                 <Route exact path="/login" component={LoginComponent} />
                 <AuthenticatedRoute role={role} url={url} exact path="/logout" component={LogoutComponent} />
                 <Route path="/list" exact component={DishList} />
+                <Route path="/list/:d" exact component={DishShowTemplate} />
                 <AuthenticatedRoute role={role} url={url} exact path="/allergens" component={AllergensComponent} />
                 <AuthenticatedRoute role={role} url={url} exact path="/admin/register" component={RegisterComponent} />
                 <AuthenticatedRoute role={role} url={url} exact path="/admin/dashboard" component={AdminDashboard} />

@@ -16,7 +16,7 @@ const MenuComponent = props => {
                     <li><Link className="nav-link" to="/login">Zaloguj</Link></li>
                     <li><Link className="nav-link" to="/admin/register">Rejestracja</Link></li>
                     <li><Link className="nav-link" to="/logout" >Logout</Link></li>
-                    <li><Link className="nav-link" to="/list">Lista dań</Link></li>
+                    <li><Link className="nav-link" to={{pathname: "/list", state: { view: 'client'}}}>Lista dań</Link></li>
                     <li><Link className="nav-link" to="/admin/dashboard">Dashboard</Link></li>
                     <li><Link className="nav-link" to="/allergens">Składniki</Link></li>
                 </ul>
