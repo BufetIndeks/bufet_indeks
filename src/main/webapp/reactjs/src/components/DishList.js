@@ -28,7 +28,7 @@ class DishList extends Component{
 
     getDishes()
     {
-        axios.get(API_URL + "/menu/dishes")
+        axios.get(API_URL + "/menu")
             .then(response => {
                 this.setState({
                     dishes:response.data})
