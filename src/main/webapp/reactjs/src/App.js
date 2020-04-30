@@ -13,6 +13,7 @@ import HomeComponent from "./components/HomeComponent";
 import AuthenticatedRoute from "./components/AuthenticatedRoute";
 import DishEditTemplate from "./templates/DishEditTemplate";
 import AdminDashboard from "./components/AdminDashboard";
+import ErrorTemplate from "./templates/ErrorTemplate"
 
 export default function App() {
 
@@ -33,6 +34,7 @@ export default function App() {
                 <AuthenticatedRoute role={role} url={url} exact path="/admin/dashboard" component={AdminDashboard} />
                 <AuthenticatedRoute role={role} url={url} exact path="/admin/dishes" component={DishList} />
                 <AuthenticatedRoute role={role} url={url} exact path="/admin/dishes/:id" component={DishEditTemplate} />
+                <Route path="/*"><ErrorTemplate /></Route>
             </Switch>
             </div>
         </Router>
