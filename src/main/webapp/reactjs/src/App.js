@@ -18,7 +18,7 @@ import About from "./components/About";
 export default function App() {
 
     const [role, setRole] = useState('ROLE_ADMIN');
-    const [url, setUrl] = useState('/logged_in')
+    const [url, setUrl] = useState('/adminLogged')
 
     return(
         <Router>
@@ -29,7 +29,7 @@ export default function App() {
                 <Route exact path="/login" component={LoginComponent} />
                 <AuthenticatedRoute role={role} url={url} exact path="/logout" component={LogoutComponent} />
                 <Route path="/list" exact component={DishList} />
-                <AuthenticatedRoute role={role} url={url} exact path="/allergens" component={AllergensComponent} />
+                <AuthenticatedRoute role={role} url={url} exact path="/allergen" component={AllergensComponent} />
                 <AuthenticatedRoute role={role} url={url} exact path="/admin/register" component={RegisterComponent} />
                 <AuthenticatedRoute role={role} url={url} exact path="/admin/dashboard" component={AdminDashboard} />
                 <AuthenticatedRoute role={role} url={url} exact path="/admin/dishes" component={DishList} />
