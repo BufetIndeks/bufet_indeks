@@ -16,6 +16,8 @@ import AdminDashboard from "./components/AdminDashboard";
 import ErrorTemplate from "./templates/ErrorTemplate"
 import DishShowTemplate from './templates/DishShowTemplate';
 
+import Regulamin from "./components/Regulamin";
+import About from "./components/About";
 export default function App() {
 
     const [role, setRole] = useState('ROLE_ADMIN');
@@ -37,6 +39,8 @@ export default function App() {
                 <AuthenticatedRoute role={role} url={url} exact path="/admin/dishes" component={DishList} />
                 <AuthenticatedRoute role={role} url={url} exact path="/admin/dishes/:id" component={DishEditTemplate} />
                 <Route path="/*"><ErrorTemplate /></Route>
+                <Route exact path="/regulamin" component={Regulamin} />
+                <Route exact path="/about" component={About} />
             </Switch>
             </div>
         </Router>
