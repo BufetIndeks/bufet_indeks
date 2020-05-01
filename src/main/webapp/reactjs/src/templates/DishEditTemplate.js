@@ -30,9 +30,10 @@ class DishEditTemplate extends Component{
             dishIngredients: dish.dishIngredients ? dish.dishIngredients : '',
             dishCategory: dish.dishCategory ? dish.dishCategory : '',
             dishOfTheDay: dish.dishOfTheDay ? dish.dishOfTheDay : false,
-            categories: ["ramen","woda","picie"],
+            categories: [],
             deleteMode: deleteMode ? true : false,
-            ingredients : ["cola", "makaron"],
+            ingredients : [],
+            ingredientsObject: [],
             editMode: editMode ? true : false
         }
     }
@@ -49,7 +50,9 @@ class DishEditTemplate extends Component{
 
         axios.get(API_URL + '/category')
             .then(response => {
-                this.setState({categories: [...response.data.map(dowolna=>dowolna.name)]})
+                this.setState({categories: [...response.data.map(el => el.name)],
+                                categoriesObj: response.data
+                })
             })
             .catch(error => {
                 console.log(error)
@@ -57,7 +60,8 @@ class DishEditTemplate extends Component{
 
         axios.get(API_URL + '/admin/ingredient')
             .then(response => {
-                this.setState({ingredients:  [...response.data.map(dowolna=>dowolna.ingredientName)]})
+                this.setState({ingredients:  [...response.data.map(el => el.ingredientName)],
+                                ingredientsObject: response.data})
             })
             .catch(error => {
                 console.log(error)
@@ -70,37 +74,57 @@ class DishEditTemplate extends Component{
         })
     }
 
+    handleIngredientsChange = (event, values) => {
+        console.log(this.state.ingredients)
+        let dishIngredientObj = values.map( ingredient => {
+            return this.state.ingredientsObject.find(el => el.ingredientName == ingredient)
+        })
+        console.log(dishIngredientObj)
+        this.setState({ dishIngredients: dishIngredientObj })
+    }
+
+    handleCategoriesChange = (event, values) => {
+        let dishCategoriesObj = values.map( category => {
+            return this.state.categoriesObj.find(el => el.name == category)
+        })
+        console.log(dishCategoriesObj)
+        this.setState({ dishCategory: dishCategoriesObj})
+    }
+
     handleSubmit = () => {
         if(this.state.deleteMode){
-            axios.post(API_URL + '/admin/setActiveDish', {
-                'id': this.state.id,
-                'active': false
-            })
+            const data = {
+                "id": this.state.id,
+                "active": false
+            }
+            axios.post(API_URL + '/admin/setActiveDish', data)
             .then(response => {
                 console.log(response)
             })
             .catch(error => {
-                console.log(error)
+                console.log(error.response)
             })
         }
         else if (this.state.editMode){
             console.log("edit")
         }
         else{
-            axios.post(API_URL + '/admin/addDish', {
-                dishName: this.state.dishName,
-                'obraz': null,
-                'cena': this.state.dishPrice,
-                'opis': this.state.dishDescription,
-                'danie_dnia': this.state.dishOfTheDay,
-                'danie_skladnik': this.state.dishIngredients,
-                'danie_kategoria': this.state.dishCategory
-            })
+            const data =  {
+                "dishName": this.state.dishName,
+                "dishImage": null,
+                "price": this.state.dishPrice,
+                "description": this.state.dishDescription,
+                "dishDay": this.state.dishOfTheDay,
+                "ingredientsList": this.state.dishIngredients,
+                "dishCategoryList": this.state.dishCategory,
+                "active": true
+            }
+            axios.post(API_URL + '/admin/addDish', data)
             .then(response => {
                 console.log(response)
             })
             .catch(error => {
-                console.log(error)
+                console.error(error.response)
             })
         }
     }
@@ -135,6 +159,7 @@ class DishEditTemplate extends Component{
                             multiple
                             id="dishIngredients"
                             options={this.state.ingredients}
+                            onChange={this.handleIngredientsChange}
                             filterSelectedOptions
                             renderInput={(params) => (
                             <TextField
@@ -151,10 +176,18 @@ class DishEditTemplate extends Component{
                 </div>
 
                 <div className="input-field col s12">
-                    <select id="dishCategory" value={this.state.dishCategory} onChange={this.handleChange} >
-                        {this.state.categories.map( (el, index) => <option key={el} value={el}>{el}</option>)}
-                    </select>
-                    <label htmlFor="dishCategory">Kategoria dania</label>
+                    <Autocomplete
+                            multiple
+                            id="dishCategory"
+                            options={this.state.categories}
+                            onChange={this.handleCategoriesChange}
+                            renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Kategorie"
+                            />
+                            )}
+                        />
                 </div>
 
                 <label className="input-field col s12">
