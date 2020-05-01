@@ -25,7 +25,7 @@ public class DishCategoryService {
     }
 
     public ResponseEntity<String> addCategory(DishCategory dishCategory) {
-        Optional<DishCategory> dishCategoryOptional = dishCategoryRepository.findById(dishCategory.getId());
+        Optional<DishCategory> dishCategoryOptional = dishCategoryRepository.findByName(dishCategory.getName());
         if (dishCategoryOptional.isEmpty()) {
             checkCategory(dishCategory);
             dishCategoryRepository.save(dishCategory);
@@ -60,7 +60,7 @@ public class DishCategoryService {
     private void checkCategory(DishCategory dishCategory) {
         if (dishCategory.getName() == null || dishCategory.getName().length() > 128)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Allergen musi mieć ustawioną nazwe, krótszą niż 32 znaki");
-        else if (!dishCategory.getName().matches("\\p{Lu}\\p{Ll}*"))
+        else if (!dishCategory.getName().matches("[\\p{L}\\p{Z}]+"))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nazwa alergenu jest niepoprawna");
     }
 }

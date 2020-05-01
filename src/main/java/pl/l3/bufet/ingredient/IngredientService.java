@@ -29,7 +29,7 @@ public class IngredientService {
 
     public ResponseEntity<String> addIngredient(Ingredient ingredient){
 
-        Optional<Ingredient> optionalIngredient = ingredientRepository.findById(ingredient.getId());
+        Optional<Ingredient> optionalIngredient = ingredientRepository.findByIngredientName(ingredient.getIngredientName());
         if(optionalIngredient.isEmpty()){
             checkIngredient(ingredient);
             ingredientRepository.save(ingredient);
@@ -60,7 +60,7 @@ public class IngredientService {
     }
 
     private void checkIngredient(Ingredient ingredient){
-        if(ingredient.getIngredientName().length()>64 || !ingredient.getIngredientName().matches("\\p{Lu}\\p{Ll}*"))
+        if(ingredient.getIngredientName().length()>64 || !ingredient.getIngredientName().matches("[\\p{L}\\p{Z}]+"))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nazwa składnika ma powyżej 64 znaków, lub jest niepoprawna");
 
         for (Allergen allergen : ingredient.getAllergenList()) {

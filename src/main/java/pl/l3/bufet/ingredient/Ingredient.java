@@ -16,13 +16,12 @@ public class Ingredient {
     @Column(name = "skladnik_id")
     private Long id;
 
-    @NotEmpty
-    @Column(name="skladnik", unique = true)
+    @Column(name="skladnik", unique = true, nullable = false)
     private String ingredientName;
 
     @ManyToMany
     @JoinTable(name = "alergen_skladnik",
-            joinColumns = {@JoinColumn(name = "danie_id", referencedColumnName = "skladnik_id")},
+            joinColumns = {@JoinColumn(name = "skladnik_id", referencedColumnName = "skladnik_id")},
             inverseJoinColumns = {@JoinColumn(name = "alergen_id", referencedColumnName = "alergen_id")})
         List<Allergen> allergenList = new ArrayList<>();
 

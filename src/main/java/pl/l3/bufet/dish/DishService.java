@@ -14,6 +14,7 @@ import pl.l3.bufet.ingredient.IngredientRepository;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Service
 public class DishService {
@@ -79,12 +80,14 @@ public class DishService {
 
 
     public void checkDish(Dish dish) {
-        if (dish.getDishName().length() > 128 || !dish.getDishName().matches("\\p{Lu}\\p{Ll}*"))
+
+       if (dish.getDishName().length() > 128 || !Pattern.matches("[\\p{L}\\p{Z}]+", dish.getDishName()))//!dish.getDishName().matches("\\p{Lu}\\p{Ll}*"))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nazwa dania jest niepoprawna");
         try {
-            if (dish.getDishImage().length() / 1024 / 1024 > 16)
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Zdjęcie posiada zbyt duży rozmiar");
-
+            if(dish.getDishImage()!=null) {
+                if (dish.getDishImage().length() / 1024 / 1024 > 16)
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Zdjęcie posiada zbyt duży rozmiar");
+            }
         } catch (SQLException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }

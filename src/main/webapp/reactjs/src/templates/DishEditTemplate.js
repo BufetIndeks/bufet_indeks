@@ -49,15 +49,15 @@ class DishEditTemplate extends Component{
 
         axios.get(API_URL + '/category')
             .then(response => {
-                this.setState({categories: response.data})
+                this.setState({categories: [...response.data.map(dowolna=>dowolna.name)]})
             })
             .catch(error => {
                 console.log(error)
             })
 
-        axios.get(API_URL + '/ingredient')
+        axios.get(API_URL + '/admin/ingredient')
             .then(response => {
-                this.setState({ingredients: response.data})
+                this.setState({ingredients:  [...response.data.map(dowolna=>dowolna.ingredientName)]})
             })
             .catch(error => {
                 console.log(error)
@@ -88,7 +88,7 @@ class DishEditTemplate extends Component{
         }
         else{
             axios.post(API_URL + '/admin/addDish', {
-                'nazwa': this.state.dishName,
+                dishName: this.state.dishName,
                 'obraz': null,
                 'cena': this.state.dishPrice,
                 'opis': this.state.dishDescription,

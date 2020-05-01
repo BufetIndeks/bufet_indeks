@@ -57,7 +57,7 @@ public class AllergenService {
     private void checkAllergen(Allergen allergen){
         if(allergen.getAllergenName()==null || allergen.getAllergenName().length()>32)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Allergen musi mieć ustawioną nazwe, krótszą niż 32 znaki");
-        else if(!allergen.getAllergenName().matches("\\p{Lu}\\p{Ll}*"))
+        else if(!allergen.getAllergenName().matches("[\\p{L}\\p{Z}]+"))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nazwa alergenu jest niepoprawna");
     }
 }
