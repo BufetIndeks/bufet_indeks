@@ -18,6 +18,8 @@ class MenuComponent extends Component {
                         <li><Link className="nav-link" to="/logout" >Logout</Link></li>
                         <li><Link className="nav-link" to="/list">Lista dań</Link></li>
                         <li><Link className="nav-link" to="/allergens">Składniki</Link></li>
+                        <li><Link className="nav-link" to="/regulamin">Regulamin</Link></li>
+                        <li><Link className="nav-link" to="/about">O nas</Link></li>
                     </ul>
                 </nav>
             </header>

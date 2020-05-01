@@ -13,7 +13,8 @@ import HomeComponent from "./components/HomeComponent";
 import AuthenticatedRoute from "./components/AuthenticatedRoute";
 import DishEditTemplate from "./templates/DishEditTemplate";
 import AdminDashboard from "./components/AdminDashboard";
-
+import Regulamin from "./components/Regulamin";
+import About from "./components/About";
 export default function App() {
 
     const [role, setRole] = useState('ROLE_ADMIN');
@@ -33,6 +34,8 @@ export default function App() {
                 <AuthenticatedRoute role={role} url={url} exact path="/admin/dashboard" component={AdminDashboard} />
                 <AuthenticatedRoute role={role} url={url} exact path="/admin/dishes" component={DishList} />
                 <AuthenticatedRoute role={role} url={url} exact path="/admin/dishes/:id" component={DishEditTemplate} />
+                <Route exact path="/regulamin" component={Regulamin} />
+                <Route exact path="/about" component={About} />
             </Switch>
             </div>
         </Router>
