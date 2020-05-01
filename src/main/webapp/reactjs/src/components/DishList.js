@@ -11,14 +11,14 @@ class DishList extends Component{
         super(props);
 
 
-        let editable = false;
+        let view = false;
         if(this.props.location !== undefined && this.props.location.state !== undefined) {
-            editable = this.props.location.state.editable;
+            view = this.props.location.state.view;
         }
 
         this.state={
             dishes: [],
-            editable: editable
+            view: view
         };
     }
 
@@ -28,7 +28,7 @@ class DishList extends Component{
 
     getDishes()
     {
-        axios.get(API_URL + "/menu/dishes")
+        axios.get(API_URL + "/menu")
             .then(response => {
                 this.setState({
                     dishes:response.data})
@@ -39,7 +39,7 @@ class DishList extends Component{
         return(
             <ul className="col s12">
                 {this.state.dishes.map( (dish, index) => {
-                    return(<li key={index} className="col s4"><Dish dish={dish} editable={this.state.editable} /></li>)
+                    return(<li key={index} className="col s4"><Dish dish={dish} view={this.state.view} key={index} /></li>)
                 })}
             </ul>
         );

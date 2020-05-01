@@ -13,27 +13,32 @@ import HomeComponent from "./components/HomeComponent";
 import AuthenticatedRoute from "./components/AuthenticatedRoute";
 import DishEditTemplate from "./templates/DishEditTemplate";
 import AdminDashboard from "./components/AdminDashboard";
+import ErrorTemplate from "./templates/ErrorTemplate"
+import DishShowTemplate from './templates/DishShowTemplate';
+
 import Regulamin from "./components/Regulamin";
 import About from "./components/About";
 export default function App() {
 
     const [role, setRole] = useState('ROLE_ADMIN');
-    const [url, setUrl] = useState('/adminLogged')
+    const [url, setUrl] = useState('/logged_in')
 
     return(
         <Router>
-            <MenuComponent />
+            <MenuComponent role={role}/>
             <div className="row container">
             <Switch>
                 <Route exact path="/" component={HomeComponent} />
                 <Route exact path="/login" component={LoginComponent} />
                 <AuthenticatedRoute role={role} url={url} exact path="/logout" component={LogoutComponent} />
                 <Route path="/list" exact component={DishList} />
-                <AuthenticatedRoute role={role} url={url} exact path="/allergen" component={AllergensComponent} />
+                <Route path="/list/:d" exact component={DishShowTemplate} />
+                <AuthenticatedRoute role={role} url={url} exact path="/allergens" component={AllergensComponent} />
                 <AuthenticatedRoute role={role} url={url} exact path="/admin/register" component={RegisterComponent} />
                 <AuthenticatedRoute role={role} url={url} exact path="/admin/dashboard" component={AdminDashboard} />
                 <AuthenticatedRoute role={role} url={url} exact path="/admin/dishes" component={DishList} />
                 <AuthenticatedRoute role={role} url={url} exact path="/admin/dishes/:id" component={DishEditTemplate} />
+                <Route path="/*"><ErrorTemplate /></Route>
                 <Route exact path="/regulamin" component={Regulamin} />
                 <Route exact path="/about" component={About} />
             </Switch>
