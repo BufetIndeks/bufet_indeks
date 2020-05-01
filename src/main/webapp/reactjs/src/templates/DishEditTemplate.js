@@ -94,9 +94,10 @@ class DishEditTemplate extends Component{
     handleSubmit = () => {
         if(this.state.deleteMode){
             const data = {
-                "id": this.state.id,
+                "id": 1,
                 "active": false
             }
+            console.log(data)
             axios.post(API_URL + '/admin/setActiveDish', data)
             .then(response => {
                 console.log(response)

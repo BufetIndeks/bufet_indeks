@@ -38,8 +38,10 @@ public class DishController {
     }
 
     @PostMapping(path = "/admin/setActiveDish")
-    public ResponseEntity<String> setActive(@RequestParam (name="id") Long id, @RequestParam(name = "active") Boolean active){
-        return dishService.setActive(id,active);
+    public ResponseEntity<String> setActive(@RequestBody Dish dish){
+        if(dish.getId()==null)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Danie nie posiada id");
+        return dishService.setActive(dish.getId(),dish.isActive());
     }
 
     @PostMapping(path = "/admin/updateDish")
