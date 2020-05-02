@@ -1,86 +1,107 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import AuthenticationService from '../service/AuthenticationService';
 
+import {FormControlLabel, Checkbox, Button, Container, TextField, Grid, Box} from '@material-ui/core'
 
-class LoginComponent extends Component {
+const LoginComponent = (props) => {
 
-    constructor(props) {
-        super(props)
-
-        this.state = {
-            username: '',
-            password: '',
-            rememberMe: true,
-            hasLoginFailed: false,
-            showSuccessMessage: false
-        }
-        this.handleInputChange = this.handleInputChange.bind(this);
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+    const [rememberMe, setRememberMe] = useState(false)
+    const [loginFail, setLoginFail] = useState(false)
+    const [successMessage, setSuccessMessage] = useState(false)
 
 
-    }
-
-    handleChange = (event) => {
-        this.setState(
-            {
-                [event.target.name]
-                    : event.target.value
-            }
-        )
-    }
-
-    loginClicked = () => {
+    const handleSubmit = () => {
        AuthenticationService
-           .executeBasicAuthenticationService(this.state.username, this.state.password, this.state.rememberMe)
+           .executeBasicAuthenticationService(username, password, rememberMe)
            .then(response=>{
-             if(response.status===200){
-                 this.props.history.push(`/`)
-             }
-               else
-                 this.props.history.push(`/login`)
+                if(response.status===200)
+                    this.props.history.push(`/`)
+                else
+                    this.props.history.push(`/login`)
            })
-
-
-
     }
-    handleInputChange(event) {
-        const target = event.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-        const name = target.name;
 
-        this.setState({
-            [name]: value
-        });
-    }
-    render() {
-            return (
-                <div className=" col s10 offset-s1 l4 offset-l4">
-                    <div className="red-text accent-2"><h1>Login</h1></div>
-                    {this.state.hasLoginFailed && <div className="alert alert-warning">Invalid Credentials</div>}
-                    {this.state.showSuccessMessage && <div>Login Sucessful</div>}
-                    <div className="input-field">
-                        <input className="validate" name="username" type="text" id="username" value={this.state.username} onChange={this.handleChange}/>
-                        <label htmlFor="username">Username</label>
-                    </div>
-                    <div className="input-field">
-                        <label htmlFor="password">Password</label>
-                        <input name="password" type="password" id="password" value={this.state.password} onChange={this.handleChange} />
-                    </div>
-                    <div>
-                        <label>
-                            Zapamiętaj mnie na tym komputerze
-                            <input
-                                name="rememberMe"
-                                type="checkbox"
-                                checked={this.state.rememberMe}
-                                onChange={this.handleInputChange} />
-                            <span></span>
-                        </label>
-                    </div>
+    return (
+        <Container maxWidth="sm">
+            <Grid container spacing={0} justify="center" direction="column" alignItems="stretch">
+                <Grid item>
+                    <h1>Panel logowania</h1>
+                </Grid>
+                <Grid item xs={12} >
+                    <TextField 
+                        id="username" 
+                        fullWidth
+                        inputProps={{
+                            maxlength: 32
+                          }}
+                        onChange={e => setUsername(e.target.value)} 
+                        margin="normal" 
+                        helperText={`${username.length}/32`}
+                        label="Nazwa użytkownika" 
+                        variant="outlined" />
+                </Grid>
+                <Grid item xs={12} >
+                    <TextField 
+                        id="password" 
+                        fullWidth
+                        type="password"
+                        onChange={e => setPassword(e.target.value)} 
+                        margin="normal" 
+                        label="Hasło" 
+                        inputProps={{
+                            maxlength: 32
+                          }}
+                        helperText={`${password.length}/32`}
+                        variant="outlined" />
+                </Grid>
+                <Grid item xs={12}>
+                    <FormControlLabel label = "Zapamiętaj mnie na tym komputerze"
+                        control = {
+                            <Checkbox 
+                                checked={rememberMe} 
+                                color="primary"
+                                onChange={event => setRememberMe(event.target.checked)} 
+                                margin="normal" 
+                                name="rememberMe" />
+                    }/>
+                </Grid>
+                <Grid item xs={12}>
+                    <Box display="flex" justifyContent="flex-end">
+                        <Button variant="contained" color="primary" type="submit" margin="normal" onClick={handleSubmit}>Zaloguj się</Button>
+                    </Box>
+                </Grid>
+            </Grid>
+        </Container>
+        // <div className=" col s10 offset-s1 l4 offset-l4">
+        //     <div className="red-text accent-2"><h1>Login</h1></div>
 
-                    <button className="btn blue right" onClick={this.loginClicked}>Zaloguj się</button>
-                </div>
-        )
-    }
+        //     {loginFail && <div className="alert alert-warning">Invalid Credentials</div>}
+        //     {successMessage && <div>Login Sucessful</div>}
+            
+        //     <div className="input-field">
+        //         <input className="validate" name="username" type="text" id="username" value={username} onChange={event => setUsername(event.target.value)}/>
+        //         <label htmlFor="username">Username</label>
+        //     </div>
+            
+        //     <div className="input-field">
+        //         <label htmlFor="password">Password</label>
+        //         <input name="password" type="password" id="password" value={password} onChange={event => setPassword(event.target.value)} />
+        //     </div>
+           
+        //    <div>
+        //         <FormControlLabel
+        //             label = "Zapamiętaj mnie na tym komputerze"
+        //             control = {
+        //                 <Checkbox checked={remember} onChange={event => setRemember(event.target.checked)} name="rememberMe" />
+        //             }
+        //          />
+        //     </div>
+
+        //     <button className="btn blue right" onClick={loginClicked}>Zaloguj się</button>
+        // </div>
+    )
 }
 
 export default LoginComponent

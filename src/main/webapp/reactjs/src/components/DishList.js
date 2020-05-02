@@ -5,6 +5,8 @@ import axios from 'axios';
 import AuthenticationService from "../service/AuthenticationService";
 import {API_URL} from "../ApiUrl";
 
+import {Container, Grid} from '@material-ui/core'
+
 class DishList extends Component{
 
     constructor(props){
@@ -30,18 +32,26 @@ class DishList extends Component{
     {
         axios.get(API_URL + "/menu")
             .then(response => {
+                console.log(response.data)
                 this.setState({
                     dishes:response.data})
+            })
+            .catch(error => {
+                console.error(error)
             })
     }
 
     render() {
         return(
-            <ul className="col s12">
+            <Container maxWidth="md" style={{marginTop: "10px"}}>
+                <Grid container spacing={4}>
                 {this.state.dishes.map( (dish, index) => {
-                    return(<li key={index} className="col s4"><Dish dish={dish} view={this.state.view} key={index} /></li>)
+                     return(<Grid item xs={4}>
+                                <Dish dish={dish} view={this.state.view} />
+                            </Grid>)
                 })}
-            </ul>
+                </Grid>
+            </Container>
         );
 }
                 }
