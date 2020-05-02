@@ -1,34 +1,19 @@
-import React, {Component} from 'react'
+import React, { useState } from 'react'
 import axios from 'axios';
-import M from "materialize-css";
 import {API_URL} from "../ApiUrl";
+import {Button, Container, TextField, Grid, Box, FormControl, InputLabel} from '@material-ui/core'
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import Select from '@material-ui/core/Select';
 
-class RegisterComponent extends Component {
-    componentDidMount() {
-        M.AutoInit();
-    }
+const RegisterComponent = props => {
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            username: '',
-            password: '',
-            role : 'ROLE_ADMIN',
-            hasCreationFailed: false,
-            showSuccessMessage: false,
-        }
-    }
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+    const [role, setRole] = useState('ROLE_ADMIN')
+    const [hasCreationFailed, setHadCreationFailed] = useState(false)
+    const [successMessage, setSuccessMessage] = useState(false)
 
-    handleChange = (event) => {
-        this.setState(
-            {
-                [event.target.name]: event.target.value
-
-            }
-        )
-    }
-
-    submitClicked = () => {
+    const handleSubmit = () => {
         console.log({login: this.state.username,
             password: this.state.password,
             roles: [{"role":this.state.role}]})
@@ -54,41 +39,73 @@ class RegisterComponent extends Component {
             })
     }
 
-    render() {
-         return (
-                <div className="row container">
-                    <div className="col s10 offset-s1 l4 offset-l4">
-                        <div className="purple-text accent-2"><h5>Create New Account</h5></div>
+    return(
+        <Container maxWidth="sm">
+            <Grid container spacing={0} justify="center" direction="column" alignItems="stretch">
 
-                        <div className="input-field">
-                            <select value={this.state.role}  onChange={this.handleChange} name="role">
-                                <option value='ROLE_ADMIN'>Administrator</option>
-                                <option value='ROLE_TABLE'>Klient</option>
-                                <option value='ROLE_WORKER'>Pracownik</option>
-                            </select>
-                        </div>
-                        <div className="input-field">
-                            <input className="validate" type="text" id="username" name="username"
-                                   value={this.state.username} onChange={this.handleChange}/>
-                            <label htmlFor="username">Username</label>
-                        </div>
-                        <div className="input-field">
-                            <label htmlFor="password">Password</label>
-                            <input type="password" id="password" name="password" value={this.state.password}
-                                   onChange={this.handleChange}/>
-                        </div>
+                <Grid item>
+                    <h1>Stwórz nowego użytkownika</h1>
+                </Grid>
 
+                <Grid item xs={12}>
+                    <TextField 
+                            id="username" 
+                            fullWidth
+                            inputProps={{
+                                maxlength: 32
+                            }}
+                            onChange={e => setUsername(e.target.value)} 
+                            margin="normal" 
+                            helperText={`${username.length}/32`}
+                            label="Nazwa użytkownika" 
+                            variant="outlined" />
+                </Grid>
 
-                        <button className="btn blue col l12 waves-effect waves-light"
-                                onClick={this.submitClicked}>Zarejestruj użytkownika
-                        </button>
-                        {this.state.showSuccessMessage &&
-                        <div className="green-text">Rejestracja zakończona powodzeniem</div>}
-                        {this.state.hasCreationFailed && <div className="red-text">Rejestracja nie powiodła się</div>}
-                    </div>
-                </div>
-)}
+                <Grid item xs={12}>
+                    <TextField 
+                            id="password" 
+                            fullWidth
+                            type="password"
+                            onChange={e => setPassword(e.target.value)} 
+                            margin="normal" 
+                            label="Hasło" 
+                            inputProps={{
+                                maxlength: 32
+                            }}
+                            helperText={`${password.length}/32`}
+                            variant="outlined" />
+                </Grid>
 
+                <Grid item xs={12}>
+                <FormControl variant="outlined" fullWidth margin="normal">
+                    <InputLabel htmlFor="roleSelect">Age</InputLabel>
+                        <Select
+                            native
+                            value={role}
+                            inputProps={{
+                                id: "roleSelect"
+                            }}
+                            onChange={e => setRole(e.target.value)}
+                            label="Rola"
+                            >
+                            <option aria-label="None" value="" />
+                            <option value="ROLE_ADMIN">Administrator</option>
+                            <option value="ROLE_WORKER">Pracownik</option>
+                            <option value="ROLE_TABLE">Stolik</option>
+                        </Select>
+                    </FormControl>
+                </Grid>
+
+                <Grid item xs={12}>
+                    <FormControl fullWidth margin="normal">
+                        <Box display="flex" justifyContent="flex-end">
+                            <Button variant="contained" color="primary" type="submit" margin="normal" onClick={handleSubmit}>Stwórz</Button>
+                        </Box>
+                    </FormControl>
+                </Grid>
+            </Grid>
+        </Container>
+    )
 }
 
 export default RegisterComponent

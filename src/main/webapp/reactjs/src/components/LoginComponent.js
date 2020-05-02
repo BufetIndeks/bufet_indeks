@@ -25,11 +25,11 @@ const LoginComponent = (props) => {
 
     return (
         <Container maxWidth="sm">
-            <Grid container spacing={0} justify="flex-end" direction="column" alignItems="stretch">
+            <Grid container spacing={0} justify="center" direction="column" alignItems="stretch">
                 <Grid item>
                     <h1>Panel logowania</h1>
                 </Grid>
-                <Grid item md={12} >
+                <Grid item xs={12} >
                     <TextField 
                         id="username" 
                         fullWidth
@@ -46,6 +46,7 @@ const LoginComponent = (props) => {
                     <TextField 
                         id="password" 
                         fullWidth
+                        type="password"
                         onChange={e => setPassword(e.target.value)} 
                         margin="normal" 
                         label="Hasło" 
