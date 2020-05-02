@@ -1,23 +1,24 @@
-import React, {Component} from 'react'
-import { Link, withRouter } from 'react-router-dom'
+import React from 'react'
+import { Link } from 'react-router-dom'
+import {Container, Grid} from '@material-ui/core'
 
-class HomeComponent extends Component{
-    constructor(props){
-        super(props);
-    }
+const HomeComponent = props => {
 
-    render(){
-        return(
-            <div className="row">
-                <img className="col s12 l4 offset-l4 marginTop" src={require("../logo.svg")} width="300px"/>
-                <Link className="nav-link" to="/login">
-                    <button className="btn blue col s10 offset-s1 l2 offset-l5 marginTop">
-                        Zaloguj się
-                    </button>
-                </Link>
-            </div>
-        )
-    }
+    return(
+        <Container maxWidth="md">
+            <Link to="/">
+                <Grid container justify="center" direction="column" alignItems="center">
+                    <Grid item xs={12}>
+                        <img className="col s12 l4 offset-l4 marginTop" src={require("../logo.svg")} width="300px"/>
+                    </Grid>
+                        <h1>Dotnij, aby zamówić</h1>
+                    <Grid item xs={12}>
+
+                    </Grid>
+                </Grid>
+            </Link>
+        </Container>
+    )
 }
 
 export default HomeComponent;
