@@ -47,16 +47,11 @@ class DishList extends Component{
                 <Grid container spacing={4}>
                 {this.state.dishes.map( (dish, index) => {
                      return(<Grid item xs={4}>
-                                <Dish dish={dish} view={this.state.view} key={index} />
+                                <Dish dish={dish} view={this.state.view} />
                             </Grid>)
                 })}
                 </Grid>
             </Container>
-            // <ul className="col s12">
-            //     {this.state.dishes.map( (dish, index) => {
-            //         return(<li key={index} className="col s4"><Dish dish={dish} view={this.state.view} key={index} /></li>)
-            //     })}
-            // </ul>
         );
 }
                 }

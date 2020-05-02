@@ -1,9 +1,6 @@
 import React from "react";
 import { Link } from 'react-router-dom';
-import { Card, CardActionArea, CardActions, CardContent, CardMedia, Typography, IconButton} from '@material-ui/core';
-import DeleteIcon from '@material-ui/icons/Delete'
-import EditIcon from '@material-ui/icons/Edit'
-import PanToolIcon from '@material-ui/icons/PanTool'
+import { Card, CardActionArea, CardContent, CardMedia, Typography, CardActions, Button} from '@material-ui/core';
 
 const Dish = props => {
 
@@ -32,43 +29,12 @@ const Dish = props => {
                         </Typography>
                     </CardContent>
                 </CardActionArea>
+                <CardActions>
+                    <Link to={{pathname: path, state: {...props, deleteMode: true}}}><Button>Delete</Button></Link>
+                </CardActions>
             </Link>
-            {/* <CardActions>
-                {props.view === 'admin' && <>
-                    <Link to={{ pathname: `/admin/dishes/${props.dish.id}`, state: {...props, editMode: true}}} >
-                        <IconButton aria-label="Modyfikuj"><EditIcon /></IconButton>
-                        </Link>
-                    <Link to={{ pathname: `/admin/dishes/${props.dish.id}`, state: {...props, deleteMode: true}}}>
-                        <IconButton aria-label="Usuń"><DeleteIcon /></IconButton>
-                    </Link>
-                </>}
-                {props.view === 'client' && 
-                    <Link to={{ pathname: `/list/${props.key}`, state: {...props}}}>
-                        <IconButton aria-label="Zamów"><PanToolIcon /></IconButton>
-                    </Link>}
-            </CardActions> */}
         </Card>
     )
-
-    // return(
-    //     <div className="card hoverable">
-            
-    //         <div className="card-image">
-    //             <img src="https://images.freeimages.com/images/premium/previews/2871/28718848-spaghetti-with-pesto.jpg" alt="Obrazek dania"/>
-    //             {props.view === 'admin' &&
-    //             <React.Fragment>
-    //                 <Link to={{ pathname: `/admin/dishes/${props.dish.id}`, state: {...props, editMode: true}}} className="btn-floating halfway-fab waves-effect waves-light blue left"><i className="material-icons">edit</i></Link>
-    //                 <Link to={{ pathname: `/admin/dishes/${props.dish.id}`, state: {...props, deleteMode: true}}} className="btn-floating halfway-fab waves-effect waves-light red"><i className="material-icons">delete</i></Link>
-    //             </React.Fragment>
-    //             }
-    //             {props.view === 'client' && <Link to={{ pathname: `/list/${props.key}`, state: {...props}}} className="btn-floating halfway-fab waves-effect waves-light blue green"><i className="material-icons">pan_tool</i></Link>}
-    //         </div>
-    //         <div className="card-content row">
-    //             <b><p className="col s12 center">{props.dish.dishName}</p></b>
-    //         </div>
-    //     </div>
-    // )
-
 }
 
 export default Dish;
