@@ -71,6 +71,7 @@ public class DishService {
         Optional<Dish> dish = dishRepository.findById(id);
         dish.ifPresentOrElse(value -> {
                     value.setActive(active);
+                    dishRepository.save(value);
                 },
                 () -> {
                     throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Nie znaleziono dania o takim id");

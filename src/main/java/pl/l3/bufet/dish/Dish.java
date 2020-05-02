@@ -34,9 +34,6 @@ public class Dish {
     @Column(name="usuniety",nullable = false)
     private boolean active = false;
 
-
-
-
     @NotEmpty
     @ManyToMany
     @JoinTable(name = "danie_skladnik",
