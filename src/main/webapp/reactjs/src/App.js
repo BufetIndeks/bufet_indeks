@@ -20,10 +20,12 @@ import About from "./components/About";
 
 import { Container } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import ListTemplate from './templates/ListTemplate';
+import { API_URL } from './ApiUrl';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        //width: "40%",
+        marginTop: "20px",
         display: "flex",
         justifyContent: "center",
         alignItems: "center"
@@ -53,9 +55,16 @@ export default function App() {
                     <Route role={role} url={url} exact path="/admin/dashboard" component={AdminDashboard} />
                     <Route role={role} url={url} exact path="/admin/dishes" component={DishList} />
                     <Route role={role} url={url} exact path="/admin/dishes/:id" component={DishEditTemplate} />
-                    <Route path="/*"><ErrorTemplate /></Route>
+                    
+                    <Route exact path="/admin/ingredients" role={role} url={url}>
+                        <ListTemplate url={'/admin/ingredient'} headers={['Składnik', 'Alergeny']}/>
+                    </Route>
+                    <Route exact path="/admin/categories" role={role} url={url}>
+                        <ListTemplate url={'/category'} headers={['Kategoria']}/>
+                    </Route>
                     <Route exact path="/regulamin" component={Regulamin} />
                     <Route exact path="/about" component={About} />
+                    <Route path="/*"><ErrorTemplate /></Route>
                 </Switch>
             </Container>
         </Router>
