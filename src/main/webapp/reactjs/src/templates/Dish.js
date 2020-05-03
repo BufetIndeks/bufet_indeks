@@ -29,9 +29,11 @@ const Dish = props => {
                         </Typography>
                     </CardContent>
                 </CardActionArea>
-                <CardActions>
-                    <Link to={{pathname: path, state: {...props, deleteMode: true}}}><Button>Delete</Button></Link>
-                </CardActions>
+                {props.view === 'admin' &&
+                    <CardActions>
+                        <Link to={{pathname: path, state: {...props, deleteMode: true}}}><Button>Delete</Button></Link>
+                    </CardActions>
+                }
             </Link>
         </Card>
     )
