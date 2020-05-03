@@ -8,8 +8,6 @@ const LoginComponent = (props) => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [rememberMe, setRememberMe] = useState(false)
-    const [loginFail, setLoginFail] = useState(false)
-    const [successMessage, setSuccessMessage] = useState(false)
 
 
     const handleSubmit = () => {
@@ -17,9 +15,9 @@ const LoginComponent = (props) => {
            .executeBasicAuthenticationService(username, password, rememberMe)
            .then(response=>{
                 if(response.status===200)
-                    this.props.history.push(`/`)
+                    props.history.push(`/`)
                 else
-                    this.props.history.push(`/login`)
+                    props.history.push(`/login`)
            })
     }
 
@@ -34,7 +32,7 @@ const LoginComponent = (props) => {
                         id="username" 
                         fullWidth
                         inputProps={{
-                            maxlength: 32
+                            maxLength: 32
                           }}
                         onChange={e => setUsername(e.target.value)} 
                         margin="normal" 
@@ -51,7 +49,7 @@ const LoginComponent = (props) => {
                         margin="normal" 
                         label="Hasło" 
                         inputProps={{
-                            maxlength: 32
+                            maxLength: 32
                           }}
                         helperText={`${password.length}/32`}
                         variant="outlined" />

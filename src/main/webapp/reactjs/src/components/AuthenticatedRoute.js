@@ -1,17 +1,11 @@
 import React, { Component } from 'react'
-    import { Route, Redirect, withRouter } from 'react-router-dom'
+    import { Route, withRouter } from 'react-router-dom'
 import axios from "axios";
 import {API_URL} from "../ApiUrl";
 
-
-
-
 class AuthenticatedRoute extends Component {
-
     constructor(props) {
         super(props)
-
-
 
         this.state = {
             authorized: false,

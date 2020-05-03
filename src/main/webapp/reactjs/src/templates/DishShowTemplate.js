@@ -1,7 +1,4 @@
 import React, { Component } from 'react';
-import M from "materialize-css";
-import Chip from '@material-ui/core/Chip';
-import Autocomplete from '@material-ui/lab/Autocomplete';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 
@@ -41,7 +38,7 @@ class DishShowTemplate extends Component{
             <>
                 <div className="card col s10 offset-s1">
                     <div className="card-image">
-                        <img src={this.state.dishImage} />
+                        <img src={this.state.dishImage} alt="Obrazek poglądowy"/>
                     </div>
                 </div>
 

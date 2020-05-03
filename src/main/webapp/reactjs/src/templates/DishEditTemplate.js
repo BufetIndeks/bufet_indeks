@@ -3,7 +3,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import axios from 'axios';
 import { API_URL } from '../ApiUrl';
 
-import {Box, TextField, FormControlLabel, Checkbox, Card, Button, CardMedia, Container, Grid, CardActionArea} from '@material-ui/core'
+import {Box, TextField, FormControlLabel, Checkbox, Card, Button, CardMedia, Container, Grid} from '@material-ui/core'
 
 const DishEditTemplate = props => {
 
@@ -227,7 +227,7 @@ const DishEditTemplate = props => {
                             <Button type="submit" variant="contained" color="primary" margin="normal" onClick={console.log("Nie zrobione")}>Modyfikuj</Button>}
                         {deleteMode && 
                             <Button type="submit" variant="contained" color="secondary" margin="normal" onClick={handleSubmit}>Usuń</Button>}
-                        {props.location.state == undefined && 
+                        {props.location.state === undefined && 
                             <Button type="submit" variant="contained" color="primary" margin="normal"onClick={handleSubmit}>Dodaj</Button>}
                     </Box>
                 </Grid>

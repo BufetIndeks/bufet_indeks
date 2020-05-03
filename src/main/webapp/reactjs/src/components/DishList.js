@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import Dish from '../templates/Dish';
-import '../App.css'
 import axios from 'axios';
-import AuthenticationService from "../service/AuthenticationService";
 import {API_URL} from "../ApiUrl";
 
 import {Container, Grid} from '@material-ui/core'
