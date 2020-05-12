@@ -11,7 +11,7 @@ const DishEditTemplate = props => {
     const [image, setImage] = useState(null)
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
-    const [price, setPrice] = useState(null)
+    const [price, setPrice] = useState(0)
     const [ingredients, setIngredients] = useState([])
     const [categories, setCategories] = useState([])
     const [dishDay, setDishDay] = useState(false)
@@ -142,7 +142,7 @@ const DishEditTemplate = props => {
                         onChange={e => setName(e.target.value)}
                         margin="normal"
                         label="Nazwa dania"
-                        helperText={`/128`}
+                        helperText={`${name.length}/128`}
                         variant="outlined" />
                 </Grid>
 
@@ -157,7 +157,7 @@ const DishEditTemplate = props => {
                         onChange={e => setDescription(e.target.value)}
                         margin="normal"
                         label="Opis dania"
-                        helperText={`/512`}
+                        helperText={`${description.length}/512`}
                         variant="outlined" />
                 </Grid>
 
@@ -186,6 +186,10 @@ const DishEditTemplate = props => {
                         fullWidth
                         value={price}
                         onChange={e => setPrice(e.target.value)}
+                        inputProps={{
+                            maxLength: 10
+                        }}
+                        helperText={`Tylko cyfry i przecinek`}
                         margin="normal"
                         label="Cena dania"
                         variant="outlined" />
@@ -224,11 +228,11 @@ const DishEditTemplate = props => {
                 <Grid item xs={12}>
                     <Box display="flex" justifyContent="flex-end">
                         {editMode && 
-                            <Button type="submit" variant="contained" color="primary" margin="normal" onClick={console.log("Nie zrobione")}>Modyfikuj</Button>}
+                            <Button type="submit" variant="contained" color="primary" margin="normal" onClick={() => console.log("Nie zrobione")}>Modyfikuj</Button>}
                         {deleteMode && 
-                            <Button type="submit" variant="contained" color="secondary" margin="normal" onClick={handleSubmit}>Usuń</Button>}
+                            <Button type="submit" variant="contained" color="secondary" margin="normal" onClick={() => handleSubmit()}>Usuń</Button>}
                         {props.location.state === undefined && 
-                            <Button type="submit" variant="contained" color="primary" margin="normal"onClick={handleSubmit}>Dodaj</Button>}
+                            <Button type="submit" variant="contained" color="primary" margin="normal"onClick={() => handleSubmit()}>Dodaj</Button>}
                     </Box>
                 </Grid>
 
