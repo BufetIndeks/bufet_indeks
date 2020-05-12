@@ -67,6 +67,13 @@ public class DishService {
         }
     }
 
+    public List<Dish> getDishesFromCategory(String name){
+        Optional <DishCategory> dishCategory = dishCategoryRepository.findByName(name);
+        if(dishCategory.isEmpty())
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Brak takiej kategori");
+        return dishRepository.findAllByDishCategoryList(dishCategory.get().getId());
+    }
+
     public ResponseEntity<String> setActive(Long id, Boolean active) {
         Optional<Dish> dish = dishRepository.findById(id);
         dish.ifPresentOrElse(value -> {

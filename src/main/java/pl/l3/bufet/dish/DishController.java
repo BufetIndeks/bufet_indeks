@@ -50,4 +50,9 @@ public class DishController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Danie nie ma id, więc nie istnieje w bazie");
         return dishService.updateDish(dish);
     }
+
+    @GetMapping(path = "/menu/{name}")
+    public List<Dish> getDishesFromCategory(@PathVariable(required = true) String name){
+        return dishService.getDishesFromCategory(name);
+    }
 }
