@@ -52,7 +52,7 @@ const LoginComponent = props => {
                         inputProps={{
                             maxLength: 32
                           }}
-                        onChange={e => checkPattern(setUsername, e.target.value, /\p{L}/gu)} 
+                        onChange={e => setUsername(e.target.value)} 
                         margin="normal" 
                         helperText={`${username.length}/32`}
                         label="Nazwa użytkownika" 
