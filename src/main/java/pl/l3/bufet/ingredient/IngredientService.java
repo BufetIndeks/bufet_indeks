@@ -63,10 +63,13 @@ public class IngredientService {
         if(ingredient.getIngredientName().length()>64 || !ingredient.getIngredientName().matches("[\\p{L}\\p{Z}]+"))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nazwa składnika ma powyżej 64 znaków, lub jest niepoprawna");
 
-        for (Allergen allergen : ingredient.getAllergenList()) {
-            Optional<Allergen> allergenOptional = allergenRepository.findById(allergen.getId());
+        for (int i = 0; i < ingredient.getAllergenList().size(); i++) {
+            Optional<Allergen> allergenOptional = allergenRepository.findByAllergenName(ingredient.getAllergenList().get(i).getAllergenName());
             if(allergenOptional.isEmpty())
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Alergen przypisany do składnika nie istnieje w bazie");
+            else{
+                ingredient.getAllergenList().get(i).setId(allergenOptional.get().getId());
+            }
         }
     }
 
