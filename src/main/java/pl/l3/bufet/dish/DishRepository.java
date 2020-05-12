@@ -15,7 +15,9 @@ public interface DishRepository extends JpaRepository<Dish, Long> {
 
     List<Dish>findAllByActiveIsTrue();
 
-    @Query("SELECT d.* FROM danie d INNER JOIN danie_kategoria dk ON d.danie_id = dk.danie_id WHERE dk.kategoria_dania_id=(:id)")
+    @Query("SELECT d FROM Dish d INNER join d.dishCategoryList dcl WHERE dcl.id = (:id)")
     List<Dish>findAllByDishCategoryList(@Param("id") Long id);
+
+    Optional<Dish> findDishByIdAndActiveIsTrue(Long id);
 
 }

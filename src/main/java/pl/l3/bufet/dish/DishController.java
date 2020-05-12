@@ -55,4 +55,9 @@ public class DishController {
     public List<Dish> getDishesFromCategory(@PathVariable(required = true) String name){
         return dishService.getDishesFromCategory(name);
     }
+
+    @GetMapping(path = "/menu/danie={id}")
+    public Dish getDishById(@PathVariable(required = true) Long id){
+        return dishService.getDish(id);
+    }
 }
