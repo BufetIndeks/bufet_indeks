@@ -1,80 +1,100 @@
-import React, { Component } from 'react';
-import M from "materialize-css";
-import Chip from '@material-ui/core/Chip';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
+import { TextField, Container, Grid, Card, CardMedia, Typography, Button, Box } from '@material-ui/core';
 
-class DishShowTemplate extends Component{
-    constructor(props){
-        super(props)
+const DishShowTemplate = props => {
         
-        let dish = {};
+    let dish = {};
 
-        if(this.props.location !== undefined && this.props.location.state !== undefined) {
-            dish = this.props.location.state.dish;
+    if(props.location !== undefined && props.location.state !== undefined) {
+        if(props.location.state.dish !== undefined){
+            Object.assign(dish, props.location.state.dish);
+            console.log(dish)
         }
-
-        this.state = {
-            dishImage: dish.dishImage ? dish.dishImage : '',
-            dishName: dish.dishName ? dish.dishName : '',
-            dishDescription: dish.dishDescription ? dish.dishDescription : '',
-            dishPrice: dish.dishPrice ? dish.dishPrice : '',
-            dishIngredients: dish.dishIngredients ? dish.dishIngredients : '',
-            dishCategory: dish.dishCategory ? dish.dishCategory : '',
-            dishOfTheDay: dish.dishOfTheDay ? dish.dishOfTheDay : false
+        else{
+            Object.assign(dish, props.location.state);
+            console.log(dish)
         }
     }
-
-    handleChange = (event) => {
-        this.setState({
-            [event.target.id]: event.target.value
-        })
+    else{
+        return(
+            <>Błąd - brak dania</>
+        )
     }
 
-    handleSubmit = () => {
+    const handleSubmit = () => {
         console.log("SUBMIT")
     }
 
-    render(){
-        return(
-            <>
-                <div className="card col s10 offset-s1">
-                    <div className="card-image">
-                        <img src={this.state.dishImage} />
-                    </div>
-                </div>
+    return(
+        <Container maxWidth="sm">
+            <Grid container>
 
-                <div className="col s12">
-                    {this.state.dishName}
-                </div>
+                <Grid item xs={12}>       
+                    <Box display="flex" justifyContent="center">
+                        <Card style={{maxWidth: "300px", height: "150px"}}>
+                            <CardMedia
+                                component="img"
+                                image="https://images.freeimages.com/images/premium/previews/2871/28718848-spaghetti-with-pesto.jpg"
+                                title="Contemplative Reptile"
+                            />
+                        </Card>
+                    </Box>
+                </Grid>
+                
+                <Grid item xs={12}>
+                    <hr/>
+                    <Typography variant="h3">
+                        {dish.dishName}
+                    </Typography>
+                </Grid>
 
-                <div className="col s12">
-                    {this.state.dishDescription}
-                </div>
+                <Grid item xs={12}>
+                    <hr/>
+                    <Typography>
+                        {dish.description}
+                    </Typography>
+                </Grid>
 
-                <div className="col s12">
-                    {this.state.ingredients}
-                </div>
+                <Grid item xs={12}>
+                <hr/>
+                    <Typography>
+                        {dish.ingredientsList.map(el => el.ingredientName + ' ')}
+                    </Typography>
+                </Grid>
 
-                <div className="col s12">
-                    {this.state.dishPrice}
-                </div>
+                <Grid item xs={12}>
+                <hr/>
+                    <Typography>
+                        {dish.price + ' złotych'}
+                    </Typography>
+                </Grid>
 
-                <div className="col s12">
-                    {this.state.dishCategory}
-                </div>
+                <Grid item xs={12}>
+                <hr/>
+                    <Typography>
+                        {dish.dishCategoryList.map(el => el.name + ' ')}
+                    </Typography>
+                </Grid>
 
-                <div className="col s12">
-                    {this.state.dishOfTheDay && <p>Danie dnia</p>}
-                </div>
+                <Grid item xs={12}>
+                <hr/>
+                    <Typography>
+                        {dish.dishDay}
+                    </Typography>
+                </Grid>
 
-                <div className="col s12">
-                    <button className="btn btn-block blue">Zamów</button>
-                </div>
-            </>
-        )
-    }
+                <Grid item xs={12}>
+                    <Box display="flex" justifyContent="center">
+                        <Button variant="contained" color="primary" onClick={() => handleSubmit()}>
+                            Zamów
+                        </Button>
+                    </Box>
+                </Grid>
+
+            </Grid>
+        </Container>
+    )
 }
 
 export default DishShowTemplate;

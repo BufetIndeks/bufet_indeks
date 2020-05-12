@@ -1,25 +1,12 @@
-import React, { Component } from 'react'
+import React from 'react'
 import axios from 'axios';
 import {API_URL} from "../ApiUrl";
 
-class LogoutComponent extends Component {
-    constructor(props) {
-        super(props)
-
-
-    }
-
-    componentDidMount() {
-        axios.get(`${API_URL}/logout`)
-        this.props.history.push(``)
-    }
-
-    render() {
-        return (
-            <>
-
-            </>
-        )
-    }
+const LogoutComponent = props => { 
+   
+    axios.get(`${API_URL}/logout`)
+    props.history.push(``)
+    return(<></>)
 }
+
 export default LogoutComponent

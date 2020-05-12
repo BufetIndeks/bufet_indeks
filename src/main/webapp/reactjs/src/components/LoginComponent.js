@@ -1,40 +1,56 @@
 import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import AuthenticationService from '../service/AuthenticationService';
+import {FormControlLabel, Checkbox, Button, Container, TextField, Grid, Box, Typography, Paper} from '@material-ui/core'
 
-import {FormControlLabel, Checkbox, Button, Container, TextField, Grid, Box} from '@material-ui/core'
-
-const LoginComponent = (props) => {
+const LoginComponent = props => {
 
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [rememberMe, setRememberMe] = useState(false)
-    const [loginFail, setLoginFail] = useState(false)
-    const [successMessage, setSuccessMessage] = useState(false)
+    const [invalid, setInvalid] = useState(false)
 
+    const history = useHistory();
 
     const handleSubmit = () => {
-       AuthenticationService
+
+        AuthenticationService
            .executeBasicAuthenticationService(username, password, rememberMe)
            .then(response=>{
-                if(response.status===200)
-                    this.props.history.push(`/`)
+                if(response.status===200){
+                    history.push(`/`)
+                }
                 else
-                    this.props.history.push(`/login`)
+                    throw new Error()
            })
+           .catch(error => {
+               setInvalid(true)
+           })
+    }
+
+    const checkPattern = (setter, value, pattern) => {
+        let viableMatches = String(value).match(pattern)
+        if(viableMatches !== null)
+            setter(viableMatches.join(""))
+        else
+            setter("")
     }
 
     return (
         <Container maxWidth="sm">
             <Grid container spacing={0} justify="center" direction="column" alignItems="stretch">
+                
                 <Grid item>
                     <h1>Panel logowania</h1>
                 </Grid>
+
                 <Grid item xs={12} >
                     <TextField 
                         id="username" 
                         fullWidth
+                        value={username}
                         inputProps={{
-                            maxlength: 32
+                            maxLength: 32
                           }}
                         onChange={e => setUsername(e.target.value)} 
                         margin="normal" 
@@ -51,7 +67,7 @@ const LoginComponent = (props) => {
                         margin="normal" 
                         label="Hasło" 
                         inputProps={{
-                            maxlength: 32
+                            maxLength: 32
                           }}
                         helperText={`${password.length}/32`}
                         variant="outlined" />
@@ -72,35 +88,16 @@ const LoginComponent = (props) => {
                         <Button variant="contained" color="primary" type="submit" margin="normal" onClick={handleSubmit}>Zaloguj się</Button>
                     </Box>
                 </Grid>
+
+                {invalid && 
+                    <Grid item xs={12}>
+                        <Box mt={2} display="flex" justifyContent="center">
+                            <Typography style={{color: "red", fontSize: "24"}} variant="outlined" >Niewłaściwe dane</Typography>
+                        </Box>
+                    </Grid>}
+
             </Grid>
         </Container>
-        // <div className=" col s10 offset-s1 l4 offset-l4">
-        //     <div className="red-text accent-2"><h1>Login</h1></div>
-
-        //     {loginFail && <div className="alert alert-warning">Invalid Credentials</div>}
-        //     {successMessage && <div>Login Sucessful</div>}
-            
-        //     <div className="input-field">
-        //         <input className="validate" name="username" type="text" id="username" value={username} onChange={event => setUsername(event.target.value)}/>
-        //         <label htmlFor="username">Username</label>
-        //     </div>
-            
-        //     <div className="input-field">
-        //         <label htmlFor="password">Password</label>
-        //         <input name="password" type="password" id="password" value={password} onChange={event => setPassword(event.target.value)} />
-        //     </div>
-           
-        //    <div>
-        //         <FormControlLabel
-        //             label = "Zapamiętaj mnie na tym komputerze"
-        //             control = {
-        //                 <Checkbox checked={remember} onChange={event => setRemember(event.target.checked)} name="rememberMe" />
-        //             }
-        //          />
-        //     </div>
-
-        //     <button className="btn blue right" onClick={loginClicked}>Zaloguj się</button>
-        // </div>
     )
 }
 

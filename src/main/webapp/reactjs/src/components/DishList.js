@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import Dish from '../templates/Dish';
-import '../App.css'
 import axios from 'axios';
-import AuthenticationService from "../service/AuthenticationService";
 import {API_URL} from "../ApiUrl";
 
 import {Container, Grid} from '@material-ui/core'
@@ -46,7 +44,7 @@ class DishList extends Component{
             <Container maxWidth="md" style={{marginTop: "10px"}}>
                 <Grid container spacing={4}>
                 {this.state.dishes.map( (dish, index) => {
-                     return(<Grid item xs={4}>
+                     return(<Grid key={dish.dishName} item xs={6} sm={4}>
                                 <Dish dish={dish} view={this.state.view} />
                             </Grid>)
                 })}

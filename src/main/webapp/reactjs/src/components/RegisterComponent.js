@@ -1,41 +1,30 @@
 import React, { useState } from 'react'
 import axios from 'axios';
 import {API_URL} from "../ApiUrl";
-import {Button, Container, TextField, Grid, Box, FormControl, InputLabel} from '@material-ui/core'
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import Select from '@material-ui/core/Select';
+import {Button, Container, TextField, Grid, Box, FormControl, InputLabel, Typography, Select} from '@material-ui/core'
 
 const RegisterComponent = props => {
 
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [role, setRole] = useState('ROLE_ADMIN')
-    const [hasCreationFailed, setHadCreationFailed] = useState(false)
-    const [successMessage, setSuccessMessage] = useState(false)
+    const [returnColour, setReturnColour] = useState("green")
+    const [returnMessage, setReturnMessage] = useState('')
 
     const handleSubmit = () => {
-        console.log({login: this.state.username,
-            password: this.state.password,
-            roles: [{"role":this.state.role}]})
         axios.post(API_URL + '/admin/register', {
-            login: this.state.username,
-            password: this.state.password,
-            roles: [{"role":this.state.role}]
+            login: username,
+            password: password,
+            roles: [{"role": role}]
         })
             .then((response) => {
-                this.setState({
-                        showSuccessMessage: true,
-                        hasCreationFailed: false
-                    }
-                )
-                console.log(response)
+                setReturnMessage(response.data)
+                setReturnColour("DarkGreen")
             })
             .catch((error) => {
-                this.setState({
-                    showSuccessMessage: false,
-                    hasCreationFailed: true
-                })
                 console.log(error)
+                setReturnMessage(error.response.data.message)
+                setReturnColour("DarkRed")   
             })
     }
 
@@ -52,7 +41,7 @@ const RegisterComponent = props => {
                             id="username" 
                             fullWidth
                             inputProps={{
-                                maxlength: 32
+                                maxLength: 32
                             }}
                             onChange={e => setUsername(e.target.value)} 
                             margin="normal" 
@@ -70,7 +59,7 @@ const RegisterComponent = props => {
                             margin="normal" 
                             label="Hasło" 
                             inputProps={{
-                                maxlength: 32
+                                maxLength: 32
                             }}
                             helperText={`${password.length}/32`}
                             variant="outlined" />
@@ -102,6 +91,12 @@ const RegisterComponent = props => {
                             <Button variant="contained" color="primary" type="submit" margin="normal" onClick={handleSubmit}>Stwórz</Button>
                         </Box>
                     </FormControl>
+                </Grid>
+
+                <Grid item xs={12}>
+                    <Typography variant="h6" component="h6" style={{color: returnColour}}>
+                        {returnMessage}        
+                    </Typography>
                 </Grid>
             </Grid>
         </Container>
