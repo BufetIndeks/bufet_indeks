@@ -4,7 +4,7 @@ import { Card, CardActionArea, CardContent, CardMedia, Typography, CardActions, 
 
 const Dish = props => {
 
-    let path = `/list/${props.key}`
+    let path = `/list/${props.dish.id}`
     let mode = {...props}
     
     if(props.view === 'admin'){
@@ -14,8 +14,9 @@ const Dish = props => {
 
     return(
         <Card>
-            <Link to={{ pathname: path, state: mode}}>
                 <CardActionArea>
+                <Link to={{ pathname: path, state: mode}}>
+
                     <CardMedia
                         component="img"
                         alt={props.dish.dishName}
@@ -28,13 +29,13 @@ const Dish = props => {
                             {props.dish.dishName}
                         </Typography>
                     </CardContent>
+                    </Link>
                 </CardActionArea>
                 {props.view === 'admin' &&
                     <CardActions>
-                        <Link to={{pathname: path, state: {...props, deleteMode: true}}}><Button>Delete</Button></Link>
+                        <Button variant="contained" color="secondary"><Link to={{pathname: path, state: {...props, deleteMode: true}}}>Delete</Link></Button>
                     </CardActions>
                 }
-            </Link>
         </Card>
     )
 }
