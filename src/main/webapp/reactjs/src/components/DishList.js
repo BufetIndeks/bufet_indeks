@@ -44,7 +44,7 @@ class DishList extends Component{
             <Container maxWidth="md" style={{marginTop: "10px"}}>
                 <Grid container spacing={4}>
                 {this.state.dishes.map( (dish, index) => {
-                     return(<Grid item xs={4}>
+                     return(<Grid key={dish.dishName} item xs={4}>
                                 <Dish dish={dish} view={this.state.view} />
                             </Grid>)
                 })}
