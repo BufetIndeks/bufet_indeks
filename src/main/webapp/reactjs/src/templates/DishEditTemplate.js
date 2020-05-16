@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import axios from 'axios';
 import { API_URL } from '../ApiUrl';
+import { useHistory } from 'react-router-dom'
 
 import {Box, TextField, FormControlLabel, Checkbox, Card, Button, CardMedia, Container, Grid} from '@material-ui/core'
 
@@ -19,13 +20,14 @@ const DishEditTemplate = props => {
     const [allCategories, setAllCategories] = useState([])
     const [allIngredients, setAllIngredients] = useState([])
 
+    const history = useHistory();
+
     let editMode = false;
     let deleteMode = false;
     if(props.location !== undefined && props.location.state !== undefined){
         deleteMode = props.location.state.deleteMode;
         editMode = props.location.state.editMode;
     }
-
 
     useEffect( () => {
         let dish = {}
@@ -65,43 +67,63 @@ const DishEditTemplate = props => {
             })
     }, [])
 
-    const handleSubmit = () => {
-        if(deleteMode){
-            const data = {
-                "id": 1,
-                "active": false
-            }
-            console.log(data)
-            axios.post(API_URL + '/admin/setActiveDish', data)
-            .then(response => {
-                console.log(response)
-            })
-            .catch(error => {
-                console.log(error.response)
-            })
+    const handleEdit = () => {
+        const data = {
+            "id": id,
+            "dishName": name,
+            "dishImage": image,
+            "price": price,
+            "description": description,
+            "dishDay": dishDay,
+            "ingredientsList": ingredients,
+            "dishCategoryList": categories,
+            "active": true
         }
-        else if (editMode){
-            console.log("edit")
+        axios.post(API_URL + '/admin/updateDish', data)
+        .then(response => {
+            console.log(response)
+            history.goBack()
+        })
+        .catch(error => {
+            console.error(error.response)
+        })
+    }
+
+    const handleDelete = () => {
+        const data = {
+            "id": 1,
+            "active": false
         }
-        else{
-            const data =  {
-                "dishName": name,
-                "dishImage": image,
-                "price": price,
-                "description": description,
-                "dishDay": dishDay,
-                "ingredientsList": ingredients,
-                "dishCategoryList": categories,
-                "active": true
-            }
-            axios.post(API_URL + '/admin/addDish', data)
-            .then(response => {
-                console.log(response)
-            })
-            .catch(error => {
-                console.error(error.response)
-            })
+        console.log(data)
+        axios.post(API_URL + '/admin/setActiveDish', data)
+        .then(response => {
+            console.log(response)
+            history.goBack()
+        })
+        .catch(error => {
+            console.log(error.response)
+        })
+    }
+
+    const handleAdd = () => {
+        const data =  {
+            "dishName": name,
+            "dishImage": image,
+            "price": price,
+            "description": description,
+            "dishDay": dishDay,
+            "ingredientsList": ingredients,
+            "dishCategoryList": categories,
+            "active": true
         }
+        axios.post(API_URL + '/admin/addDish', data)
+        .then(response => {
+            console.log(response)
+            history.goBack()
+        })
+        .catch(error => {
+            console.error(error.response)
+        })
     }
 
     return(
@@ -228,11 +250,11 @@ const DishEditTemplate = props => {
                 <Grid item xs={12}>
                     <Box display="flex" justifyContent="flex-end">
                         {editMode && 
-                            <Button type="submit" variant="contained" color="primary" margin="normal" onClick={() => console.log("Nie zrobione")}>Modyfikuj</Button>}
+                            <Button type="submit" variant="contained" color="primary" margin="normal" onClick={() => handleEdit()}>Modyfikuj</Button>}
                         {deleteMode && 
-                            <Button type="submit" variant="contained" color="secondary" margin="normal" onClick={() => handleSubmit()}>Usuń</Button>}
+                            <Button type="submit" variant="contained" color="secondary" margin="normal" onClick={() => handleDelete()}>Usuń</Button>}
                         {props.location.state === undefined && 
-                            <Button type="submit" variant="contained" color="primary" margin="normal"onClick={() => handleSubmit()}>Dodaj</Button>}
+                            <Button type="submit" variant="contained" color="primary" margin="normal"onClick={() => handleAdd()}>Dodaj</Button>}
                     </Box>
                 </Grid>
 
