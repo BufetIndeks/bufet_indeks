@@ -65,12 +65,10 @@ public class IngredientService {
 
         for (int i = 0; i < ingredient.getAllergenList().size(); i++) {
             Optional<Allergen> allergenOptional = allergenRepository.findByAllergenName(ingredient.getAllergenList().get(i).getAllergenName());
-            if(allergenOptional.isEmpty())
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Alergen przypisany do składnika nie istnieje w bazie");
-            else{
+            if(allergenOptional.isPresent())
                 ingredient.getAllergenList().get(i).setId(allergenOptional.get().getId());
-            }
         }
+
     }
 
 }
