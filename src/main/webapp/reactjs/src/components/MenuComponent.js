@@ -30,7 +30,6 @@ const MenuComponent = props => {
                 <Toolbar>
                     <Link to="/" className={classes.buttonlink}>Home</Link>
                     <Link to="/login" className={classes.buttonlink}>Zaloguj</Link>
-                    <Link to="/admin/register" className={classes.buttonlink}>Rejestracja</Link>
                     <Link to="/logout" className={classes.buttonlink}>Logout</Link>
                     <Link to={{pathname: "/list", state: { view: 'client'}}} className={classes.buttonlink}>Lista dań</Link>
                     <Link to="/admin/dashboard" className={classes.buttonlink}>Dashboard</Link>

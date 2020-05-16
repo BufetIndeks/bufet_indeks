@@ -49,6 +49,14 @@ const AdminDashboard = props => {
                         </Link>
                     </Grid>
 
+                    <Grid item xs={12}>
+                        <Link to="/admin/register">
+                            <Button fullWidth color="primary" variant="contained">
+                                Dodaj nowego użytkownika
+                            </Button>
+                        </Link>
+                    </Grid>
+
                 </Grid>
             </Box>
         </Container>
