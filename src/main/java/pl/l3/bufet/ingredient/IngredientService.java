@@ -23,51 +23,53 @@ public class IngredientService {
         this.allergenRepository = allergenRepository;
     }
 
-    public List<Ingredient> getIngredients(){
+    public List<Ingredient> getIngredients() {
         return ingredientRepository.findAll();
     }
 
-    public ResponseEntity<String> addIngredient(Ingredient ingredient){
+    public ResponseEntity<String> addIngredient(Ingredient ingredient) {
 
         Optional<Ingredient> optionalIngredient = ingredientRepository.findByIngredientName(ingredient.getIngredientName());
-        if(optionalIngredient.isEmpty()){
-            checkIngredient(ingredient);
+        if (optionalIngredient.isEmpty()) {
+            ingredient=checkIngredient(ingredient);
             ingredientRepository.save(ingredient);
             return ResponseEntity.ok("Dodano składnik");
-        }
-        else throw new DuplicateIngredientException();
+        } else throw new DuplicateIngredientException();
 
     }
 
-    public ResponseEntity<String> updateIngredient(Ingredient ingredient){
+    public ResponseEntity<String> updateIngredient(Ingredient ingredient) {
         Optional<Ingredient> optionalIngredient = ingredientRepository.findById(ingredient.getId());
-        if(optionalIngredient.isPresent()){
-            checkIngredient(ingredient);
+        if (optionalIngredient.isPresent()) {
+            ingredient=checkIngredient(ingredient);
             optionalIngredient.get().setAllergenList(ingredient.getAllergenList());
             optionalIngredient.get().setIngredientName(ingredient.getIngredientName());
             ingredientRepository.save(optionalIngredient.get());
             return ResponseEntity.ok("Zaktualizowano składnik");
-        }else throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Nie znaleziono takiego składnika");
+        } else throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Nie znaleziono takiego składnika");
     }
 
-    public ResponseEntity<String> deleteIngredient(Ingredient ingredient){
+    public ResponseEntity<String> deleteIngredient(Ingredient ingredient) {
         Optional<Ingredient> optionalIngredient = ingredientRepository.findById(ingredient.getId());
-        if(optionalIngredient.isPresent()){
+        if (optionalIngredient.isPresent()) {
             ingredientRepository.delete(optionalIngredient.get());
             return ResponseEntity.ok("Usunięto składnik");
-        }
-        else throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Nie znaleziono takiego składnika");
+        } else throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Nie znaleziono takiego składnika");
     }
 
-    private void checkIngredient(Ingredient ingredient){
-        if(ingredient.getIngredientName().length()>64 || !ingredient.getIngredientName().matches("[\\p{L}\\p{Z}]+"))
+    private Ingredient checkIngredient(Ingredient ingredient) {
+        Ingredient ingredientCopy = new Ingredient();
+
+        if (ingredient.getIngredientName().length() > 64 || !ingredient.getIngredientName().matches("[\\p{L}\\p{Z}]+"))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nazwa składnika ma powyżej 64 znaków, lub jest niepoprawna");
+        else
+            ingredientCopy.setIngredientName(ingredient.getIngredientName());
 
         for (int i = 0; i < ingredient.getAllergenList().size(); i++) {
             Optional<Allergen> allergenOptional = allergenRepository.findByAllergenName(ingredient.getAllergenList().get(i).getAllergenName());
-            if(allergenOptional.isPresent())
-                ingredient.getAllergenList().get(i).setId(allergenOptional.get().getId());
+            allergenOptional.ifPresent(allergen -> ingredientCopy.getAllergenList().add(allergen));
         }
+        return ingredientCopy;
 
     }
 
