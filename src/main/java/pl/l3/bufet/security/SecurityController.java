@@ -58,6 +58,14 @@ public class SecurityController {
         return authentication;
     }
 
+    @GetMapping(path = "/takeRole", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Authentication giveRole(Authentication authentication) {
+        return authentication;
+    }
+
+
+
 }
 
 
