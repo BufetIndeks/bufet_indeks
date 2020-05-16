@@ -13,11 +13,11 @@ public interface DishRepository extends JpaRepository<Dish, Long> {
 
     Optional<Dish> findByDishName(String allergenName);
 
-    List<Dish>findAllByActiveIsTrue();
+    List<Dish>findAllByActiveIsFalse();
 
     @Query("SELECT d FROM Dish d INNER join d.dishCategoryList dcl WHERE dcl.id = (:id)")
     List<Dish>findAllByDishCategoryList(@Param("id") Long id);
 
-    Optional<Dish> findDishByIdAndActiveIsTrue(Long id);
+    Optional<Dish> findDishByIdAndActiveIsFalse(Long id);
 
 }

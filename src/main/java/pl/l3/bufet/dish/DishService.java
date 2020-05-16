@@ -31,13 +31,13 @@ public class DishService {
     }
 
     public List<Dish> getAllActiveDishes() {
-        return dishRepository.findAllByActiveIsTrue();
+        return dishRepository.findAllByActiveIsFalse();
     }
     public List<Dish> getAllDishes(){
         return dishRepository.findAll();
     }
     public Dish getDish(Long id){
-        Optional<Dish> dish = dishRepository.findDishByIdAndActiveIsTrue(id);
+        Optional<Dish> dish = dishRepository.findDishByIdAndActiveIsFalse(id);
         if(dish.isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Nie znaleziono dania o podanym ID");
         return dish.get();
