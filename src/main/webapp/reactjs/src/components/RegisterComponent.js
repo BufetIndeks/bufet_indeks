@@ -67,7 +67,7 @@ const RegisterComponent = props => {
 
                 <Grid item xs={12}>
                 <FormControl variant="outlined" fullWidth margin="normal">
-                    <InputLabel htmlFor="roleSelect">Age</InputLabel>
+                    <InputLabel htmlFor="roleSelect">Rola</InputLabel>
                         <Select
                             native
                             value={role}
