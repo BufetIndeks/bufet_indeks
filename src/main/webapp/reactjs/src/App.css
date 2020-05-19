@@ -46,3 +46,5 @@
 .marginLeft{ margin-left: 10px;}
 .marginRight{ margin-right: 10px;}
 .marginBottom{ margin-bottom: 10px;}
+
+button::-moz-focus-inner { border: 0; }
