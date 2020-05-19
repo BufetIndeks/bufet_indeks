@@ -1,11 +1,16 @@
 import React from 'react'
 import axios from 'axios';
 import {API_URL} from "../ApiUrl";
+import { useHistory } from 'react-router-dom'
 
 const LogoutComponent = props => { 
-   
+
+    const history = useHistory()
+
+    props.setRole('ROLE_GUEST')
+
     axios.get(`${API_URL}/logout`)
-    props.history.push(``)
+    history.push(``)
     return(<></>)
 }
 
