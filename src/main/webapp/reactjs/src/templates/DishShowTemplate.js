@@ -1,26 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios'
+import { useLocation, useHistory } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 import { TextField, Container, Grid, Card, CardMedia, Typography, Button, Box } from '@material-ui/core';
+import { API_URL } from '../ApiUrl';
 
 const DishShowTemplate = props => {
         
-    let dish = {};
+    const [dish, setDish] = useState({})
+    const location = useLocation()
+    const history = useHistory()
 
-    if(props.location !== undefined && props.location.state !== undefined) {
-        if(props.location.state.dish !== undefined){
-            Object.assign(dish, props.location.state.dish);
-            console.log(dish)
-        }
-        else{
-            Object.assign(dish, props.location.state);
-            console.log(dish)
-        }
-    }
-    else{
-        return(
-            <>Błąd - brak dania</>
-        )
-    }
+    useEffect( () => {
+        axios.get(API_URL + `/menu/danie=${location.pathname.slice(location.pathname.lastIndexOf('/') + 1)}`)
+            .then(response => {
+                setDish(response.data)
+            })
+            .catch(err => {
+                console.error(err.response)
+                history.push('/error')
+            })
+    }, [])
+    
+    useEffect( () => {
+        // if(history.action === "POP")
+        //     history.goBack()
+    },[history.action])
 
     const handleSubmit = () => {
         console.log("SUBMIT")
@@ -59,7 +64,7 @@ const DishShowTemplate = props => {
                 <Grid item xs={12}>
                 <hr/>
                     <Typography>
-                        {dish.ingredientsList.map(el => el.ingredientName + ' ')}
+                        {Object.keys(dish).length !== 0 && dish.ingredientsList.map(el => el.ingredientName + ' ')}
                     </Typography>
                 </Grid>
 
@@ -73,7 +78,7 @@ const DishShowTemplate = props => {
                 <Grid item xs={12}>
                 <hr/>
                     <Typography>
-                        {dish.dishCategoryList.map(el => el.name + ' ')}
+                        {Object.keys(dish).length !== 0 && dish.dishCategoryList.map(el => el.name + ' ')}
                     </Typography>
                 </Grid>
 
