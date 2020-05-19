@@ -50,6 +50,7 @@ const ListTemplate = props => {
     const [newEntry, setNewEntry] = useState(['',''])
     const [up,update] = useState(false)
     const [editMode, setEditMode] = useState(false)
+    const [search, setSearch] = useState('')
 
     const classes = useStyles();
 
@@ -67,6 +68,25 @@ const ListTemplate = props => {
             })
     }, [up])
 
+    useEffect( () => {
+        if(search === ''){
+            setFlattenedData(flattenData(data))
+        }
+        else{
+            const list = flattenedData.map( element => {
+                return [element.id, Object.values(element).join('').toLowerCase()]
+            })
+            .filter(el => el[1].includes(search))
+            setFlattenedData(flattenedData.filter(el => {
+                for(let one of list){
+                    if(one[0] === el.id)
+                        return el
+                }
+            }))
+            
+        }
+    }, [search])
+
     const flattenData = (data) => {
         return data.map(obj => {
             let newObj = {}
@@ -81,6 +101,9 @@ const ListTemplate = props => {
               }
               else if(key == 'id'){
                   newObj[key] = obj[key]
+              }
+              else if(key == 'allergenName'){
+                  newObj.name = obj[key]
               }
               else{
                 newObj[key] = obj[key]
@@ -100,6 +123,8 @@ const ListTemplate = props => {
         let temp = [];
         if(element.ingredientName !== undefined)
             temp = [element.ingredientName, element.allergenList, element.id]
+        else if(element.allergenName !== undefined)
+            temp = [element.allergenName, element.id]
         else
             temp = [element.name, element.id]
         setNewEntry(temp)
@@ -193,6 +218,20 @@ const ListTemplate = props => {
                     })
             })
         }
+        else if(url === '/admin/allergen'){
+            axios.post(API_URL + '/admin/updateAllergen', {
+                id: newEntry[1],
+                allergenName: newEntry[0]
+            })
+                .then(res => {
+                    console.log(res.data)
+                    update(!up)
+                    closeEdit()
+                })
+                .catch(err => {
+                    console.error(err)
+                })
+        }
         else
             throw new Error("Nieprawidłowy adres URL do serwera")
     }
@@ -206,6 +245,19 @@ const ListTemplate = props => {
         if(url == '/category'){
             axios.post(API_URL + "/admin/addCategory", {
                 name: newEntry[0]
+            })
+                .then(response => {
+                    console.log(response)
+                    setAddItem(false)
+                    update(!up)
+                })
+                .catch(error => {
+                    console.error(error.response)
+                })
+        }
+        else if(url == '/admin/allergen'){
+            axios.post(API_URL + "/admin/addAllergen", {
+                allergenName: newEntry[0]
             })
                 .then(response => {
                     console.log(response)
@@ -252,6 +304,20 @@ const ListTemplate = props => {
                     console.error(error.response)
                 })
         }
+        else if(url == '/admin/allergen'){
+            console.log(data[entryId], entryName)
+            axios.post(API_URL + "/admin/deleteAllergen", {
+                id: data[entryId].id,
+                allergenName: entryName
+            })
+                .then(response => {
+                    console.log(response.data)
+                    update(!up)
+                })
+                .catch(error => {
+                    console.error(error.response)
+                })
+        }
         else if(url == '/admin/ingredient'){
             axios.post(API_URL + "/admin/deleteIngredient", {
                 id: data[entryId].id,
@@ -267,6 +333,10 @@ const ListTemplate = props => {
         }
         else
             throw new Error("Nieprawidłowy adres URL do serwera")
+    }
+
+    const searching = event => {
+        setSearch(event.target.value)
     }
 
     return(
@@ -293,6 +363,8 @@ const ListTemplate = props => {
                 ))}
             </Box>
 
+            <TextField value={search}  variant='outlined' placeholder='Szukaj' margin='normal' onChange={e => searching(e)}/>
+            
             <TableContainer>
                 <Table size="small">
                     <TableHead>
