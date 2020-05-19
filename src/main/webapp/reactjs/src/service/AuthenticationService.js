@@ -7,7 +7,6 @@ class AuthenticationService {
 
 
     executeBasicAuthenticationService(username, password, rememberme) {
-        console.log(rememberme);
         let formData = new FormData();
         formData.append("username", username);
         formData.append("password", password);
