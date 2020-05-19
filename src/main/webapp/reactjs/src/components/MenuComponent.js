@@ -1,42 +1,59 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import { Link, withRouter } from 'react-router-dom'
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import { makeStyles } from '@material-ui/core/styles';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp'
+import PersonIcon from '@material-ui/icons/Person'
+import { Box, Typography, IconButton } from '@material-ui/core';
 
 const useStyles = makeStyles( theme => ({
     buttonlink: {
         color: "white",
         textDecoration: "none",
-        height: "100%",
-        padding: "22.5px",
+        textAlign: "center",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: "64px",
+        minWidth: "90px",
         '&:hover': {
             background: "forestgreen"
+        },
+        '& a': {
+            color: "white"
         }
     }
 }))
 
 const MenuComponent = props => {
 
-    //const role = props.role;
-    //const isLoggedIn = props.isLoggedIn;
-
     const classes = useStyles();
 
-    return (
 
-        <header>
-            <AppBar position="static" style={{background: "green"}}>
+    return (
+            <AppBar position="sticky" style={{background: "green"}}>
                 <Toolbar>
-                    <Link to="/" className={classes.buttonlink}>Home</Link>
-                    <Link to="/login" className={classes.buttonlink}>Zaloguj</Link>
-                    <Link to="/logout" className={classes.buttonlink}>Logout</Link>
-                    <Link to="/admin/dashboard" className={classes.buttonlink}>Dashboard</Link>
+
+                    <Link to="/" className={classes.buttonlink}>
+                        Home
+                    </Link>
+
+                    <Link to="/admin/dashboard" className={classes.buttonlink}>
+                        PA
+                    </Link>
+
+                    <Box flexGrow={1}></Box>
+
+                    <Link to={props.role !== 'ROLE_GUEST' ? '/logout' : '/login'} className={classes.buttonlink}>
+                        {props.role !== 'ROLE_GUEST' ? <ExitToAppIcon /> : <PersonIcon /> }
+                    </Link>
+                            
+                    
                 </Toolbar>
             </AppBar>
-        </header>
     )
     
 }
 
-export default withRouter(MenuComponent)
+export default MenuComponent
