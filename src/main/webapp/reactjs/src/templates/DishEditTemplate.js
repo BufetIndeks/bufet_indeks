@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import axios from 'axios';
+import CloseIcon from '@material-ui/icons/Close'
 import { API_URL } from '../ApiUrl';
 import { useHistory } from 'react-router-dom'
 
-import {Box, TextField, FormControlLabel, Checkbox, Card, Button, CardMedia, Container, Grid} from '@material-ui/core'
+import {Box, TextField, FormControlLabel, Checkbox, Card, Button, CardMedia, Container, Grid, IconButton} from '@material-ui/core'
 
 const DishEditTemplate = props => {
 
     const [id, setId] = useState(null)
-    const [image, setImage] = useState(null)
+    const [image, setImage] = useState(undefined)
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [price, setPrice] = useState(0)
@@ -116,7 +117,19 @@ const DishEditTemplate = props => {
             "dishCategoryList": categories,
             "active": true
         }
-        axios.post(API_URL + '/admin/addDish', data)
+        const cos = new FormData()
+        cos.append('image', image, image.name)
+        cos.append('dishName', name)
+        cos.append('price', price)
+        cos.append('description', description)
+        cos.append('ingredientsList', ingredients)
+        cos.append('dishCategoryList', categories)
+        cos.append('active', true)
+        console.log(cos)
+        axios.post(API_URL + '/admin/addDish', cos, {headers: {
+            Accept: 'application/json',
+            'Content-Type': 'multipart/form-data',
+          }})
         .then(response => {
             console.log(response)
             history.goBack()
@@ -129,28 +142,45 @@ const DishEditTemplate = props => {
     return(
         <Container maxWidth="md" style={{marginTop: "20px"}}>
             <Grid container justify="center" alignItems="stretch">   
-
                 <Grid item xs={12}>       
                     <Box display="flex" justifyContent="center">
-                        <Card style={{maxWidth: "300px", height: "150px"}}>
+                        <Card style={{maxWidth: "300px", height: "160px"}}>
                             <CardMedia
                                 component="img"
-                                image="https://images.freeimages.com/images/premium/previews/2871/28718848-spaghetti-with-pesto.jpg"
-                                title="Contemplative Reptile"
+                                alt=""
+                                image={(image === undefined || image.length === 0) ? undefined : URL.createObjectURL(image)}
                             />
                         </Card>
                     </Box>
                 </Grid>
 
                 <Grid item xs={12}>
-                    <TextField 
-                        id="dishImage"
-                        fullWidth
-                        onChange={e => setImage(e.target.value)}
-                        margin="normal"
-                        label="Zdjęcie dania"
-                        type="image"
-                        variant="outlined" />
+                    <Box className="marginTop" display="flex" justifyContent="flex-end" >
+                        <input
+                            accept="image/*"
+                            style={{ display: 'none' }}
+                            id="raised-button-file"
+                            onChange={e => {
+                                //let a = new Blob(e.target.files[0])
+                                //
+                                //console.log(a)
+                                setImage(e.target.files[0])
+                                }}
+                            type="file"
+                        />
+                        {image !== undefined && 
+                            <IconButton color="secondary" className="marginRight" size="small" onClick={e => {
+                                const file = document.getElementById('raised-button-file');
+                                file.value = '';
+                                setImage(undefined)}}>
+                                <CloseIcon />
+                            </IconButton>}
+                        <label htmlFor="raised-button-file">
+                            <Button variant="contained" color="primary" component="span">
+                                Zdjęcie
+                            </Button>
+                        </label> 
+                    </Box>
                 </Grid>
 
                 <Grid item xs={12}>
@@ -162,7 +192,7 @@ const DishEditTemplate = props => {
                             maxLength: 128
                         }}
                         onChange={e => setName(e.target.value)}
-                        margin="normal"
+                        margin="dense"
                         label="Nazwa dania"
                         helperText={`${name.length}/128`}
                         variant="outlined" />
@@ -177,10 +207,25 @@ const DishEditTemplate = props => {
                             maxLength: 512
                         }}
                         onChange={e => setDescription(e.target.value)}
-                        margin="normal"
+                        margin="dense"
                         label="Opis dania"
                         helperText={`${description.length}/512`}
                         variant="outlined" />
+                </Grid>
+
+                <Grid item xs={12}>
+                    <TextField 
+                            id="price"
+                            fullWidth
+                            value={price}
+                            onChange={e => setPrice(e.target.value)}
+                            inputProps={{
+                                maxLength: 10
+                            }}
+                            helperText={`Tylko cyfry i przecinek`}
+                            margin="dense"
+                            label="Cena dania"
+                            variant="outlined" />
                 </Grid>
 
                 <Grid item xs={12}>
@@ -197,24 +242,10 @@ const DishEditTemplate = props => {
                             {...params}
                             label="Składniki"
                             variant="outlined"
+                            margin="normal"
                         />
                         )}
                     />
-                </Grid>
-                            
-                <Grid item xs={12}>
-                <TextField 
-                        id="price"
-                        fullWidth
-                        value={price}
-                        onChange={e => setPrice(e.target.value)}
-                        inputProps={{
-                            maxLength: 10
-                        }}
-                        helperText={`Tylko cyfry i przecinek`}
-                        margin="normal"
-                        label="Cena dania"
-                        variant="outlined" />
                 </Grid>
 
                 <Grid item xs={12}>
@@ -230,6 +261,7 @@ const DishEditTemplate = props => {
                             {...params}
                             label="Kategorie"
                             variant="outlined"
+                            margin="normal"
                         />
                         )}
                     />
@@ -248,7 +280,7 @@ const DishEditTemplate = props => {
                 </Grid>
 
                 <Grid item xs={12}>
-                    <Box display="flex" justifyContent="flex-end">
+                    <Box className="marginBottom" display="flex" justifyContent="flex-end">
                         {editMode && 
                             <Button type="submit" variant="contained" color="primary" margin="normal" onClick={() => handleEdit()}>Modyfikuj</Button>}
                         {deleteMode && 
@@ -257,7 +289,6 @@ const DishEditTemplate = props => {
                             <Button type="submit" variant="contained" color="primary" margin="normal"onClick={() => handleAdd()}>Dodaj</Button>}
                     </Box>
                 </Grid>
-
             </Grid>
         </Container>
     )
