@@ -28,7 +28,7 @@ const AdminDashboard = props => {
                     <Grid item xs={12}>
                         <Link to={{ pathname: `/admin/dishes`, state: {view: 'admin'}}}>
                             <Button fullWidth color="primary" variant="contained">
-                                Lista dań
+                                Dania
                             </Button>
                         </Link>
                     </Grid>
@@ -36,7 +36,7 @@ const AdminDashboard = props => {
                     <Grid item xs={12}>
                         <Link to="/admin/ingredients">
                             <Button fullWidth color="primary" variant="contained">
-                                Lista składników
+                                Składniki
                             </Button>
                         </Link>
                     </Grid>
@@ -44,7 +44,15 @@ const AdminDashboard = props => {
                     <Grid item xs={12}>
                         <Link to="/admin/categories">
                             <Button fullWidth color="primary" variant="contained">
-                                Lista kategorii
+                                Kategorie
+                            </Button>
+                        </Link>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Link to="/admin/allergens">
+                            <Button fullWidth color="primary" variant="contained">
+                                Alergeny
                             </Button>
                         </Link>
                     </Grid>
