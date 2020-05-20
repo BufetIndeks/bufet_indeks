@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import AuthenticationService from '../service/AuthenticationService';
 import {FormControlLabel, Checkbox, Button, Container, TextField, Grid, Box, Typography, Paper} from '@material-ui/core'
+import axios from 'axios';
+import { API_URL } from '../ApiUrl'
 
 const LoginComponent = props => {
 
@@ -14,16 +16,29 @@ const LoginComponent = props => {
 
     const handleSubmit = () => {
 
+
         AuthenticationService
            .executeBasicAuthenticationService(username, password, rememberMe)
            .then(response=>{
                 if(response.status===200){
-                    history.push(`/`)
+                    axios.get(API_URL + '/takeRole')
+                        .then(res => {
+                            console.log(res)
+                            if(res.data.authorities !== undefined)
+                                props.setRole(res.data.authorities[0].authority)
+                            else
+                                props.setRole('ROLE_GUEST')
+                            history.push(`/`)
+                        })
+                        .catch(err => {
+                            console.error(err.response)
+                        })
                 }
                 else
                     throw new Error()
            })
            .catch(error => {
+               console.error(error.response)
                setInvalid(true)
            })
     }
