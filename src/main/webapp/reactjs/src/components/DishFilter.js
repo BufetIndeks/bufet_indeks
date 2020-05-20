@@ -123,10 +123,10 @@ const DishFilter = props => {
         let result = JSON.parse(JSON.stringify(allDishes))
         console.log(result, props.filters)
         if(props.filters.priceMin !== ''){
-            result = result.filter(el => el.price > props.filters.priceMin)
+            result = result.filter(el => el.price >= props.filters.priceMin)
         }
         if(props.filters.priceMax !== ''){
-            result = result.filter(el => el.price < props.filters.priceMax)
+            result = result.filter(el => el.price <= props.filters.priceMax)
         }
         if(props.filters.ingredients.length > 0){
             result = result.map(dish => {
