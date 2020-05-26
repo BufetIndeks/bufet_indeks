@@ -62,7 +62,13 @@ const App = props => {
             <MenuComponent role={checkRole()}/>
             <Container component="main" style={{marginTop: "20px", display: "flex", justifyContent: "center", alignItems: "center"}} maxWidth="md">
                 <Switch>
-                    <Route exact path="/" component={HomeComponent} />
+                    
+                    <Route exact path="/">
+                        {role === 'ROLE_GUEST' && <HomeComponent />}
+                        {role === 'ROLE_ADMIN' && <AdminDashboard />}
+                        {role === 'ROLE_TABLE' && <HomeComponent />}
+                        {role === 'ROLE_WORKER' && <HomeComponent />}
+                    </Route>
                     
                     <Route exact path="/login" >
                         <LoginComponent setRole={setRole} />

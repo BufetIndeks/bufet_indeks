@@ -39,10 +39,6 @@ const MenuComponent = props => {
                         Home
                     </Link>
 
-                    <Link to="/admin/dashboard" className={classes.buttonlink}>
-                        PA
-                    </Link>
-
                     <Box flexGrow={1}></Box>
 
                     <Link to={props.role !== 'ROLE_GUEST' ? '/logout' : '/login'} className={classes.buttonlink}>
