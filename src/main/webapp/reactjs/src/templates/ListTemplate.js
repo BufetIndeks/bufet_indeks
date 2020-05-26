@@ -9,6 +9,7 @@ import DeleteIcon from '@material-ui/icons/Delete'
 import AddIcon from '@material-ui/icons/Add'
 import DoneIcon from '@material-ui/icons/Done'
 import CloseIcon from '@material-ui/icons/Close'
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
 const useStyles = makeStyles({
     fabNew: {
@@ -58,10 +59,26 @@ const ListTemplate = props => {
     const [editMode, setEditMode] = useState(false)
     const [search, setSearch] = useState('')
 
+    const [allAllergens, setAllAllergens] = useState([])
+    const [allergens, setAllergens] = useState([])
+
     const classes = useStyles();
 
     const url = props.url
     const headers = props.headers
+
+    useEffect( () => {
+        if(url === '/admin/ingredient'){
+            axios.get(API_URL + '/admin/allergen')
+            .then(response => {
+                console.log(response)
+                setAllAllergens(response.data)
+            })
+            .catch(error => {
+                console.error(error.response)
+            })
+        }
+    },[])
 
     useEffect( () => {
         axios.get(API_URL + url)
@@ -144,30 +161,8 @@ const ListTemplate = props => {
         setAddItem(false)
     }
 
-    const addAllergens = (allergens) => {
-        return new Promise((res, rej) => {
-            let counter = 0
-            for(let el of allergens){
-                axios.post(API_URL + '/admin/addAllergen',{
-                    allergenName: el
-                })
-                    .then(res => {
-                        console.log(res.data)
-                        counter++
-                    })
-                    .catch(err => {
-                        console.error(err.response)
-                        counter++
-                    })
-                    .finally( () => {
-                        if(counter === allergens.length)
-                            res()
-                    })
-            }
-        })
-    }
-
     const handleUpdate = () => {
+        closeEdit()
         if(url === '/category'){
             axios.post(API_URL + '/admin/updateCategory', {
                 id: newEntry[1],
@@ -176,53 +171,24 @@ const ListTemplate = props => {
                 .then(res => {
                     console.log(res.data)
                     update(!up)
-                    closeEdit()
                 })
                 .catch(err => {
                     console.error(err)
                 })
         }
         else if(url === '/admin/ingredient'){
-            let allergens = []
-            let newEntryAllergens = newEntry[1].replace(/\s/g,'').split(',')
-            addAllergens(newEntryAllergens)
-            .then( () => {
-                axios.get(API_URL + '/admin/allergen')
-                    .then(response => {
-                        allergens = response.data;
-                        allergens = allergens.filter(el => {
-                            for(let nEA of newEntryAllergens){
-                                if(nEA === el.allergenName){
-                                    const index = newEntryAllergens.indexOf(nEA)
-                                    if(index > -1)
-                                        newEntryAllergens.splice(index, 1)
-                                    return true
-                                }
-                            }
-                            return false
-                        })
-
-                        const post = {
-                            id: newEntry[2],
-                            ingredientName: newEntry[0],
-                            allergenList: allergens
-                        }
-
-                        axios.post(API_URL + '/admin/updateIngredient', post)
-                            .then(response => {
-                                console.log(response)
-                                closeEdit()
-                                update(!up)
-                            })
-                            .catch(err => {
-                                console.error(err.response)
-                            })
-                        
-                    })
-                    .catch(err => {
-                        console.error(err)
-                    })
+            axios.post(API_URL + '/admin/updateIngredient', {
+                id: newEntry[2],
+                ingredientName: newEntry[0],
+                allergenList: allergens
             })
+                .then(response => {
+                    console.log(response)
+                    update(!up)
+                })
+                .catch(err => {
+                    console.error(err.response)
+                })
         }
         else if(url === '/admin/allergen'){
             axios.post(API_URL + '/admin/updateAllergen', {
@@ -232,7 +198,6 @@ const ListTemplate = props => {
                 .then(res => {
                     console.log(res.data)
                     update(!up)
-                    closeEdit()
                 })
                 .catch(err => {
                     console.error(err)
@@ -275,10 +240,9 @@ const ListTemplate = props => {
                 })
         }
         else if(url === '/admin/ingredient'){
-            let allergenList = 
             axios.post(API_URL + "/admin/addIngredient", {
                 ingredientName: newEntry[0],
-                allergenList: newEntry[1].replace(/\s+/g, '').split(",").map(el => {return {allergenName: el}})
+                allergenList: allergens
             })
                 .then(response => {
                     console.log(response)
@@ -362,12 +326,41 @@ const ListTemplate = props => {
                     <Fab variant="round" className={classes.fabAdd} style={{background: editMode ? "blue" : "green"}} onClick={() => handleAdd()}>
                         <DoneIcon />
                     </Fab>
-                    <Box style={{width: "70%"}}>
-                        {headers.map( (el, index) => (
-                            <Box flex-grow={2} key={el} display="flex" alignContent="" mx="2vw" mt="20px">
-                                <TextField placeholder={el} fullWidth value={newEntry[index]} variant="outlined" size="medium" onChange={ e => handleInput(e, index) }/>
-                            </Box>
-                        ))}
+                    <Box style={{width: "80%"}}>
+                        {headers.map( (el, index) => {
+                            
+                            if(url === '/admin/ingredient' && index === 1)
+                                return (
+                                    <Box flex-grow={2} key={el} display="flex" alignContent="" mx="2vw" mt="20px">
+                                        <Autocomplete
+                                            multiple
+                                            id="allergens"
+                                            options={allAllergens}
+                                            value={allergens}
+                                            limitTags={1}
+                                            getOptionLabel={(option) => option.allergenName}
+                                            onChange={(e,v) => setAllergens(v)}
+                                            filterSelectedOptions
+                                            fullWidth
+                                            renderInput={(params) => (
+                                            <TextField
+                                                {...params}
+                                                label="Alergeny"
+                                                variant="outlined"
+                                                margin="normal"
+                                            />
+                                            )}
+                                        />
+                                    </Box>
+                                )
+                            else{
+                                return(
+                                    <Box flex-grow={2} key={el} display="flex" alignContent="" mx="2vw" mt="20px">
+                                        <TextField placeholder={el} fullWidth value={newEntry[index]} variant="outlined" size="medium" onChange={ e => handleInput(e, index) }/>
+                                    </Box>
+                                )
+                            }
+                        })}
                     </Box>
             </Box>
 
