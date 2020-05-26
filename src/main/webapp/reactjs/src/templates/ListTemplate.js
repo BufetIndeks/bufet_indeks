@@ -19,7 +19,8 @@ const useStyles = makeStyles({
         top: 'auto', 
         right: 20,
         bottom: 20, 
-        left: "auto"
+        left: "auto",
+        zIndex: 2
     },
     fabAdd: {
         background: "green", 
@@ -29,16 +30,21 @@ const useStyles = makeStyles({
         top: 'auto', 
         right: 20,
         bottom: 100, 
-        left: "auto"
+        left: "auto",
+        zIndex: 2
+
     },
     newEntry: {
         position: "fixed",
-        width: "70%",
+        width: "100%",
         margin: 0, 
         top: 'auto', 
-        left: 20,
-        bottom: 20, 
-        right: "auto"
+        left: 'auto',
+        bottom: 0, 
+        padding: '0 15px 15px 15px',
+        right: 'auto',
+        background: "white",
+        zIndex: 1
     }
 })
 
@@ -348,25 +354,29 @@ const ListTemplate = props => {
                     closeEdit()
                 }
             }} 
-            className={classes.fabNew} style={{background: addItem ? "red" : "green"}}>
-                {addItem ? <CloseIcon /> : <AddIcon />}
+                className={classes.fabNew} style={{background: addItem ? "red" : "green"}}>
+                    {addItem ? <CloseIcon /> : <AddIcon />}
             </Fab>
 
             <Box display={addItem ? "block" : "none"} className={classes.newEntry} justifyContent="flex-start">
-                <Fab variant="round" className={classes.fabAdd} style={{background: editMode ? "blue" : "green"}} onClick={() => handleAdd()}>
-                    <DoneIcon />
-                </Fab>
-                {headers.map( (el, index) => (
-                    <Box flex-grow={2} key={el} display="flex" alignContent="" mx="2vw" mt="20px">
-                        <TextField placeholder={el} fullWidth value={newEntry[index]} variant="outlined" size="medium" onChange={ e => handleInput(e, index) }/>
+                    <Fab variant="round" className={classes.fabAdd} style={{background: editMode ? "blue" : "green"}} onClick={() => handleAdd()}>
+                        <DoneIcon />
+                    </Fab>
+                    <Box style={{width: "70%"}}>
+                        {headers.map( (el, index) => (
+                            <Box flex-grow={2} key={el} display="flex" alignContent="" mx="2vw" mt="20px">
+                                <TextField placeholder={el} fullWidth value={newEntry[index]} variant="outlined" size="medium" onChange={ e => handleInput(e, index) }/>
+                            </Box>
+                        ))}
                     </Box>
-                ))}
             </Box>
 
-            <TextField value={search}  variant='outlined' placeholder='Szukaj' margin='normal' onChange={e => searching(e)}/>
             
             <TableContainer>
+                <TextField value={search}  variant='outlined' placeholder='Szukaj' margin='normal' onChange={e => searching(e)}/>
+                
                 <Table size="small">
+                    
                     <TableHead>
                         <TableRow>
                             {headers !== undefined && 
