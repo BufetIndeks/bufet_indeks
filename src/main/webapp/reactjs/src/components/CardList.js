@@ -18,11 +18,12 @@ const CardList = props => {
 
     const [cards, setCards] = useState([])
     const [filters, setFilters] = useState(nonfiltered)
-    const [noFilter, setNoFilter] = useState(false)
+    const [categoryClicked, setCategoryClicked] = useState(false)
 
     const history = useHistory()
     const location = useLocation()
 
+    //Zerowanie filtrów
     useEffect( () => {
         setFilters({
             priceMin: '',
@@ -32,31 +33,38 @@ const CardList = props => {
             categories: [],
             dishDay: false
         })
+        console.log("CARDLIST RENDER")
     }, [])
 
     useEffect( () => {
-        console.log(location, history.location)
-        if(location.state !== undefined && location.state.filters !== undefined){
-            console.log("AAAAAA", location.state)
+        if(location.state === undefined){
+            console.log("COS")
+            setFilters(nonfiltered)
+            setCategoryClicked(true)
+        }
+        else if(history.action == 'POP' && location.state !== undefined && location.state.filters !== undefined){
+            console.log("CARDSLIST FILTRY Z LOKACJI")
             setFilters(location.state.filters)
             setCards(location.state.cards)
         }
     }, [location.state])
 
     const handleMove = (value) => {
+        console.log("PUSH if defined", value.active)
         if(value.active !== undefined)
             history.push(location.pathname + '/' + value.id)
         else{
+            history.action = "PUSH"
+            setCategoryClicked(true)
             setFilters(prev => ({...prev, categories: [value]}))
         }
     }
 
     return(
         <Container maxWidth="md">
-            {history.action === "POP" && cards.length === 9 && history.push('/')}
-            <DishFilter noFilter={noFilter} setCards={setCards} cards={cards} setFilters={setFilters} filters={filters}/>
+            <DishFilter categoryClicked={categoryClicked} setCategoryClicked={setCategoryClicked} setCards={setCards} cards={cards} setFilters={setFilters} filters={filters}/>
             <Grid container spacing={4}>
-                {cards.map( (el, index) => {
+                {cards !== undefined && cards.map( (el, index) => {
                     if(el.name === undefined){
                         el.name = el.dishName
                     }

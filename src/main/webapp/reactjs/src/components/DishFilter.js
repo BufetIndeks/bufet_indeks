@@ -1,15 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import { Link, useHistory, useLocation } from 'react-router-dom'
 import { Fab, Modal, Grid, TextField, FormControlLabel, Checkbox, Typography, Button, Box, Container } from '@material-ui/core'
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { makeStyles } from '@material-ui/core/styles'
 import FilterListIcon from '@material-ui/icons/FilterList'
 import axios from 'axios'
 import {API_URL} from '../ApiUrl'
-
-function rand() {
-    return Math.round(Math.random() * 20) - 10;
-}
 
 function getModalStyle() {
     return {
@@ -47,14 +43,7 @@ const useStyles = makeStyles(theme => ({
 const DishFilter = props => {
 
     const [open, setOpen] = useState(false)
-    const [redirect, setRedirect] = useState(false)
-
-    // const [priceMin, setPriceMin] = useState('')
-    // const [priceMax, setPriceMax] = useState('')
-    // const [categories, setCategories] = useState([])
-    // const [ingredients, setIngredients] = useState([])
-    // const [allergens, setAllergens] = useState([])
-    // const [dishDay, setDishDay] = useState(false)
+    const [pressedFilter, setPressedFilter] = useState(false)
 
     const nonfiltered = {
         priceMin: '',
@@ -73,8 +62,10 @@ const DishFilter = props => {
     const [modalStyle] = useState(getModalStyle);
     const classes = useStyles()
     const history = useHistory()
+    const location = useLocation()
 
-    useEffect( () => {
+    //Początkowe pobranie wszystkich informacji
+    useEffect( () => {  
 
         axios.get(API_URL + '/category')
             .then(response => {
@@ -107,21 +98,30 @@ const DishFilter = props => {
             })
     }, [])
 
+
     useEffect( () => {
-        if(history.location.pathname === '/menu' && history.action === "PUSH"){
+        if((history.location.pathname === '/menu' && history.action === "PUSH") || history.location.state === undefined){
             props.setCards(allCategories)
-            console.log('axios')
         }
     },[allCategories])
 
+    //Filtrowanie poprzez zmianę kategorii - przyciśnięcie karty w menu
     useEffect( () => {
-        if(!open && allDishes.length !== 0)
-            filter()
-    }, [props.filters.categories])
+        if(props.categoryClicked === true){
+            props.setCategoryClicked(false)
 
-    const filter = () => {
+            if(location.state === undefined){
+                console.log("catClicked 0")
+                props.setCards(allCategories)
+            }
+            if((!open) || location.state.cards.length === 0){
+                filter()
+            }
+        }
+    }, [props.categoryClicked])
+
+    const filter = (button = false) => {
         let result = JSON.parse(JSON.stringify(allDishes))
-        console.log(result, props.filters)
         if(props.filters.priceMin !== ''){
             result = result.filter(el => el.price >= props.filters.priceMin)
         }
@@ -160,45 +160,34 @@ const DishFilter = props => {
             })
                 .filter(el => el !== null)
         }
-
-        if(history.action !== "POP"){
-            console.log("filtry")
-            if(JSON.stringify(nonfiltered) === JSON.stringify(props.filters)){
-                props.setCards(allCategories)
-            }
-            else if(result.length === allDishes.length){
-                props.setCards(allCategories)
-                console.log("")
-            }
-            else{
-                console.log("FILTRY")
-                props.setCards(result)
-            }
+        console.log(result, props.filters)
+        if(button){
+            history.push('/menu', {filters: props.filters, cards: result})
+            props.setCards(result)
         }
         else{
-            if(history.location.state !== undefined){
-                console.log("z historii")
-                props.setCards(history.location.state.cards)
-                history.action = ''
+            if(history.action !== "POP" && result.length !== 0){
+                console.log("push filter", result)
+                history.push('/menu', {filters: props.filters, cards: result})
+            
+                if((JSON.stringify(nonfiltered) === JSON.stringify(props.filters)) || props.filters.categories.length === 0){
+                    props.setCards(allCategories)
+                }
+                else{
+                    console.log("FILTRY")
+                    props.setCards(result)
+                }
             }
-        }
+            else{
+                if(history.location.state !== undefined){
+                    console.log("z historii")
+                    props.setCards(history.location.state.cards)
+                    history.action = ''
+                }
+            }
+       }
         setOpen(false)
     }
-
-    useEffect(() => {
-        if(history.location.state === undefined){
-            props.setCards(allCategories)
-            console.log('allcategories')
-        }
-    }, [allCategories])
-
-    useEffect( () => {
-        if(history.action !== "POP"){
-            console.log("push")
-            if(history.location.state === undefined || JSON.stringify(history.location.state.cards) !== JSON.stringify(props.cards))
-                history.push('/menu', {cards: props.cards, filters: props.filters})
-        }
-    }, [props.cards])
 
     const handleInput = (event, value, field) => {
         event.persist()
@@ -328,7 +317,7 @@ const DishFilter = props => {
                     </Grid>
 
                     <Grid item xs={12}>
-                            <Button variant="contained" color="primary" onClick={() => filter()}>
+                            <Button variant="contained" color="primary" onClick={() => filter(true)}>
                                 Filtruj
                             </Button>
                     </Grid>
