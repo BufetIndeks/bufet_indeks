@@ -72,7 +72,7 @@ const DishEditTemplate = props => {
         const data = {
             "id": id,
             "dishName": name,
-            "dishImage": image,
+            "file": image,
             "price": price,
             "description": description,
             "dishDay": dishDay,
@@ -109,7 +109,6 @@ const DishEditTemplate = props => {
     const handleAdd = () => {
         const data =  {
             "dishName": name,
-            "dishImage": image,
             "price": price,
             "description": description,
             "dishDay": dishDay,
@@ -117,26 +116,27 @@ const DishEditTemplate = props => {
             "dishCategoryList": categories,
             "active": true
         }
-        const cos = new FormData()
-        cos.append('image', image, image.name)
-        cos.append('dishName', name)
-        cos.append('price', price)
-        cos.append('description', description)
-        cos.append('ingredientsList', ingredients)
-        cos.append('dishCategoryList', categories)
-        cos.append('active', true)
-        console.log(cos)
-        axios.post(API_URL + '/admin/addDish', cos, {headers: {
-            Accept: 'application/json',
-            'Content-Type': 'multipart/form-data',
+        const data2={
+            "dishImage":image
+        }
+      const cos2 = new FormData()
+       cos2.append('dishImage', image, image.name)
+
+        axios.post(API_URL + '/admin/addDish', data, {headers: {
+            Accept: 'application/json'
           }})
         .then(response => {
             console.log(response)
-            history.goBack()
+            axios.post(API_URL+'/admin/addDishImage/'+name, cos2,{headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'multipart/form-data',
+                }})
+          //  history.goBack()
         })
         .catch(error => {
             console.error(error.response)
         })
+
     }
 
     return(

@@ -24,7 +24,7 @@ public class Dish {
     private String dishName;
     @Lob
     @Column(name="obraz")
-    private Blob dishImage;
+    private byte[] dishImage;
     @Column(name="cena", nullable = false)
     private Double price;
     @Column(name="opis", length = 512)
@@ -49,6 +49,7 @@ public class Dish {
     List<DishCategory> dishCategoryList = new ArrayList<>();
     //Constructor
     public Dish() {}
+
     //Getter setter
     public Long getId() {
         return id;
@@ -66,11 +67,11 @@ public class Dish {
         this.dishName = dishName;
     }
 
-    public Blob getDishImage() {
+    public byte[] getDishImage() {
         return dishImage;
     }
 
-    public void setDishImage(Blob dishImage) {
+    public void setDishImage(byte[] dishImage) {
         this.dishImage = dishImage;
     }
 

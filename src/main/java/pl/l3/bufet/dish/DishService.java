@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import pl.l3.bufet.dishCategory.DishCategory;
 import pl.l3.bufet.dishCategory.DishCategoryRepository;
@@ -11,6 +12,7 @@ import pl.l3.bufet.exceptions.DuplicateDishException;
 import pl.l3.bufet.ingredient.Ingredient;
 import pl.l3.bufet.ingredient.IngredientRepository;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
@@ -54,6 +56,24 @@ public class DishService {
         }
     }
 
+    public ResponseEntity<String> addImage(MultipartFile multipartFile, String name){
+        if(multipartFile!=null) {
+            if (multipartFile.getSize() / 1024 / 1024 > 16)
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Zdjęcie posiada zbyt duży rozmiar");
+        }
+        Optional<Dish> dishOptional = dishRepository.findByDishName(name);
+        if(dishOptional.isPresent()){
+            try {
+                dishOptional.get().setDishImage(multipartFile.getBytes());
+                dishRepository.save(dishOptional.get());
+            } catch (IOException e) {
+                throw new  ResponseStatusException(HttpStatus.BAD_REQUEST, "Nie dodano zdjęcia");
+            }
+            return ResponseEntity.ok("Dodano zdjęcie dania");
+        }
+        throw new  ResponseStatusException(HttpStatus.BAD_REQUEST, "Nie dodano zdjęcia");
+    }
+
     public ResponseEntity<String> updateDish(Dish dish) {
         Optional<Dish> dishOptional = dishRepository.findById(dish.getId());
         if (dishOptional.isPresent()) {
@@ -64,7 +84,6 @@ public class DishService {
             dishOptional.get().setDishName(dish.getDishName());
             dishOptional.get().setDescription(dish.getDescription());
             dishOptional.get().setDishDay(dish.isDishDay());
-            dishOptional.get().setDishImage(dish.getDishImage());
             dishOptional.get().setPrice(dish.getPrice());
             dishRepository.save(dishOptional.get());
             return ResponseEntity.ok("Zmieniono dnie");
@@ -97,14 +116,6 @@ public class DishService {
 
        if (dish.getDishName().length() > 128 || !Pattern.matches("[\\p{L}\\p{Z}]+", dish.getDishName()))//!dish.getDishName().matches("\\p{Lu}\\p{Ll}*"))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nazwa dania jest niepoprawna");
-        try {
-            if(dish.getDishImage()!=null) {
-                if (dish.getDishImage().length() / 1024 / 1024 > 16)
-                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Zdjęcie posiada zbyt duży rozmiar");
-            }
-        } catch (SQLException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-        }
         if (dish.getPrice() == null)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Brak ceny dania");
         if (dish.getDescription().length() > 512)
@@ -124,5 +135,7 @@ public class DishService {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Kategoria przypisana do dania nie istnieje w bazie");
         }
     }
+
+
 
 }

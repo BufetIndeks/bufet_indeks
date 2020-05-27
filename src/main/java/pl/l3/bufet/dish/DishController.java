@@ -5,8 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -35,6 +37,10 @@ public class DishController {
         if(dish.getId()!=null)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Zapisywane danie nie może mieć ustawionego id");
         return dishService.addDish(dish);
+    }
+    @PostMapping(path="/admin/addDishImage/{name}")
+    public ResponseEntity<String> addDishImage(@PathVariable(required = true) String name, @RequestParam ("dishImage") MultipartFile dishImage){
+        return dishService.addImage(dishImage, name);
     }
 
     @PostMapping(path = "/admin/setActiveDish")
