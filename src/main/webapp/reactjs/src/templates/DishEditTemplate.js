@@ -10,7 +10,7 @@ import {Box, TextField, FormControlLabel, Checkbox, Card, Button, CardMedia, Con
 const DishEditTemplate = props => {
 
     const [id, setId] = useState(null)
-    const [image, setImage] = useState(undefined)
+    const [image, setImage] = useState(null)
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [price, setPrice] = useState(0)
@@ -148,7 +148,7 @@ const DishEditTemplate = props => {
                             <CardMedia
                                 component="img"
                                 alt=""
-                                image={(image === undefined || image.length === 0) ? undefined : URL.createObjectURL(image)}
+                                image={(image === null || image.length === 0) ? null : URL.createObjectURL(image)}
                             />
                         </Card>
                     </Box>
@@ -168,11 +168,11 @@ const DishEditTemplate = props => {
                                 }}
                             type="file"
                         />
-                        {image !== undefined && 
+                        {image !== null && 
                             <IconButton color="secondary" className="marginRight" size="small" onClick={e => {
                                 const file = document.getElementById('raised-button-file');
                                 file.value = '';
-                                setImage(undefined)}}>
+                                setImage(null)}}>
                                 <CloseIcon />
                             </IconButton>}
                         <label htmlFor="raised-button-file">
