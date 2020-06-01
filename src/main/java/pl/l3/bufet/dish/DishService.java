@@ -49,6 +49,7 @@ public class DishService {
         Optional<Dish> dishOptional = dishRepository.findByDishName(dish.getDishName());
         if (dishOptional.isEmpty()) {
             checkDish(dish);
+            dish.setActive(false);
             dishRepository.save(dish);
             return ResponseEntity.ok("Dodano danie");
         } else {

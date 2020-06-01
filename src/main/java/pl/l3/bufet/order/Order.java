@@ -3,13 +3,16 @@ package pl.l3.bufet.order;
 import net.bytebuddy.implementation.bind.annotation.Default;
 import org.springframework.format.annotation.NumberFormat;
 import pl.l3.bufet.dish.Dish;
+import pl.l3.bufet.status.Status;
 import pl.l3.bufet.user.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -28,9 +31,6 @@ public class Order {
 
     @Column(name="zaplacone")//, columnDefinition = "boolean default false")
     private Boolean paid=false;
-   // @NotEmpty
-    @Column(name="status")
-    private String status = "Zamowienie przyjete";
 
     //@NotEmpty
     @ManyToMany
@@ -44,7 +44,40 @@ public class Order {
     @JoinColumn(name = "client_id")
     User user;
 
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name="status")
+    Status status;
+
+    @Column(name="data_zamowienia")
+    Date date;
+
     public Order() {}
+
+    public Boolean getPaid() {
+        return paid;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public void setPaid(Boolean paid) {
+        this.paid = paid;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     public Long getId() {
         return id;
     }
