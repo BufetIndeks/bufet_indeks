@@ -72,7 +72,7 @@ const CardList = props => {
                    
                     return(
                         <Grid key={index} item xs={6} sm={4}>
-                            <Card style={{maxHeight: "200"}}>
+                            <Card style={{height: "200px"}}>
                                     <CardActionArea onClick={() => handleMove(el)}>
                                         <CardMedia 
                                             component="img"
