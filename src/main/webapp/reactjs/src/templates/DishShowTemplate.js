@@ -37,10 +37,11 @@ const DishShowTemplate = props => {
 
                 <Grid item xs={12}>       
                     <Box display="flex" justifyContent="center">
-                        <Card style={{maxWidth: "300px", height: "150px"}}>
+                        <Card>
                             <CardMedia
+                                style={{maxWidth: "300px", height: "150px"}}
                                 component="img"
-                                image="https://images.freeimages.com/images/premium/previews/2871/28718848-spaghetti-with-pesto.jpg"
+                                image={`data:image/jpeg;base64, ${dish.dishImage}`}
                                 title="Contemplative Reptile"
                             />
                         </Card>

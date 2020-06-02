@@ -34,7 +34,6 @@ const DishEditTemplate = props => {
         let dish = {}
         if(props.location !== undefined && props.location.state !== undefined) {
             dish = props.location.state.dish;
-            
             setId(dish.id)
             setImage(dish.dishImage)
             setName(dish.dishName)
@@ -72,13 +71,14 @@ const DishEditTemplate = props => {
         const data = {
             "id": id,
             "dishName": name,
-            "file": image,
+            //"file": image,
             "price": price,
             "description": description,
             "dishDay": dishDay,
+            "dishImage": image,
             "ingredientsList": ingredients,
             "dishCategoryList": categories,
-            "active": true
+            "active": false
         }
         axios.post(API_URL + '/admin/updateDish', data)
         .then(response => {
@@ -93,7 +93,7 @@ const DishEditTemplate = props => {
     const handleDelete = () => {
         const data = {
             "id": 1,
-            "active": false
+            "active": true
         }
         console.log(data)
         axios.post(API_URL + '/admin/setActiveDish', data)
@@ -114,23 +114,24 @@ const DishEditTemplate = props => {
             "dishDay": dishDay,
             "ingredientsList": ingredients,
             "dishCategoryList": categories,
-            "active": true
+            "active": false,
+            "dishImage": image
         }
         const data2={
             "dishImage":image
         }
       const cos2 = new FormData()
-       cos2.append('dishImage', image, image.name)
+      // cos2.append('dishImage', image, image.name)
 
         axios.post(API_URL + '/admin/addDish', data, {headers: {
             Accept: 'application/json'
           }})
         .then(response => {
             console.log(response)
-            axios.post(API_URL+'/admin/addDishImage/'+name, cos2,{headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'multipart/form-data',
-                }})
+            // axios.post(API_URL+'/admin/addDishImage/'+name, cos2,{headers: {
+            //         Accept: 'application/json',
+            //         'Content-Type': 'multipart/form-data',
+            //     }})
           //  history.goBack()
         })
         .catch(error => {
@@ -144,11 +145,11 @@ const DishEditTemplate = props => {
             <Grid container justify="center" alignItems="stretch">   
                 <Grid item xs={12}>       
                     <Box display="flex" justifyContent="center">
-                        <Card style={{maxWidth: "300px", height: "160px"}}>
-                            <CardMedia
+                        <Card >
+                            <CardMedia style={{maxWidth: "300px", height: "160px"}}
                                 component="img"
                                 alt=""
-                                image={(image === null || image.length === 0) ? null : URL.createObjectURL(image)}
+                                image={(image === null || image.length === 0) ? null : 'data:image/jpeg;base64,' + image}
                             />
                         </Card>
                     </Box>
@@ -161,10 +162,11 @@ const DishEditTemplate = props => {
                             style={{ display: 'none' }}
                             id="raised-button-file"
                             onChange={e => {
-                                //let a = new Blob(e.target.files[0])
-                                //
-                                //console.log(a)
-                                setImage(e.target.files[0])
+                                var reader = new FileReader();
+                                reader.onloadend = function() {
+                                    setImage(reader.result.substring(reader.result.indexOf(',') + 1))
+                                }
+                                reader.readAsDataURL(e.target.files[0])
                                 }}
                             type="file"
                         />

@@ -68,16 +68,17 @@ const CardList = props => {
                     if(el.name === undefined){
                         el.name = el.dishName
                     }
+                    
                     return(
                         <Grid key={index} item xs={6} sm={4}>
                             <Card style={{height: "100%"}}>
                                     <CardActionArea onClick={() => handleMove(el)}>
                                         <CardMedia 
                                             component="img"
-                                            alt={el.name}
+                                            alt={el.name === undefined ? el.dishName : el.name}
                                             height="140"
-                                            image={el.image}
-                                            title={el.name}
+                                            image={'data:image/jpeg;base64,' + (el.image === undefined ? el.dishImage : el.image)}
+                                            title={el.name === undefined ? el.dishName : el.name}
                                         />
                                         <CardContent>
                                             <Typography variant="h6" component="h3" align="center">
