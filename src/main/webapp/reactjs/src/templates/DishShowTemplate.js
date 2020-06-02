@@ -41,7 +41,7 @@ const DishShowTemplate = props => {
                             <CardMedia
                                 style={{maxWidth: "300px", height: "150px"}}
                                 component="img"
-                                image={`data:image/jpeg;base64, ${dish.dishImage}`}
+                                image={dish.dishImage ? `data:image/jpeg;base64, ${dish.dishImage}` : 'https://dummyimage.com/300x150/ffffff/32750e&text=placeholder'}
                                 title="Contemplative Reptile"
                             />
                         </Card>

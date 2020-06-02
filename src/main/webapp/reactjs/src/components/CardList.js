@@ -65,24 +65,25 @@ const CardList = props => {
             <DishFilter categoryClicked={categoryClicked} setCategoryClicked={setCategoryClicked} setCards={setCards} cards={cards} setFilters={setFilters} filters={filters}/>
             <Grid container spacing={4}>
                 {cards !== undefined && cards.map( (el, index) => {
-                    if(el.name === undefined){
-                        el.name = el.dishName
+                    if(el.image === undefined){
+                        if(el.dishImage !== undefined)
+                            el.image = el.dishImage
                     }
-                    
+                   
                     return(
                         <Grid key={index} item xs={6} sm={4}>
-                            <Card style={{height: "100%"}}>
+                            <Card style={{maxHeight: "200"}}>
                                     <CardActionArea onClick={() => handleMove(el)}>
                                         <CardMedia 
                                             component="img"
-                                            alt={el.name === undefined ? el.dishName : el.name}
-                                            height="140"
-                                            image={'data:image/jpeg;base64,' + (el.image === undefined ? el.dishImage : el.image)}
-                                            title={el.name === undefined ? el.dishName : el.name}
+                                            alt={el.name ? el.name : el.dishName}
+                                            style={{maxHeight: '140'}}
+                                            image={el.image ? el.image : 'https://dummyimage.com/300x150/ffffff/32750e&text=placeholder'}
+                                            title={el.name ? el.name : el.dishName}
                                         />
                                         <CardContent>
                                             <Typography variant="h6" component="h3" align="center">
-                                                {el.name}
+                                                {el.name === undefined ? el.dishName : el.name}
                                             </Typography>
                                         </CardContent>
                                     </CardActionArea>
