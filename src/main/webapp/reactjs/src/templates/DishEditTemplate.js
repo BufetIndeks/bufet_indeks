@@ -5,7 +5,7 @@ import CloseIcon from '@material-ui/icons/Close'
 import { API_URL } from '../ApiUrl';
 import { useHistory } from 'react-router-dom'
 
-import {Box, TextField, FormControlLabel, Checkbox, Card, Button, CardMedia, Container, Grid, IconButton} from '@material-ui/core'
+import {Box, TextField, FormControlLabel, Checkbox, Card, Button, CardMedia, Container, Grid, IconButton, Typography} from '@material-ui/core'
 
 const DishEditTemplate = props => {
 
@@ -13,7 +13,7 @@ const DishEditTemplate = props => {
     const [image, setImage] = useState(null)
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
-    const [price, setPrice] = useState(0)
+    const [price, setPrice] = useState('')
     const [ingredients, setIngredients] = useState([])
     const [categories, setCategories] = useState([])
     const [dishDay, setDishDay] = useState(false)
@@ -21,7 +21,10 @@ const DishEditTemplate = props => {
     const [allCategories, setAllCategories] = useState([])
     const [allIngredients, setAllIngredients] = useState([])
 
+    const [error, setError] = useState('');
+
     const history = useHistory();
+    const pattern = /[\p{L} \s , .]/gu;
 
     let editMode = false;
     let deleteMode = false;
@@ -117,27 +120,27 @@ const DishEditTemplate = props => {
             "active": false,
             "dishImage": image
         }
-        const data2={
-            "dishImage":image
-        }
-      const cos2 = new FormData()
-      // cos2.append('dishImage', image, image.name)
 
         axios.post(API_URL + '/admin/addDish', data, {headers: {
             Accept: 'application/json'
           }})
         .then(response => {
             console.log(response)
-            // axios.post(API_URL+'/admin/addDishImage/'+name, cos2,{headers: {
-            //         Accept: 'application/json',
-            //         'Content-Type': 'multipart/form-data',
-            //     }})
-          //  history.goBack()
+            history.goBack();
         })
         .catch(error => {
-            console.error(error.response)
+            if(error.response)
+                setError(error.response.data.message)
         })
 
+    }
+
+    const checkPattern = (setter, value, pattern) => {
+        let viableMatches = String(value).match(pattern)
+        if(viableMatches !== null)
+            setter(viableMatches.join(""))
+        else
+            setter("")
     }
 
     const handleSubmit = event => {
@@ -204,7 +207,7 @@ const DishEditTemplate = props => {
                             inputProps={{
                                 maxLength: 128
                             }}
-                            onChange={e => setName(e.target.value)}
+                            onChange={e => checkPattern(setName, e.target.value, pattern)}
                             margin="dense"
                             label="Nazwa dania"
                             helperText={`${name.length}/128`}
@@ -219,7 +222,7 @@ const DishEditTemplate = props => {
                             inputProps={{
                                 maxLength: 512
                             }}
-                            onChange={e => setDescription(e.target.value)}
+                            onChange={e => checkPattern(setDescription, e.target.value, pattern)}
                             margin="dense"
                             label="Opis dania"
                             helperText={`${description.length}/512`}
@@ -231,7 +234,7 @@ const DishEditTemplate = props => {
                                 id="price"
                                 fullWidth
                                 value={price}
-                                onChange={e => setPrice(e.target.value)}
+                                onChange={e => checkPattern(setPrice, e.target.value.replace(/,/g, '.'), /[0-9 , .]+/)}
                                 inputProps={{
                                     maxLength: 10
                                 }}
@@ -291,7 +294,10 @@ const DishEditTemplate = props => {
                                     name="Danie dania" />
                         }/>
                     </Grid>
-
+                    {error && <Grid item xs={12}>
+                            <Typography style={{color: "red"}}>{error}</Typography>
+                        </Grid>}
+                    
                     <Grid item xs={12}>
                         <Box className="marginBottom" display="flex" justifyContent="flex-end">
                             {editMode && 

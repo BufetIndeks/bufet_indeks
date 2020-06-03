@@ -43,14 +43,6 @@ const LoginComponent = props => {
            })
     }
 
-    const checkPattern = (setter, value, pattern) => {
-        let viableMatches = String(value).match(pattern)
-        if(viableMatches !== null)
-            setter(viableMatches.join(""))
-        else
-            setter("")
-    }
-
     return (
         <Container maxWidth="sm">
             <Grid container spacing={0} justify="center" direction="column" alignItems="stretch">
@@ -58,6 +50,7 @@ const LoginComponent = props => {
                 <Grid item>
                     <h1>Panel logowania</h1>
                 </Grid>
+                
                 <form onSubmit={e => handleSubmit(e)} >
                     <Grid item xs={12} >
                         <TextField 
