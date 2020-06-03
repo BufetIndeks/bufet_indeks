@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { API_URL } from '../ApiUrl'
-import { Container, Grid, Card, CardActionArea, CardContent, CardMedia, Typography } from '@material-ui/core'
-import { Link, useLocation, useHistory } from 'react-router-dom'
+import { Container, Grid} from '@material-ui/core'
+import { useLocation, useHistory } from 'react-router-dom'
 import DishFilter from './DishFilter'
+import CardListItem from '../items/CardListItem'
 
 const CardList = props => {
 
@@ -71,24 +72,11 @@ const CardList = props => {
                     }
                    
                     return(
-                        <Grid key={index} item xs={6} sm={4}>
-                            <Card style={{height: "200px"}}>
-                                    <CardActionArea onClick={() => handleMove(el)}>
-                                        <CardMedia 
-                                            component="img"
-                                            alt={el.name ? el.name : el.dishName}
-                                            style={{maxHeight: '140'}}
-                                            image={el.image ? el.image : `data:image/jpeg;base64,${el.dishImage}`}
-                                            title={el.name ? el.name : el.dishName}
-                                        />
-                                        <CardContent>
-                                            <Typography variant="h6" component="h3" align="center">
-                                                {el.name === undefined ? el.dishName : el.name}
-                                            </Typography>
-                                        </CardContent>
-                                    </CardActionArea>
-                            </Card>
-                        </Grid>
+                        <CardListItem 
+                            key={el.name ? el.name : el.dishName}
+                            element={el}
+                            actionOnClick={handleMove}
+                        />
                     )}
                 )}
                     
