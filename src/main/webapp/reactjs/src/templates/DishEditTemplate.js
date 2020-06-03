@@ -17,6 +17,7 @@ const DishEditTemplate = props => {
     const [ingredients, setIngredients] = useState([])
     const [categories, setCategories] = useState([])
     const [dishDay, setDishDay] = useState(false)
+    const [active, setActive] = useState(false);
 
     const [allCategories, setAllCategories] = useState([])
     const [allIngredients, setAllIngredients] = useState([])
@@ -45,6 +46,7 @@ const DishEditTemplate = props => {
             setIngredients(dish.ingredientsList)
             setCategories(dish.dishCategoryList)
             setDishDay(dish.dishDay)
+            setActive(dish.active);
         }
 
         if(deleteMode === true){
@@ -81,7 +83,7 @@ const DishEditTemplate = props => {
             "dishImage": image,
             "ingredientsList": ingredients,
             "dishCategoryList": categories,
-            "active": false
+            "active": active
         }
         axios.post(API_URL + '/admin/updateDish', data)
         .then(response => {
@@ -95,7 +97,7 @@ const DishEditTemplate = props => {
 
     const handleDelete = () => {
         const data = {
-            "id": 1,
+            "id": id,
             "active": true
         }
         console.log(data)
@@ -148,7 +150,7 @@ const DishEditTemplate = props => {
         if(editMode)
             handleEdit();
         else if(deleteMode)
-            handleEdit();
+            handleDelete();
         else
             handleAdd();
     }
@@ -163,7 +165,7 @@ const DishEditTemplate = props => {
                                 <CardMedia style={{maxWidth: "300px", height: "160px"}}
                                     component="img"
                                     alt=""
-                                    image={(image === null || image.length === 0) ? null : 'data:image/jpeg;base64,' + image}
+                                    image={image ? 'data:image/jpeg;base64,' + image : null}
                                 />
                             </Card>
                         </Box>
@@ -292,6 +294,18 @@ const DishEditTemplate = props => {
                                     value={dishDay}
                                     onChange={(e,checked) => setDishDay(checked)} 
                                     name="Danie dania" />
+                        }/>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <FormControlLabel label = "Danie aktywne" margin="normal" 
+                            control = {
+                                <Checkbox 
+                                    id="active"
+                                    color="primary"
+                                    checked={!active}
+                                    onChange={(e) => setActive(!active)} 
+                                    name="Aktywne" />
                         }/>
                     </Grid>
                     {error && <Grid item xs={12}>

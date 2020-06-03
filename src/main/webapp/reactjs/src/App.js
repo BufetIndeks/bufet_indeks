@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom';
 
-import DishList from './components/DishList';
+//import DishList from './components/DishList';
+import DishList from './list/DishList';
+import CategoryList from './list/CategoryList';
 import LoginComponent from './components/LoginComponent';
 import MenuComponent from './components/MenuComponent';
 import LogoutComponent from './components/LogoutComponent';
@@ -90,7 +92,10 @@ const App = props => {
                         
                         <AuthenticatedRoute role={'ROLE_ADMIN'} url='/adminLogged' exact path="/admin/dashboard" component={AdminDashboard} />
                         
-                        <AuthenticatedRoute role={role} url='/adminLogged' exact path="/admin/dishes" component={DishList} />
+                        <AuthenticatedRoute role={role} url='/adminLogged' exact path="/admin/dishes">
+                            {/* <ListTemplate url={'/admin/dishes'} headers={['Danie']}/> */}
+                            <DishList />
+                        </AuthenticatedRoute>
                         
                         <AuthenticatedRoute role={'ROLE_ADMIN'} url='/adminLogged' exact path="/admin/dishes/:id" component={DishEditTemplate} />
                         
@@ -99,7 +104,8 @@ const App = props => {
                         </Route>
 
                         <Route exact path="/admin/categories" role={role} url='/adminLogged' >
-                            <ListTemplate url={'/category'} headers={['Kategoria']}/>
+                            {/* <ListTemplate url={'/category'} headers={['Kategoria']}/> */}
+                            <CategoryList />
                         </Route>
 
                         <Route exact path="/admin/allergens" role={role} url='/adminLogged' >
