@@ -140,158 +140,171 @@ const DishEditTemplate = props => {
 
     }
 
+    const handleSubmit = event => {
+        event.preventDefault();
+        if(editMode)
+            handleEdit();
+        else if(deleteMode)
+            handleEdit();
+        else
+            handleAdd();
+    }
+
     return(
         <Container maxWidth="md" style={{marginTop: "20px"}}>
-            <Grid container justify="center" alignItems="stretch">   
-                <Grid item xs={12}>       
-                    <Box display="flex" justifyContent="center">
-                        <Card >
-                            <CardMedia style={{maxWidth: "300px", height: "160px"}}
-                                component="img"
-                                alt=""
-                                image={(image === null || image.length === 0) ? null : 'data:image/jpeg;base64,' + image}
+            <form onSubmit={e => handleSubmit(e)}>
+                <Grid container justify="center" alignItems="stretch">   
+                    <Grid item xs={12}>       
+                        <Box display="flex" justifyContent="center">
+                            <Card >
+                                <CardMedia style={{maxWidth: "300px", height: "160px"}}
+                                    component="img"
+                                    alt=""
+                                    image={(image === null || image.length === 0) ? null : 'data:image/jpeg;base64,' + image}
+                                />
+                            </Card>
+                        </Box>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Box className="marginTop" display="flex" justifyContent="flex-end" >
+                            <input
+                                accept="image/*"
+                                style={{ display: 'none' }}
+                                id="raised-button-file"
+                                onChange={e => {
+                                    var reader = new FileReader();
+                                    reader.onloadend = function() {
+                                        setImage(reader.result.substring(reader.result.indexOf(',') + 1))
+                                    }
+                                    reader.readAsDataURL(e.target.files[0])
+                                    }}
+                                type="file"
                             />
-                        </Card>
-                    </Box>
-                </Grid>
+                            {image !== null && 
+                                <IconButton color="secondary" className="marginRight" size="small" onClick={e => {
+                                    const file = document.getElementById('raised-button-file');
+                                    file.value = '';
+                                    setImage(null)}}>
+                                    <CloseIcon />
+                                </IconButton>}
+                            <label htmlFor="raised-button-file">
+                                <Button variant="contained" color="primary" component="span">
+                                    Zdjęcie
+                                </Button>
+                            </label> 
+                        </Box>
+                    </Grid>
 
-                <Grid item xs={12}>
-                    <Box className="marginTop" display="flex" justifyContent="flex-end" >
-                        <input
-                            accept="image/*"
-                            style={{ display: 'none' }}
-                            id="raised-button-file"
-                            onChange={e => {
-                                var reader = new FileReader();
-                                reader.onloadend = function() {
-                                    setImage(reader.result.substring(reader.result.indexOf(',') + 1))
-                                }
-                                reader.readAsDataURL(e.target.files[0])
-                                }}
-                            type="file"
-                        />
-                        {image !== null && 
-                            <IconButton color="secondary" className="marginRight" size="small" onClick={e => {
-                                const file = document.getElementById('raised-button-file');
-                                file.value = '';
-                                setImage(null)}}>
-                                <CloseIcon />
-                            </IconButton>}
-                        <label htmlFor="raised-button-file">
-                            <Button variant="contained" color="primary" component="span">
-                                Zdjęcie
-                            </Button>
-                        </label> 
-                    </Box>
-                </Grid>
-
-                <Grid item xs={12}>
-                    <TextField 
-                        id="name"
-                        fullWidth
-                        value={name}
-                        inputProps={{
-                            maxLength: 128
-                        }}
-                        onChange={e => setName(e.target.value)}
-                        margin="dense"
-                        label="Nazwa dania"
-                        helperText={`${name.length}/128`}
-                        variant="outlined" />
-                </Grid>
-
-                <Grid item xs={12}>
-                    <TextField 
-                        id="description"
-                        fullWidth
-                        value={description}
-                        inputProps={{
-                            maxLength: 512
-                        }}
-                        onChange={e => setDescription(e.target.value)}
-                        margin="dense"
-                        label="Opis dania"
-                        helperText={`${description.length}/512`}
-                        variant="outlined" />
-                </Grid>
-
-                <Grid item xs={12}>
-                    <TextField 
-                            id="price"
+                    <Grid item xs={12}>
+                        <TextField 
+                            id="name"
                             fullWidth
-                            value={price}
-                            onChange={e => setPrice(e.target.value)}
+                            value={name}
                             inputProps={{
-                                maxLength: 10
+                                maxLength: 128
                             }}
-                            helperText={`Tylko cyfry i przecinek`}
+                            onChange={e => setName(e.target.value)}
                             margin="dense"
-                            label="Cena dania"
+                            label="Nazwa dania"
+                            helperText={`${name.length}/128`}
                             variant="outlined" />
-                </Grid>
+                    </Grid>
 
-                <Grid item xs={12}>
-                    <Autocomplete
-                        multiple
-                        id="allIngredients"
-                        value={ingredients}
-                        options={allIngredients}
-                        getOptionLabel={(option) => option.ingredientName}
-                        onChange={(e,v) => setIngredients(v)}
-                        filterSelectedOptions
-                        renderInput={(params) => (
-                        <TextField
-                            {...params}
-                            label="Składniki"
-                            variant="outlined"
-                            margin="normal"
+                    <Grid item xs={12}>
+                        <TextField 
+                            id="description"
+                            fullWidth
+                            value={description}
+                            inputProps={{
+                                maxLength: 512
+                            }}
+                            onChange={e => setDescription(e.target.value)}
+                            margin="dense"
+                            label="Opis dania"
+                            helperText={`${description.length}/512`}
+                            variant="outlined" />
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <TextField 
+                                id="price"
+                                fullWidth
+                                value={price}
+                                onChange={e => setPrice(e.target.value)}
+                                inputProps={{
+                                    maxLength: 10
+                                }}
+                                helperText={`Tylko cyfry i przecinek`}
+                                margin="dense"
+                                label="Cena dania"
+                                variant="outlined" />
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Autocomplete
+                            multiple
+                            id="allIngredients"
+                            value={ingredients}
+                            options={allIngredients}
+                            getOptionLabel={(option) => option.ingredientName}
+                            onChange={(e,v) => setIngredients(v)}
+                            filterSelectedOptions
+                            renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Składniki"
+                                variant="outlined"
+                                margin="normal"
+                            />
+                            )}
                         />
-                        )}
-                    />
-                </Grid>
+                    </Grid>
 
-                <Grid item xs={12}>
-                    <Autocomplete
-                        multiple
-                        id="category"
-                        value={categories}
-                        options={allCategories}
-                        getOptionLabel={(option) => option.name}
-                        onChange={(e, value) => setCategories(value)}
-                        renderInput={(params) => (
-                        <TextField
-                            {...params}
-                            label="Kategorie"
-                            variant="outlined"
-                            margin="normal"
+                    <Grid item xs={12}>
+                        <Autocomplete
+                            multiple
+                            id="category"
+                            value={categories}
+                            options={allCategories}
+                            getOptionLabel={(option) => option.name}
+                            onChange={(e, value) => setCategories(value)}
+                            renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Kategorie"
+                                variant="outlined"
+                                margin="normal"
+                            />
+                            )}
                         />
-                        )}
-                    />
-                </Grid>
+                    </Grid>
 
-                <Grid item xs={12}>
-                    <FormControlLabel label = "Danie dnia" margin="normal" 
-                        control = {
-                            <Checkbox 
-                                id="dishDay"
-                                color="primary"
-                                value={dishDay}
-                                onChange={(e,checked) => setDishDay(checked)} 
-                                name="Danie dania" />
-                    }/>
-                </Grid>
+                    <Grid item xs={12}>
+                        <FormControlLabel label = "Danie dnia" margin="normal" 
+                            control = {
+                                <Checkbox 
+                                    id="dishDay"
+                                    color="primary"
+                                    value={dishDay}
+                                    onChange={(e,checked) => setDishDay(checked)} 
+                                    name="Danie dania" />
+                        }/>
+                    </Grid>
 
-                <Grid item xs={12}>
-                    <Box className="marginBottom" display="flex" justifyContent="flex-end">
-                        {editMode && 
-                            <Button type="submit" variant="contained" color="primary" margin="normal" onClick={() => handleEdit()}>Modyfikuj</Button>}
-                        {deleteMode && 
-                            <Button type="submit" variant="contained" color="secondary" margin="normal" onClick={() => handleDelete()}>Usuń</Button>}
-                        {props.location.state === undefined && 
-                            <Button type="submit" variant="contained" color="primary" margin="normal"onClick={() => handleAdd()}>Dodaj</Button>}
-                    </Box>
+                    <Grid item xs={12}>
+                        <Box className="marginBottom" display="flex" justifyContent="flex-end">
+                            {editMode && 
+                                <Button type="submit" variant="contained" color="primary" margin="normal">Modyfikuj</Button>}
+                            {deleteMode && 
+                                <Button type="submit" variant="contained" color="secondary" margin="normal">Usuń</Button>}
+                            {props.location.state === undefined && 
+                                <Button type="submit" variant="contained" color="primary" margin="normal">Dodaj</Button>}
+                        </Box>
+                    </Grid>
                 </Grid>
-            </Grid>
+            </form>
+
         </Container>
     )
 }
