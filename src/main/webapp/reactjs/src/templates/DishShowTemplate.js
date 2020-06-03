@@ -41,9 +41,9 @@ const DishShowTemplate = props => {
 
                 <Grid item xs={12}>       
                     <Box display="flex" justifyContent="center">
-                        <Card>
+                        <Card style={{height: "150px"}}>
                             <CardMedia
-                                style={{maxWidth: "300px", height: "150px"}}
+                                style={{maxHeight: "150px"}}
                                 component="img"
                                 image={dish.dishImage ? `data:image/jpeg;base64, ${dish.dishImage}` : 'https://dummyimage.com/300x150/ffffff/32750e&text=placeholder'}
                                 title="Contemplative Reptile"

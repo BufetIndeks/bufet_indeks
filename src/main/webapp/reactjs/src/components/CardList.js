@@ -65,9 +65,9 @@ const CardList = props => {
             <DishFilter categoryClicked={categoryClicked} setCategoryClicked={setCategoryClicked} setCards={setCards} cards={cards} setFilters={setFilters} filters={filters}/>
             <Grid container spacing={4}>
                 {cards !== undefined && cards.map( (el, index) => {
-                    if(el.image === undefined){
-                        if(el.dishImage !== undefined)
-                            el.image = el.dishImage
+                    if(!el.image){
+                        if(!el.dishImage)
+                            el.image = 'https://dummyimage.com/300x150/ffffff/32750e&text=placeholder'
                     }
                    
                     return(
@@ -78,7 +78,7 @@ const CardList = props => {
                                             component="img"
                                             alt={el.name ? el.name : el.dishName}
                                             style={{maxHeight: '140'}}
-                                            image={el.image ? el.image : 'https://dummyimage.com/300x150/ffffff/32750e&text=placeholder'}
+                                            image={el.image ? el.image : `data:image/jpeg;base64,${el.dishImage}`}
                                             title={el.name ? el.name : el.dishName}
                                         />
                                         <CardContent>
