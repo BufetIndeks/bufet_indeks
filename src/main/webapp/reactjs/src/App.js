@@ -106,7 +106,7 @@ const App = props => {
                             <ListTemplate url={'/admin/allergen'} headers={['Alergen']}/>
                         </Route>
                         
-                        <Route exact path="/regulamin" component={Regulamin} />
+                        <Route exact path="/regulations" component={Regulamin} />
                         <Route exact path="/about" component={About} />
                         <Route exact path="/menu">
                             <CardList getUrl="/category" itemUrl='/menu/'/>

@@ -23,8 +23,8 @@ export default function About() {
 
         Pellentesque in egestas mi, sit amet eleifend sapien. Proin scelerisque dapibus dui non gravida. Donec non velit tincidunt, efficitur nibh vitae, scelerisque erat. Sed molestie quis enim quis laoreet. Morbi mollis dolor nec mattis eleifend. Praesent at eros vel augue consectetur sagittis. Etiam vel porttitor libero. Quisque fringilla arcu a dolor consectetur, in tincidunt lorem maximus. Nunc sit amet arcu sit amet elit lacinia ornare eget ut sapien.
         </Typography>
-        <Typography align='center' variant='h4' className={classes.marg}>Znajdź nas</Typography>
-        <LocationMap />
+        {/* <Typography align='center' variant='h4' className={classes.marg}>Znajdź nas</Typography>
+        <LocationMap /> */}
     </Container>
     </div>
   );
