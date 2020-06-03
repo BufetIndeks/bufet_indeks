@@ -29,20 +29,22 @@ const HomeComponent = props => {
 
     return(
         <Container maxWidth="md">
-                    <Grid container direction="column" alignItems="center">
-                        <Link to="/menu">
-                            <Grid item xs={12}>
-                                <img className="col s12 l4 offset-l4 marginTop" src={require("../logo.svg")} width="300px" alt="Logo Bufet INDEKS"/>
-                            </Grid>
-                            
-                            <Grid item xs={12} className={classes.mt}>
-                                <Typography variant="h3" component="h3" className={classes.link}>
-                                    Dotnij, aby zamówić
-                                </Typography>
-                            </Grid>
-                        </Link>
-
-                            
+                    <Grid container direction="column">
+                        <Box display="flex" justifyContent="center">
+                            <Link to="/menu">
+                                <Grid item xs={12}>
+                                    <Box display="flex" justifyContent="center">
+                                        <img src={require("../logo.svg")} width="300px" alt="Logo Bufet INDEKS"/>
+                                    </Box>
+                                </Grid>
+                                
+                                <Grid item xs={12} className={classes.mt}>
+                                    <Typography variant="h3" component="h3" className={classes.link}>
+                                        Dotnij, aby zamówić
+                                    </Typography>
+                                </Grid>
+                            </Link>
+                        </Box>     
                     </Grid>
                     <Box className={classes.bottomPanel}>
                                 <Link to="/about">
