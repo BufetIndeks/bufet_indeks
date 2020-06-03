@@ -13,10 +13,10 @@ const CartItem = ({dish, addItem, removeItem}) => {
                     <img height={"75px"} width={"75px"} src={'data:image/jpeg;base64,' + dish.dishImage} />
                 </Card>
                 
-                <Box flexGrow={1}><h2>{dish.dishName}</h2></Box>
+                <Box flexGrow={2}><h2>{dish.dishName}</h2></Box>
                 
-                <Box className="marginLeft marginRight">
-                    <Typography variant="h4">{`${dish.price * dish.quantity} zł`}</Typography>
+                <Box flexGrow={1} className="marginLeft marginRight">
+                    <Typography variant="h6">{`${dish.price * dish.quantity} zł`}</Typography>
                 </Box>
 
                 <Box>

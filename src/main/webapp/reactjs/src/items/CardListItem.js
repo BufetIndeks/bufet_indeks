@@ -9,21 +9,21 @@ const CardListItem = ({element, actionOnClick}) => {
 
     return(
         <Grid item xs={6} sm={4}>
-            <Card style={{height: "200px"}}>
-                    <CardActionArea onClick={() => actionOnClick(element)}>
-                        <CardMedia 
-                            component="img"
-                            alt={name}
-                            style={{maxHeight: '140'}}
-                            image={image}
-                            title={name}
-                        />
-                        <CardContent>
-                            <Typography variant="h6" component="h3" align="center">
-                                {name}
-                            </Typography>
-                        </CardContent>
-                    </CardActionArea>
+            <Card style={{height: "250px"}}>
+                <CardActionArea onClick={() => actionOnClick(element)}>
+                    <img
+                        alt={name}
+                        height='130px'
+                        width="100%"
+                        src={image}
+                        title={name}
+                    />
+                    <CardContent>
+                        <Typography variant="h6" component="h3" align="center">
+                            {name}
+                        </Typography>
+                    </CardContent>
+                </CardActionArea>
             </Card>
         </Grid>
     )
