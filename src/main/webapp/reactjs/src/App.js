@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom';
-//import 'materialize-css/dist/css/materialize.min.css';
 
-import DishList from './components/DishList';
+//import DishList from './components/DishList';
+import DishList from './list/DishList';
+import CategoryList from './list/CategoryList';
+import IngredientList from './list/IngredientList';
+import AllergenList from './list/AllergenList';
 import LoginComponent from './components/LoginComponent';
 import MenuComponent from './components/MenuComponent';
 import LogoutComponent from './components/LogoutComponent';
@@ -18,18 +21,17 @@ import DishShowTemplate from './templates/DishShowTemplate';
 import Regulamin from "./components/Regulamin";
 import About from "./components/About";
 import CardList from './components/CardList'
+import Cart from './components/Cart';
+import Payment from './components/Payment';
 
-import { Container } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
+import { Container } from '@material-ui/core';
 import ListTemplate from './templates/ListTemplate';
-import axios from 'axios';
-import { API_URL } from './ApiUrl';
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        
-    }
-}))
+import GlobalState from './context/GlobalState'
+
+import axios from 'axios'
+import {API_URL} from './ApiUrl.js'
+import WorkerDashboard from './components/WorkerDashboard';
 
 const App = props => {
 
@@ -38,10 +40,12 @@ const App = props => {
     const checkRole = () => {
         axios.get(API_URL + '/takeRole')
             .then(res => {
+                console.log(res)
                 if(res.data.authorities !== undefined)
                     setRole(res.data.authorities[0].authority)
-                else
-                    setRole('ROLE_GUEST')
+                else{
+                    setRole('ROLE_GUEST');
+                }
             })
             .catch(err => {
                 console.error(err)
@@ -58,62 +62,65 @@ const App = props => {
     }, [])
 
     return(
-        <Router>
-            <MenuComponent role={checkRole()}/>
-            <Container component="main" style={{marginTop: "20px", display: "flex", justifyContent: "center", alignItems: "center"}} maxWidth="md">
-                <Switch>
-                    
-                    <Route exact path="/">
-                        {role === 'ROLE_GUEST' && <HomeComponent />}
-                        {role === 'ROLE_ADMIN' && <AdminDashboard />}
-                        {role === 'ROLE_TABLE' && <HomeComponent />}
-                        {role === 'ROLE_WORKER' && <HomeComponent />}
-                    </Route>
-                    
-                    <Route exact path="/login" >
-                        <LoginComponent setRole={setRole} />
-                    </Route>
-                    
-                    <Route role={role} url='/adminLogged' exact path="/logout">
-                        <LogoutComponent setRole={setRole} />
-                    </Route>
-                
-                    <AuthenticatedRoute role={role} url='/adminLogged' exact path="/allergen" component={AllergensComponent} />
-                    
-                    <AuthenticatedRoute role={'ROLE_ADMIN'} url='/adminLogged' exact path="/admin/register" component={RegisterComponent} />
-                    
-                    <AuthenticatedRoute role={'ROLE_ADMIN'} url='/adminLogged' exact path="/admin/dashboard" component={AdminDashboard} />
-                    
-                    <AuthenticatedRoute role={role} url='/adminLogged' exact path="/admin/dishes" component={DishList} />
-                    
-                    <AuthenticatedRoute role={'ROLE_ADMIN'} url='/adminLogged' exact path="/admin/dishes/:id" component={DishEditTemplate} />
-                    
-                    <Route exact path="/admin/ingredients" role={role} url='/adminLogged' >
-                        <ListTemplate url={'/admin/ingredient'} headers={['Składnik', 'Alergeny']}/>
-                    </Route>
+        <GlobalState>
+            <Router>
+                <MenuComponent role={checkRole()}/>
+                <Container component="main" style={{marginTop: "20px", display: "flex", justifyContent: "center", alignItems: "center"}} maxWidth="md">
+                    <Switch>
+                        
+                        <Route exact path="/">
+                            {role === 'ROLE_ADMIN' && <AdminDashboard />}
+                            {role === 'ROLE_TABLE' && <HomeComponent />}
+                            {role === 'ROLE_WORKER' && <WorkerDashboard />}
+                            {role === 'ROLE_GUEST' && <LoginComponent />}
+                        </Route>
+                        
+                        <Route exact path="/login" >
+                            <LoginComponent setRole={setRole} />
+                        </Route>
+                        
+                        <Route exact path="/cart" component={Cart} />
+                        <Route exact path="/cart/pay" component={Payment} />
+                        
 
-                    <Route exact path="/admin/categories" role={role} url='/adminLogged' >
-                        <ListTemplate url={'/category'} headers={['Kategoria']}/>
-                    </Route>
+                        <Route exact path='/menu/:dishId'>
+                            <DishShowTemplate />
+                        </Route>
 
-                    <Route exact path="/admin/allergens" role={role} url='/adminLogged' >
-                        <ListTemplate url={'/admin/allergen'} headers={['Alergen']}/>
-                    </Route>
+                        <Route role={role} url='/adminLogged' exact path="/logout">
+                            <LogoutComponent setRole={setRole} />
+                        </Route>
                     
-                    <Route exact path="/regulamin" component={Regulamin} />
-                    <Route exact path="/about" component={About} />
-                    <Route exact path="/menu">
-                        <CardList getUrl="/category" itemUrl='/menu/'/>
-                    </Route>
+                        <AuthenticatedRoute role={role} url='/adminLogged' exact path="/allergen" component={AllergensComponent} />
+                        
+                        <AuthenticatedRoute role={'ROLE_ADMIN'} url='/adminLogged' exact path="/admin/register" component={RegisterComponent} />
+                        
+                        <AuthenticatedRoute role={'ROLE_ADMIN'} url='/adminLogged' exact path="/admin/dashboard" component={AdminDashboard} />
+                        
+                        <AuthenticatedRoute role={role} url='/adminLogged' exact path="/admin/dishes" component={DishList} />
+                        
+                        <AuthenticatedRoute role={'ROLE_ADMIN'} url='/adminLogged' exact path="/admin/dishes/:id" component={DishEditTemplate} />
+                        
+                        <AuthenticatedRoute exact path="/admin/ingredients" role={role} url='/adminLogged' component={IngredientList} />
+                            {/* <ListTemplate url={'/admin/ingredient'} headers={['Składnik', 'Alergeny']}/> */}
 
-                    <Route exact path='/menu/:dishId'>
-                        <DishShowTemplate />
-                    </Route>
-                    
-                    <Route path="/*"><ErrorTemplate /></Route>
-                </Switch>
-            </Container>
-        </Router>
+                        <AuthenticatedRoute exact path="/admin/categories" role={role} url='/adminLogged' component={CategoryList} />
+                            {/* <ListTemplate url={'/category'} headers={['Kategoria']}/> */}
+
+                        <AuthenticatedRoute exact path="/admin/allergens" role={role} url='/adminLogged' component={AllergenList} />
+                            {/* <ListTemplate url={'/admin/allergen'} headers={['Alergen']}/> */}
+                        
+                        <Route exact path="/regulations" component={Regulamin} />
+                        <Route exact path="/about" component={About} />
+                        <Route exact path="/menu">
+                            <CardList getUrl="/category" itemUrl='/menu/'/>
+                        </Route>
+                        
+                        <Route path="/*"><ErrorTemplate /></Route>
+                    </Switch>
+                </Container>
+            </Router>
+        </GlobalState>
     )
 }
 

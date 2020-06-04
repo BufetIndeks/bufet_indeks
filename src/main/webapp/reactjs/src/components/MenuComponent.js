@@ -1,10 +1,14 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import { Link, withRouter } from 'react-router-dom'
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import { makeStyles } from '@material-ui/core/styles';
+
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import PersonIcon from '@material-ui/icons/Person'
+import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket'
+import HomeIcon from '@material-ui/icons/Home'
+
 import { Box, Typography, IconButton } from '@material-ui/core';
 
 const useStyles = makeStyles( theme => ({
@@ -26,23 +30,28 @@ const useStyles = makeStyles( theme => ({
     }
 }))
 
-const MenuComponent = props => {
+const MenuComponent = ({role}) => {
 
     const classes = useStyles();
-
 
     return (
             <AppBar position="sticky" style={{background: "green"}}>
                 <Toolbar>
 
                     <Link to="/" className={classes.buttonlink}>
-                        Home
+                        <HomeIcon />
                     </Link>
 
                     <Box flexGrow={1}></Box>
 
-                    <Link to={props.role !== 'ROLE_GUEST' ? '/logout' : '/login'} className={classes.buttonlink}>
-                        {props.role !== 'ROLE_GUEST' ? <ExitToAppIcon /> : <PersonIcon /> }
+                    {role === "ROLE_TABLE"  && 
+                        <Link to="/cart" className={classes.buttonlink}>
+                            <ShoppingBasketIcon />
+                        </Link>
+                    }
+
+                    <Link to={role !== 'ROLE_GUEST' ? '/logout' : '/login'} className={classes.buttonlink}>
+                        {role !== 'ROLE_GUEST' ? <ExitToAppIcon /> : <PersonIcon /> }
                     </Link>
                             
                     

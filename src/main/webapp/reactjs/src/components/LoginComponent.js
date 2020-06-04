@@ -14,8 +14,8 @@ const LoginComponent = props => {
 
     const history = useHistory();
 
-    const handleSubmit = () => {
-
+    const handleSubmit = event => {
+        event.preventDefault();
 
         AuthenticationService
            .executeBasicAuthenticationService(username, password, rememberMe)
@@ -28,7 +28,7 @@ const LoginComponent = props => {
                                 props.setRole(res.data.authorities[0].authority)
                             else
                                 props.setRole('ROLE_GUEST')
-                            history.push(`/`)
+                            history.push('/')
                         })
                         .catch(err => {
                             console.error(err.response)
@@ -43,14 +43,6 @@ const LoginComponent = props => {
            })
     }
 
-    const checkPattern = (setter, value, pattern) => {
-        let viableMatches = String(value).match(pattern)
-        if(viableMatches !== null)
-            setter(viableMatches.join(""))
-        else
-            setter("")
-    }
-
     return (
         <Container maxWidth="sm">
             <Grid container spacing={0} justify="center" direction="column" alignItems="stretch">
@@ -58,59 +50,60 @@ const LoginComponent = props => {
                 <Grid item>
                     <h1>Panel logowania</h1>
                 </Grid>
-
-                <Grid item xs={12} >
-                    <TextField 
-                        id="username" 
-                        fullWidth
-                        value={username}
-                        inputProps={{
-                            maxLength: 32
-                          }}
-                        onChange={e => setUsername(e.target.value)} 
-                        margin="normal" 
-                        helperText={`${username.length}/32`}
-                        label="Nazwa użytkownika" 
-                        variant="outlined" />
-                </Grid>
-                <Grid item xs={12} >
-                    <TextField 
-                        id="password" 
-                        fullWidth
-                        type="password"
-                        onChange={e => setPassword(e.target.value)} 
-                        margin="normal" 
-                        label="Hasło" 
-                        inputProps={{
-                            maxLength: 32
-                          }}
-                        helperText={`${password.length}/32`}
-                        variant="outlined" />
-                </Grid>
-                <Grid item xs={12}>
-                    <FormControlLabel label = "Zapamiętaj mnie na tym komputerze"
-                        control = {
-                            <Checkbox 
-                                checked={rememberMe} 
-                                color="primary"
-                                onChange={event => setRememberMe(event.target.checked)} 
-                                margin="normal" 
-                                name="rememberMe" />
-                    }/>
-                </Grid>
-                <Grid item xs={12}>
-                    <Box display="flex" justifyContent="flex-end">
-                        <Button variant="contained" color="primary" type="submit" margin="normal" onClick={handleSubmit}>Zaloguj się</Button>
-                    </Box>
-                </Grid>
-
-                {invalid && 
+                
+                <form onSubmit={e => handleSubmit(e)} >
+                    <Grid item xs={12} >
+                        <TextField 
+                            id="username" 
+                            fullWidth
+                            value={username}
+                            inputProps={{
+                                maxLength: 32
+                            }}
+                            onChange={e => setUsername(e.target.value)} 
+                            margin="normal" 
+                            helperText={`${username.length}/32`}
+                            label="Nazwa użytkownika" 
+                            variant="outlined" />
+                    </Grid>
+                    <Grid item xs={12} >
+                        <TextField 
+                            id="password" 
+                            fullWidth
+                            type="password"
+                            onChange={e => setPassword(e.target.value)} 
+                            margin="normal" 
+                            label="Hasło" 
+                            inputProps={{
+                                maxLength: 32
+                            }}
+                            helperText={`${password.length}/32`}
+                            variant="outlined" />
+                    </Grid>
                     <Grid item xs={12}>
-                        <Box mt={2} display="flex" justifyContent="center">
-                            <Typography style={{color: "red", fontSize: "24"}} variant="outlined" >Niewłaściwe dane</Typography>
+                        <FormControlLabel label = "Zapamiętaj mnie na tym komputerze"
+                            control = {
+                                <Checkbox 
+                                    checked={rememberMe} 
+                                    color="primary"
+                                    onChange={event => setRememberMe(event.target.checked)} 
+                                    margin="normal" 
+                                    name="rememberMe" />
+                        }/>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Box display="flex" justifyContent="flex-end">
+                            <Button variant="contained" color="primary" type="submit" margin="normal">Zaloguj się</Button>
                         </Box>
-                    </Grid>}
+                    </Grid>
 
+                    {invalid && 
+                        <Grid item xs={12}>
+                            <Box mt={2} display="flex" justifyContent="center">
+                                <Typography style={{color: "red", fontSize: "24"}} variant="outlined" >Niewłaściwe dane</Typography>
+                            </Box>
+                        </Grid>}
+                </form>
             </Grid>
         </Container>
     )

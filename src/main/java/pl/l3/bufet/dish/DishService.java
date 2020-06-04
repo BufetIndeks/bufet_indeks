@@ -86,6 +86,7 @@ public class DishService {
             dishOptional.get().setDescription(dish.getDescription());
             dishOptional.get().setDishDay(dish.isDishDay());
             dishOptional.get().setPrice(dish.getPrice());
+            dishOptional.get().setDishImage(dish.getDishImage());
             dishRepository.save(dishOptional.get());
             return ResponseEntity.ok("Zmieniono dnie");
         } else {

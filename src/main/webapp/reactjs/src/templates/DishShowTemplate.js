@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios'
 import { useLocation, useHistory } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 import { TextField, Container, Grid, Card, CardMedia, Typography, Button, Box } from '@material-ui/core';
 import { API_URL } from '../ApiUrl';
 
+import GlobalContext from '../context/GlobalContext';
+
 const DishShowTemplate = props => {
         
     const [dish, setDish] = useState({})
     const location = useLocation()
     const history = useHistory()
+    const context = useContext(GlobalContext)
 
     useEffect( () => {
         axios.get(API_URL + `/menu/danie=${location.pathname.slice(location.pathname.lastIndexOf('/') + 1)}`)
@@ -27,8 +30,9 @@ const DishShowTemplate = props => {
         //     history.goBack()
     },[history.action])
 
-    const handleSubmit = () => {
-        console.log("SUBMIT")
+    const handleOrder = () => {
+        context.addDishToOrder(dish);
+        history.push('/cart')
     }
 
     return(
@@ -37,12 +41,9 @@ const DishShowTemplate = props => {
 
                 <Grid item xs={12}>       
                     <Box display="flex" justifyContent="center">
-                        <Card style={{maxWidth: "300px", height: "150px"}}>
-                            <CardMedia
-                                component="img"
-                                image="https://images.freeimages.com/images/premium/previews/2871/28718848-spaghetti-with-pesto.jpg"
-                                title="Contemplative Reptile"
-                            />
+                        <Card style={{height: "200px", width: "100%"}}>
+                            <img src={dish.dishImage ? `data:image/jpeg;base64, ${dish.dishImage}` : `https://dummyimage.com/400x200/ffffff/32750e&text=${dish.dishName}`}
+                                height="100%" width="100%" />
                         </Card>
                     </Box>
                 </Grid>
@@ -71,7 +72,14 @@ const DishShowTemplate = props => {
                 <Grid item xs={12}>
                 <hr/>
                     <Typography>
-                        {dish.price + ' złotych'}
+                        {Object.keys(dish).length !== 0 && dish.ingredientsList.map(el => el.allergenList.map(allergen => allergen.allergenName + ' '))}
+                    </Typography>
+                </Grid>
+
+                <Grid item xs={12}>
+                <hr/>
+                    <Typography>
+                        {dish.price + ' PLN'}
                     </Typography>
                 </Grid>
 
@@ -91,7 +99,7 @@ const DishShowTemplate = props => {
 
                 <Grid item xs={12}>
                     <Box display="flex" justifyContent="center">
-                        <Button variant="contained" color="primary" onClick={() => handleSubmit()}>
+                        <Button variant="contained" color="primary" onClick={() => handleOrder()}>
                             Zamów
                         </Button>
                     </Box>

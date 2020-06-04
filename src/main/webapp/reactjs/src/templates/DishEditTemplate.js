@@ -5,7 +5,7 @@ import CloseIcon from '@material-ui/icons/Close'
 import { API_URL } from '../ApiUrl';
 import { useHistory } from 'react-router-dom'
 
-import {Box, TextField, FormControlLabel, Checkbox, Card, Button, CardMedia, Container, Grid, IconButton} from '@material-ui/core'
+import {Box, TextField, FormControlLabel, Checkbox, Card, Button, CardMedia, Container, Grid, IconButton, Typography} from '@material-ui/core'
 
 const DishEditTemplate = props => {
 
@@ -13,15 +13,19 @@ const DishEditTemplate = props => {
     const [image, setImage] = useState(null)
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
-    const [price, setPrice] = useState(0)
+    const [price, setPrice] = useState('')
     const [ingredients, setIngredients] = useState([])
     const [categories, setCategories] = useState([])
     const [dishDay, setDishDay] = useState(false)
+    const [active, setActive] = useState(false);
 
     const [allCategories, setAllCategories] = useState([])
     const [allIngredients, setAllIngredients] = useState([])
 
+    const [error, setError] = useState('');
+
     const history = useHistory();
+    const pattern = /[\p{L} \s , .]/gu;
 
     let editMode = false;
     let deleteMode = false;
@@ -34,7 +38,6 @@ const DishEditTemplate = props => {
         let dish = {}
         if(props.location !== undefined && props.location.state !== undefined) {
             dish = props.location.state.dish;
-            
             setId(dish.id)
             setImage(dish.dishImage)
             setName(dish.dishName)
@@ -43,6 +46,7 @@ const DishEditTemplate = props => {
             setIngredients(dish.ingredientsList)
             setCategories(dish.dishCategoryList)
             setDishDay(dish.dishDay)
+            setActive(dish.active);
         }
 
         if(deleteMode === true){
@@ -72,13 +76,14 @@ const DishEditTemplate = props => {
         const data = {
             "id": id,
             "dishName": name,
-            "file": image,
+            //"file": image,
             "price": price,
             "description": description,
             "dishDay": dishDay,
+            "dishImage": image,
             "ingredientsList": ingredients,
             "dishCategoryList": categories,
-            "active": true
+            "active": active
         }
         axios.post(API_URL + '/admin/updateDish', data)
         .then(response => {
@@ -92,8 +97,8 @@ const DishEditTemplate = props => {
 
     const handleDelete = () => {
         const data = {
-            "id": 1,
-            "active": false
+            "id": id,
+            "active": true
         }
         console.log(data)
         axios.post(API_URL + '/admin/setActiveDish', data)
@@ -114,182 +119,212 @@ const DishEditTemplate = props => {
             "dishDay": dishDay,
             "ingredientsList": ingredients,
             "dishCategoryList": categories,
-            "active": true
+            "active": false,
+            "dishImage": image
         }
-        const data2={
-            "dishImage":image
-        }
-      const cos2 = new FormData()
-       cos2.append('dishImage', image, image.name)
 
         axios.post(API_URL + '/admin/addDish', data, {headers: {
             Accept: 'application/json'
           }})
         .then(response => {
             console.log(response)
-            axios.post(API_URL+'/admin/addDishImage/'+name, cos2,{headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'multipart/form-data',
-                }})
-          //  history.goBack()
+            history.goBack();
         })
         .catch(error => {
-            console.error(error.response)
+            if(error.response)
+                setError(error.response.data.message)
         })
 
     }
 
+    const checkPattern = (setter, value, pattern) => {
+        let viableMatches = String(value).match(pattern)
+        if(viableMatches !== null)
+            setter(viableMatches.join(""))
+        else
+            setter("")
+    }
+
+    const handleSubmit = event => {
+        event.preventDefault();
+        if(editMode)
+            handleEdit();
+        else if(deleteMode)
+            handleDelete();
+        else
+            handleAdd();
+    }
+
     return(
         <Container maxWidth="md" style={{marginTop: "20px"}}>
-            <Grid container justify="center" alignItems="stretch">   
-                <Grid item xs={12}>       
-                    <Box display="flex" justifyContent="center">
-                        <Card style={{maxWidth: "300px", height: "160px"}}>
-                            <CardMedia
-                                component="img"
-                                alt=""
-                                image={(image === null || image.length === 0) ? null : URL.createObjectURL(image)}
+            <form onSubmit={e => handleSubmit(e)}>
+                <Grid container justify="center" alignItems="stretch">   
+                    <Grid item xs={12}>       
+                        <Box display="flex" justifyContent="center">
+                            <Card >
+                                <CardMedia style={{maxWidth: "300px", height: "160px"}}
+                                    component="img"
+                                    alt=""
+                                    image={image ? 'data:image/jpeg;base64,' + image : null}
+                                />
+                            </Card>
+                        </Box>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Box className="marginTop" display="flex" justifyContent="flex-end" >
+                            <input
+                                accept="image/*"
+                                style={{ display: 'none' }}
+                                id="raised-button-file"
+                                onChange={e => {
+                                    var reader = new FileReader();
+                                    reader.onloadend = function() {
+                                        setImage(reader.result.substring(reader.result.indexOf(',') + 1))
+                                    }
+                                    reader.readAsDataURL(e.target.files[0])
+                                    }}
+                                type="file"
                             />
-                        </Card>
-                    </Box>
-                </Grid>
+                            {image !== null && 
+                                <IconButton color="secondary" className="marginRight" size="small" onClick={e => {
+                                    const file = document.getElementById('raised-button-file');
+                                    file.value = '';
+                                    setImage(null)}}>
+                                    <CloseIcon />
+                                </IconButton>}
+                            <label htmlFor="raised-button-file">
+                                <Button variant="contained" color="primary" component="span">
+                                    Zdjęcie
+                                </Button>
+                            </label> 
+                        </Box>
+                    </Grid>
 
-                <Grid item xs={12}>
-                    <Box className="marginTop" display="flex" justifyContent="flex-end" >
-                        <input
-                            accept="image/*"
-                            style={{ display: 'none' }}
-                            id="raised-button-file"
-                            onChange={e => {
-                                //let a = new Blob(e.target.files[0])
-                                //
-                                //console.log(a)
-                                setImage(e.target.files[0])
-                                }}
-                            type="file"
-                        />
-                        {image !== null && 
-                            <IconButton color="secondary" className="marginRight" size="small" onClick={e => {
-                                const file = document.getElementById('raised-button-file');
-                                file.value = '';
-                                setImage(null)}}>
-                                <CloseIcon />
-                            </IconButton>}
-                        <label htmlFor="raised-button-file">
-                            <Button variant="contained" color="primary" component="span">
-                                Zdjęcie
-                            </Button>
-                        </label> 
-                    </Box>
-                </Grid>
-
-                <Grid item xs={12}>
-                    <TextField 
-                        id="name"
-                        fullWidth
-                        value={name}
-                        inputProps={{
-                            maxLength: 128
-                        }}
-                        onChange={e => setName(e.target.value)}
-                        margin="dense"
-                        label="Nazwa dania"
-                        helperText={`${name.length}/128`}
-                        variant="outlined" />
-                </Grid>
-
-                <Grid item xs={12}>
-                    <TextField 
-                        id="description"
-                        fullWidth
-                        value={description}
-                        inputProps={{
-                            maxLength: 512
-                        }}
-                        onChange={e => setDescription(e.target.value)}
-                        margin="dense"
-                        label="Opis dania"
-                        helperText={`${description.length}/512`}
-                        variant="outlined" />
-                </Grid>
-
-                <Grid item xs={12}>
-                    <TextField 
-                            id="price"
+                    <Grid item xs={12}>
+                        <TextField 
+                            id="name"
                             fullWidth
-                            value={price}
-                            onChange={e => setPrice(e.target.value)}
+                            value={name}
                             inputProps={{
-                                maxLength: 10
+                                maxLength: 128
                             }}
-                            helperText={`Tylko cyfry i przecinek`}
+                            onChange={e => checkPattern(setName, e.target.value, pattern)}
                             margin="dense"
-                            label="Cena dania"
+                            label="Nazwa dania"
+                            helperText={`${name.length}/128`}
                             variant="outlined" />
-                </Grid>
+                    </Grid>
 
-                <Grid item xs={12}>
-                    <Autocomplete
-                        multiple
-                        id="allIngredients"
-                        value={ingredients}
-                        options={allIngredients}
-                        getOptionLabel={(option) => option.ingredientName}
-                        onChange={(e,v) => setIngredients(v)}
-                        filterSelectedOptions
-                        renderInput={(params) => (
-                        <TextField
-                            {...params}
-                            label="Składniki"
-                            variant="outlined"
-                            margin="normal"
+                    <Grid item xs={12}>
+                        <TextField 
+                            id="description"
+                            fullWidth
+                            value={description}
+                            inputProps={{
+                                maxLength: 512
+                            }}
+                            onChange={e => checkPattern(setDescription, e.target.value, pattern)}
+                            margin="dense"
+                            label="Opis dania"
+                            helperText={`${description.length}/512`}
+                            variant="outlined" />
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <TextField 
+                                id="price"
+                                fullWidth
+                                value={price}
+                                onChange={e => checkPattern(setPrice, e.target.value.replace(/,/g, '.'), /[0-9 , .]+/)}
+                                inputProps={{
+                                    maxLength: 10
+                                }}
+                                helperText={`Tylko cyfry i przecinek`}
+                                margin="dense"
+                                label="Cena dania"
+                                variant="outlined" />
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Autocomplete
+                            multiple
+                            id="allIngredients"
+                            value={ingredients}
+                            options={allIngredients}
+                            getOptionLabel={(option) => option.ingredientName}
+                            onChange={(e,v) => setIngredients(v)}
+                            filterSelectedOptions
+                            renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Składniki"
+                                variant="outlined"
+                                margin="normal"
+                            />
+                            )}
                         />
-                        )}
-                    />
-                </Grid>
+                    </Grid>
 
-                <Grid item xs={12}>
-                    <Autocomplete
-                        multiple
-                        id="category"
-                        value={categories}
-                        options={allCategories}
-                        getOptionLabel={(option) => option.name}
-                        onChange={(e, value) => setCategories(value)}
-                        renderInput={(params) => (
-                        <TextField
-                            {...params}
-                            label="Kategorie"
-                            variant="outlined"
-                            margin="normal"
+                    <Grid item xs={12}>
+                        <Autocomplete
+                            multiple
+                            id="category"
+                            value={categories}
+                            options={allCategories}
+                            getOptionLabel={(option) => option.name}
+                            onChange={(e, value) => setCategories(value)}
+                            renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Kategorie"
+                                variant="outlined"
+                                margin="normal"
+                            />
+                            )}
                         />
-                        )}
-                    />
-                </Grid>
+                    </Grid>
 
-                <Grid item xs={12}>
-                    <FormControlLabel label = "Danie dnia" margin="normal" 
-                        control = {
-                            <Checkbox 
-                                id="dishDay"
-                                color="primary"
-                                value={dishDay}
-                                onChange={(e,checked) => setDishDay(checked)} 
-                                name="Danie dania" />
-                    }/>
-                </Grid>
+                    <Grid item xs={12}>
+                        <FormControlLabel label = "Danie dnia" margin="normal" 
+                            control = {
+                                <Checkbox 
+                                    id="dishDay"
+                                    color="primary"
+                                    value={dishDay}
+                                    onChange={(e,checked) => setDishDay(checked)} 
+                                    name="Danie dania" />
+                        }/>
+                    </Grid>
 
-                <Grid item xs={12}>
-                    <Box className="marginBottom" display="flex" justifyContent="flex-end">
-                        {editMode && 
-                            <Button type="submit" variant="contained" color="primary" margin="normal" onClick={() => handleEdit()}>Modyfikuj</Button>}
-                        {deleteMode && 
-                            <Button type="submit" variant="contained" color="secondary" margin="normal" onClick={() => handleDelete()}>Usuń</Button>}
-                        {props.location.state === undefined && 
-                            <Button type="submit" variant="contained" color="primary" margin="normal"onClick={() => handleAdd()}>Dodaj</Button>}
-                    </Box>
+                    <Grid item xs={12}>
+                        <FormControlLabel label = "Danie aktywne" margin="normal" 
+                            control = {
+                                <Checkbox 
+                                    id="active"
+                                    color="primary"
+                                    checked={!active}
+                                    onChange={(e) => setActive(!active)} 
+                                    name="Aktywne" />
+                        }/>
+                    </Grid>
+                    {error && <Grid item xs={12}>
+                            <Typography style={{color: "red"}}>{error}</Typography>
+                        </Grid>}
+                    
+                    <Grid item xs={12}>
+                        <Box className="marginBottom" display="flex" justifyContent="flex-end">
+                            {editMode && 
+                                <Button type="submit" variant="contained" color="primary" margin="normal">Modyfikuj</Button>}
+                            {deleteMode && 
+                                <Button type="submit" variant="contained" color="secondary" margin="normal">Usuń</Button>}
+                            {props.location.state === undefined && 
+                                <Button type="submit" variant="contained" color="primary" margin="normal">Dodaj</Button>}
+                        </Box>
+                    </Grid>
                 </Grid>
-            </Grid>
+            </form>
+
         </Container>
     )
 }

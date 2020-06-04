@@ -10,6 +10,7 @@ import AddIcon from '@material-ui/icons/Add'
 import DoneIcon from '@material-ui/icons/Done'
 import CloseIcon from '@material-ui/icons/Close'
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles({
     fabNew: {
@@ -63,6 +64,7 @@ const ListTemplate = props => {
     const [allergens, setAllergens] = useState([])
 
     const classes = useStyles();
+    const history = useHistory();
 
     const url = props.url
     const headers = props.headers
@@ -143,6 +145,10 @@ const ListTemplate = props => {
     }
 
     const openEdit = (element) => {
+        if(url === '/admin/menu'){
+            history.push('/admin/dishes/new');
+        }
+
         let temp = [];
         if(element.ingredientName !== undefined)
             temp = [element.ingredientName, element.allergenList, element.id]
@@ -373,8 +379,8 @@ const ListTemplate = props => {
                     <TableHead>
                         <TableRow>
                             {headers !== undefined && 
-                            headers.map( head => (
-                                <TableCell style={{fontWeight: "bold"}} key={head}>{head}</TableCell>
+                            headers.map( (head, index) => (
+                                <TableCell style={{fontWeight: "bold"}} key={head + index}>{head}</TableCell>
                             ))}
                             <TableCell style={{fontWeight: "bold"}} key={"ACTIONS"}>Operacje</TableCell>
                         </TableRow>
@@ -385,7 +391,7 @@ const ListTemplate = props => {
                                 {Object.values(element).map( (content, index) => {
                                     if(content !== element.id)
                                         return(
-                                            <TableCell key={content}>{content}</TableCell>
+                                            <TableCell key={JSON.stringify(content).slice(0, 10)}>{content}</TableCell>
                                 )})}
                                 <TableCell key={"actions" + index}>
                                     <IconButton onClick={() => openEdit(element)} size="small" color="primary"><EditIcon /></IconButton>
