@@ -5,6 +5,7 @@ import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom
 //import DishList from './components/DishList';
 import DishList from './list/DishList';
 import CategoryList from './list/CategoryList';
+import IngredientList from './list/IngredientList';
 import LoginComponent from './components/LoginComponent';
 import MenuComponent from './components/MenuComponent';
 import LogoutComponent from './components/LogoutComponent';
@@ -100,7 +101,8 @@ const App = props => {
                         <AuthenticatedRoute role={'ROLE_ADMIN'} url='/adminLogged' exact path="/admin/dishes/:id" component={DishEditTemplate} />
                         
                         <Route exact path="/admin/ingredients" role={role} url='/adminLogged' >
-                            <ListTemplate url={'/admin/ingredient'} headers={['Składnik', 'Alergeny']}/>
+                            {/* <ListTemplate url={'/admin/ingredient'} headers={['Składnik', 'Alergeny']}/> */}
+                            <IngredientList />
                         </Route>
 
                         <Route exact path="/admin/categories" role={role} url='/adminLogged' >
