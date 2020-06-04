@@ -38,6 +38,11 @@ public class OrderController {
         return orderService.add(order);
     }
 
+    @GetMapping("/getOrder/{id}")
+    public OrderDTO getOrder(@PathVariable(required = true) Long id){
+        return orderService.getOrder(id);
+    }
+
     @PostMapping("/worker/changeStatus/{id}")
     public ResponseEntity<String> changeStatus(@PathVariable(required = true) Long id, @RequestBody Status status){
         return orderService.changeStatus(id, status);

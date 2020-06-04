@@ -61,6 +61,18 @@ public class OrderService {
 
     }
 
+    public OrderDTO getOrder(Long id){
+        Order order = orderRepository.getOne(id);
+        if(order.getId()==null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Nie znaleziono takiego zamówienia");
+        OrderDTO orderDTO = new OrderDTO();
+        orderDTO.setStatus(order.getStatus().getStatus());
+        orderDTO.setDishList(order.getOrderDishesList());
+        orderDTO.setLogin(order.getUser().getLogin());
+        orderDTO.setId(order.getId());
+        return orderDTO;
+    }
+
     public ResponseEntity<String> changeStatus(Long id, Status status) {
         Optional<Order> optionalOrder = orderRepository.findById(id);
         Status statusCopy = statusService.getStatusById(status.getId());

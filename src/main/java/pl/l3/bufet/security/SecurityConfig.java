@@ -36,6 +36,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
 
                 .antMatchers("/admin/**").hasAuthority(ADMIN)
+                .antMatchers("/admin/ingredient").authenticated()
+                .antMatchers("/getOrder/**").authenticated()
+                .antMatchers("/getOrders").authenticated()
+                .antMatchers("/addOrder").authenticated()
+                .antMatchers("/worker/changeStatus/**").hasAuthority(WORKER)
                 .antMatchers("/logout").authenticated()
                 .antMatchers("/adminLogged").hasAuthority(ADMIN)
                 .antMatchers("/tableLogged").hasAuthority(TABLE)
