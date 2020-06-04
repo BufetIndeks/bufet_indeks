@@ -66,7 +66,7 @@ const App = props => {
                     <Switch>
                         
                         <Route exact path="/">
-                            {role === 'ROLE_GUEST' && <HomeComponent />}
+                            {role === 'ROLE_GUEST' && <Redirect to="/login" />}
                             {role === 'ROLE_ADMIN' && <AdminDashboard />}
                             {role === 'ROLE_TABLE' && <HomeComponent />}
                             {role === 'ROLE_WORKER' && <HomeComponent />}
@@ -101,20 +101,20 @@ const App = props => {
                         
                         <AuthenticatedRoute role={'ROLE_ADMIN'} url='/adminLogged' exact path="/admin/dishes/:id" component={DishEditTemplate} />
                         
-                        <Route exact path="/admin/ingredients" role={role} url='/adminLogged' >
+                        <AuthenticatedRoute exact path="/admin/ingredients" role={role} url='/adminLogged' >
                             {/* <ListTemplate url={'/admin/ingredient'} headers={['Składnik', 'Alergeny']}/> */}
                             <IngredientList />
-                        </Route>
+                        </AuthenticatedRoute>
 
-                        <Route exact path="/admin/categories" role={role} url='/adminLogged' >
+                        <AuthenticatedRoute exact path="/admin/categories" role={role} url='/adminLogged' >
                             {/* <ListTemplate url={'/category'} headers={['Kategoria']}/> */}
                             <CategoryList />
-                        </Route>
+                        </AuthenticatedRoute>
 
-                        <Route exact path="/admin/allergens" role={role} url='/adminLogged' >
+                        <AuthenticatedRoute exact path="/admin/allergens" role={role} url='/adminLogged' >
                             {/* <ListTemplate url={'/admin/allergen'} headers={['Alergen']}/> */}
                             <AllergenList />
-                        </Route>
+                        </AuthenticatedRoute>
                         
                         <Route exact path="/regulations" component={Regulamin} />
                         <Route exact path="/about" component={About} />

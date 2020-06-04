@@ -28,7 +28,7 @@ const LoginComponent = props => {
                                 props.setRole(res.data.authorities[0].authority)
                             else
                                 props.setRole('ROLE_GUEST')
-                            history.push(`/`)
+                            history.push('/')
                         })
                         .catch(err => {
                             console.error(err.response)

@@ -30,7 +30,7 @@ const useStyles = makeStyles( theme => ({
     }
 }))
 
-const MenuComponent = props => {
+const MenuComponent = ({role}) => {
 
     const classes = useStyles();
 
@@ -44,12 +44,14 @@ const MenuComponent = props => {
 
                     <Box flexGrow={1}></Box>
 
-                    <Link to="/cart" className={classes.buttonlink}>
-                        <ShoppingBasketIcon />
-                    </Link>
+                    {role === "ROLE_TABLE"  && 
+                        <Link to="/cart" className={classes.buttonlink}>
+                            <ShoppingBasketIcon />
+                        </Link>
+                    }
 
-                    <Link to={props.role !== 'ROLE_GUEST' ? '/logout' : '/login'} className={classes.buttonlink}>
-                        {props.role !== 'ROLE_GUEST' ? <ExitToAppIcon /> : <PersonIcon /> }
+                    <Link to={role !== 'ROLE_GUEST' ? '/logout' : '/login'} className={classes.buttonlink}>
+                        {role !== 'ROLE_GUEST' ? <ExitToAppIcon /> : <PersonIcon /> }
                     </Link>
                             
                     
