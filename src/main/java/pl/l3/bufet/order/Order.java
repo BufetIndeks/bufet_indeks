@@ -30,7 +30,7 @@ public class Order {
 
 
     @Column(name="zaplacone")//, columnDefinition = "boolean default false")
-    private Boolean paid=false;
+    private Boolean paid;
 
     //@NotEmpty
     @ManyToMany

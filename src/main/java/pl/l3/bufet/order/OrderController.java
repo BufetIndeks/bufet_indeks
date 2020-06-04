@@ -29,7 +29,7 @@ public class OrderController {
     }
 
     @GetMapping("/getOrders")
-    public List<Order> getOrders(){
+    public List<OrderDTO> getOrders(){
         return orderService.getAllOrders();
     }
 

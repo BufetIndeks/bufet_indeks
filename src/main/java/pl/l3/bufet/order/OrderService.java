@@ -12,11 +12,10 @@ import pl.l3.bufet.status.StatusService;
 import pl.l3.bufet.user.User;
 import pl.l3.bufet.user.UserService;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class OrderService {
@@ -33,10 +32,8 @@ public class OrderService {
     }
 
 
-
-
     public Long add(Order order) {
-        //SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date();
         order.setDate(date);
         order.setStatus(statusService.getFirstStatus());
@@ -49,17 +46,28 @@ public class OrderService {
         return order.getId();
     }
 
-    public List<Order> getAllOrders() {
-        return orderRepository.findAll();
+    public List<OrderDTO> getAllOrders() {
+        List<Order> orderList = orderRepository.findAll();
+        List<OrderDTO> orderDTOS = new ArrayList<>();
+        for (Order order : orderList) {
+            OrderDTO orderDTO = new OrderDTO();
+            orderDTO.setDishList(order.getOrderDishesList());
+            orderDTO.setId(order.getId());
+            orderDTO.setLogin(order.getUser().getLogin());
+            orderDTO.setStatus(order.getStatus().getStatus());
+            orderDTOS.add(orderDTO);
+        }
+        return orderDTOS;
+
     }
 
     public ResponseEntity<String> changeStatus(Long id, Status status) {
         Optional<Order> optionalOrder = orderRepository.findById(id);
         Status statusCopy = statusService.getStatusById(status.getId());
-        if(optionalOrder.isPresent()) {
+        if (optionalOrder.isPresent()) {
             optionalOrder.get().setStatus(statusCopy);
             return ResponseEntity.ok().build();
-        }else {
+        } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nie ma takiego zamówienia, bądź status jest błędny");
         }
     }
