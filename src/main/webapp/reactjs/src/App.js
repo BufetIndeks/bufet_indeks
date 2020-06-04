@@ -31,6 +31,7 @@ import GlobalState from './context/GlobalState'
 
 import axios from 'axios'
 import {API_URL} from './ApiUrl.js'
+import WorkerDashboard from './components/WorkerDashboard';
 
 const App = props => {
 
@@ -41,8 +42,9 @@ const App = props => {
             .then(res => {
                 if(res.data.authorities !== undefined)
                     setRole(res.data.authorities[0].authority)
-                else
-                    setRole('ROLE_GUEST')
+                else{
+                    setRole('ROLE_GUEST');
+                }
             })
             .catch(err => {
                 console.error(err)
@@ -66,10 +68,10 @@ const App = props => {
                     <Switch>
                         
                         <Route exact path="/">
-                            {role === 'ROLE_GUEST' && <Redirect to="/login" />}
                             {role === 'ROLE_ADMIN' && <AdminDashboard />}
                             {role === 'ROLE_TABLE' && <HomeComponent />}
-                            {role === 'ROLE_WORKER' && <HomeComponent />}
+                            {role === 'ROLE_WORKER' && <WorkerDashboard />}
+                            {role === 'ROLE_GUEST' && <LoginComponent />} }
                         </Route>
                         
                         <Route exact path="/login" >
@@ -94,27 +96,18 @@ const App = props => {
                         
                         <AuthenticatedRoute role={'ROLE_ADMIN'} url='/adminLogged' exact path="/admin/dashboard" component={AdminDashboard} />
                         
-                        <AuthenticatedRoute role={role} url='/adminLogged' exact path="/admin/dishes">
-                            {/* <ListTemplate url={'/admin/dishes'} headers={['Danie']}/> */}
-                            <DishList />
-                        </AuthenticatedRoute>
+                        <AuthenticatedRoute role={role} url='/adminLogged' exact path="/admin/dishes" component={DishList} />
                         
                         <AuthenticatedRoute role={'ROLE_ADMIN'} url='/adminLogged' exact path="/admin/dishes/:id" component={DishEditTemplate} />
                         
-                        <AuthenticatedRoute exact path="/admin/ingredients" role={role} url='/adminLogged' >
+                        <AuthenticatedRoute exact path="/admin/ingredients" role={role} url='/adminLogged' component={IngredientList} />
                             {/* <ListTemplate url={'/admin/ingredient'} headers={['Składnik', 'Alergeny']}/> */}
-                            <IngredientList />
-                        </AuthenticatedRoute>
 
-                        <AuthenticatedRoute exact path="/admin/categories" role={role} url='/adminLogged' >
+                        <AuthenticatedRoute exact path="/admin/categories" role={role} url='/adminLogged' component={CategoryList} />
                             {/* <ListTemplate url={'/category'} headers={['Kategoria']}/> */}
-                            <CategoryList />
-                        </AuthenticatedRoute>
 
-                        <AuthenticatedRoute exact path="/admin/allergens" role={role} url='/adminLogged' >
+                        <AuthenticatedRoute exact path="/admin/allergens" role={role} url='/adminLogged' component={AllergenList} />
                             {/* <ListTemplate url={'/admin/allergen'} headers={['Alergen']}/> */}
-                            <AllergenList />
-                        </AuthenticatedRoute>
                         
                         <Route exact path="/regulations" component={Regulamin} />
                         <Route exact path="/about" component={About} />
