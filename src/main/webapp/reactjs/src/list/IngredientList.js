@@ -13,6 +13,14 @@ const IngredientList = props => {
     const [formMode, setFormMode] = useState('add');
     const [formValue, setFormValue] = useState('');
     const [ingredientToUpdate, setIngredientToUpdate] = useState({});
+    const [error, setError] = useState('')
+    
+    useEffect(() => {
+        if(error !== ''){ 
+            alert(error);
+            setError('');
+        }
+    }, [error])
 
     useEffect(() => {
        getIngredients();
@@ -63,6 +71,10 @@ const IngredientList = props => {
             })
             .catch(error => {
                 console.error(error.response);
+                if(error.response.status === 500)
+                    setError("Nie można usunąć składnika")
+                else
+                    setError(error.response.data.message);
             })
     }
 
@@ -100,6 +112,7 @@ const IngredientList = props => {
             })
             .catch(error => {
                 console.error(error.response);
+                setError(error.response.data.message);
             })
 
         setAdding(false);

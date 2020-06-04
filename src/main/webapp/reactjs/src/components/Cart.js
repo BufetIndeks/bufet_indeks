@@ -56,7 +56,7 @@ const Cart = props => {
 
                 <Box display="flex" justifyContent="flex-end">
                     <Typography variant="h5">
-                        {context.order.length > 0 && `Łączna kwota: ${context.order.reduce((total, current) => total + current.price * current.quantity, 0)} PLN`}
+                        {context.order.length > 0 && `Łączna kwota: ${context.order.reduce((total, current) => total + current.price * current.quantity, 0).toFixed(2)} PLN`}
                     </Typography>
                 </Box>
 

@@ -16,7 +16,7 @@ const CartItem = ({dish, addItem, removeItem}) => {
                 <Box flexGrow={2}><h2>{dish.dishName}</h2></Box>
                 
                 <Box flexGrow={1} className="marginLeft marginRight">
-                    <Typography variant="h6">{`${dish.price * dish.quantity} PLN`}</Typography>
+                    <Typography variant="h6">{`${(dish.price * dish.quantity).toFixed(2)} PLN`}</Typography>
                 </Box>
 
                 <Box>

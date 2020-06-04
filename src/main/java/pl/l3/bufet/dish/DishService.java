@@ -116,7 +116,7 @@ public class DishService {
 
     public void checkDish(Dish dish) {
 
-       if (dish.getDishName().length() > 128 || !Pattern.matches("[\\p{L}\\p{Z}]+", dish.getDishName()))//!dish.getDishName().matches("\\p{Lu}\\p{Ll}*"))
+       if (dish.getDishName().length() > 128 || !Pattern.matches("[\\p{L}\\p{Z} , . 0-9]+", dish.getDishName()))//!dish.getDishName().matches("\\p{Lu}\\p{Ll}*"))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nazwa dania jest niepoprawna");
         if (dish.getPrice() == null)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Brak ceny dania");

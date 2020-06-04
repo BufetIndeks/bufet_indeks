@@ -12,6 +12,14 @@ const CategoryList = props => {
     const [formMode, setFormMode] = useState('add');
     const [formValue, setFormValue] = useState('');
     const [categoryToUpdate, setCategoryToUpdate] = useState({});
+    const [error, setError] = useState('')
+    
+    useEffect(() => {
+        if(error !== ''){ 
+            alert(error);
+            setError('');
+        }
+    }, [error])
 
     useEffect(() => {
        getCategories();
@@ -51,6 +59,10 @@ const CategoryList = props => {
             })
             .catch(error => {
                 console.error(error.response);
+                if(error.response.status === 500)
+                    setError("Nie można usunąć kategorii")
+                else
+                    setError(error.response.data.message);
             })
     }
 
@@ -85,6 +97,7 @@ const CategoryList = props => {
             })
             .catch(error => {
                 console.error(error.response);
+                setError(error.response.data.message);
             })
 
         setAdding(false);

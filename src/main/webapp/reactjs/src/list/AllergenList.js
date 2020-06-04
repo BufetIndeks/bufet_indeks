@@ -12,6 +12,15 @@ const AllergenList = props => {
     const [formMode, setFormMode] = useState('add');
     const [formValue, setFormValue] = useState('');
     const [allergenToUpdate, setAllergenToUpdate] = useState({});
+    const [error, setError] = useState('')
+    
+    useEffect(() => {
+        if(error !== ''){ 
+            alert(error);
+            setError('');
+        }
+    }, [error])
+
 
     useEffect(() => {
        getAllergens();
@@ -51,6 +60,7 @@ const AllergenList = props => {
             })
             .catch(error => {
                 console.error(error.response);
+                setError(error.response.data.message)
             })
     }
 
@@ -86,6 +96,10 @@ const AllergenList = props => {
             })
             .catch(error => {
                 console.error(error.response);
+                if(error.response.status === 500)
+                    setError("Nie można usunąć alergenu")
+                else
+                    setError(error.response.data.message);
             })
 
         setAdding(false);
