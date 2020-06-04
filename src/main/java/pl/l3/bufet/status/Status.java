@@ -11,7 +11,7 @@ import java.util.List;
 public class Status {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "zamowienie_id")
+    @Column(name = "status_id")
     private Long id;
 
     @Column(name="status")

@@ -9,6 +9,8 @@ import org.springframework.web.server.ResponseStatusException;
 import pl.l3.bufet.dish.Dish;
 import pl.l3.bufet.status.Status;
 import pl.l3.bufet.status.StatusService;
+import pl.l3.bufet.user.User;
+import pl.l3.bufet.user.UserService;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -21,15 +23,19 @@ public class OrderService {
 
     OrderRepository orderRepository;
     StatusService statusService;
+    UserService userService;
 
     @Autowired
-    public OrderService(OrderRepository orderRepository, StatusService statusService) {
+    public OrderService(OrderRepository orderRepository, StatusService statusService, UserService userService) {
         this.orderRepository = orderRepository;
         this.statusService = statusService;
+        this.userService = userService;
     }
 
 
-    public ResponseEntity<String> add(Order order) {
+
+
+    public Long add(Order order) {
         //SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date();
         order.setDate(date);
@@ -37,8 +43,10 @@ public class OrderService {
         for (Dish dish : order.getOrderDishesList()) {
             order.setFinalPrice(order.getFinalPrice() + dish.getPrice());
         }
+        User user = userService.findUserByLogin(order.getUser().getLogin());
+        order.setUser(user);
         orderRepository.save(order);
-        return ResponseEntity.ok().build();
+        return order.getId();
     }
 
     public List<Order> getAllOrders() {
