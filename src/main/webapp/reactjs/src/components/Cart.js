@@ -27,13 +27,21 @@ const Cart = props => {
             return dishes;
         }));
         console.log(data)
-        axios.post(API_URL + '/addOrder', {data})
+
+        axios.get(API_URL + '/takeRole')
             .then(res => {
-                console.log(res);
+                let user = res.data;
+                console.log(user)
+                axios.post(API_URL + '/addOrder', {orderDishesList: data, user: {login: user.name}})
+                    .then(res => {
+                        console.log(res);
+                    })
+                    .catch(err => {
+                        console.error(err.response);
             })
-            .catch(err => {
-                console.error(err.response);
             })
+
+        
     }
 
     return(
