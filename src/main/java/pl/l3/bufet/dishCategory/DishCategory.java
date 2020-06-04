@@ -16,7 +16,19 @@ public class DishCategory {
     @Column(name="nazwa", unique = true, nullable = false)
     private String name;
 
+    @Lob
+    @Column(name="obraz")
+    private byte[] categoryImage;
+
     public DishCategory() {
+    }
+
+    public byte[] getCategoryImage() {
+        return categoryImage;
+    }
+
+    public void setCategoryImage(byte[] categoryImage) {
+        this.categoryImage = categoryImage;
     }
 
     public Long getId() {
