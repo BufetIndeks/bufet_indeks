@@ -34,7 +34,7 @@ public class OrderController {
     }
 
     @PostMapping(value = "/addOrder")
-    public ResponseEntity<String> addOrder(@RequestBody Order order){
+    public Long addOrder(@RequestBody Order order){
         return orderService.add(order);
     }
 
