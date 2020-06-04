@@ -40,7 +40,6 @@ const App = props => {
     const checkRole = () => {
         axios.get(API_URL + '/takeRole')
             .then(res => {
-                console.log(res)
                 if(res.data.authorities !== undefined)
                     setRole(res.data.authorities[0].authority)
                 else{
@@ -72,7 +71,7 @@ const App = props => {
                             {role === 'ROLE_ADMIN' && <AdminDashboard />}
                             {role === 'ROLE_TABLE' && <HomeComponent />}
                             {role === 'ROLE_WORKER' && <WorkerDashboard />}
-                            {role === 'ROLE_GUEST' && <LoginComponent />}
+                            {checkRole() === 'ROLE_GUEST' && <Redirect to="/login" />}
                         </Route>
                         
                         <Route exact path="/login" >
