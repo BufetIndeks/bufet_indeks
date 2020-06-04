@@ -45,7 +45,7 @@ const DishList = props => {
             let active = '';
             if(el.active)
                 active = 'Nie'
-            let src = el.dishImage === null ? `data:image/jpeg;base64,${el.dishImage}` : `https://dummyimage.com/400x200/ffffff/32750e&text=${el.dishName}`;
+            let src = el.dishImage ? `data:image/jpeg;base64,${el.dishImage}` : `https://dummyimage.com/400x200/ffffff/32750e&text=${el.dishName}`;
             return [<img height="70px" width="100px" src={src} />, 
                 el.dishName, 
                 active]
