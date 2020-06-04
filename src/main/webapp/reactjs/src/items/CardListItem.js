@@ -5,8 +5,8 @@ import {Grid, Card, CardActionArea, CardContent, CardMedia, Typography} from '@m
 const CardListItem = ({element, actionOnClick}) => {
 
     const name = element.name ? element.name : element.dishName;
-    const image = element.image ? element.image : `data:image/jpeg;base64,${element.dishImage}`;
-
+    const image = element.dishImage  ? `data:image/jpeg;base64,${element.dishImage}` : `https://dummyimage.com/400x200/ffffff/32750e&text=${name}`;
+    console.log(element.dishImage)
     return(
         <Grid item xs={6} sm={4}>
             <Card style={{height: "250px"}}>

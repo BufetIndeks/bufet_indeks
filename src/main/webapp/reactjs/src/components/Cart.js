@@ -27,9 +27,9 @@ const Cart = props => {
             return dishes;
         }));
         console.log(data)
-        axios.post(API_URL + '/addOrder', data)
+        axios.post(API_URL + '/addOrder', {data})
             .then(res => {
-
+                console.log(res);
             })
             .catch(err => {
                 console.error(err.response);

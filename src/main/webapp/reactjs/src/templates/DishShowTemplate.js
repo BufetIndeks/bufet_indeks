@@ -42,7 +42,7 @@ const DishShowTemplate = props => {
                 <Grid item xs={12}>       
                     <Box display="flex" justifyContent="center">
                         <Card style={{height: "200px", width: "100%"}}>
-                            <img src={dish.dishImage ? `data:image/jpeg;base64, ${dish.dishImage}` : 'https://dummyimage.com/300x150/ffffff/32750e&text=placeholder'}
+                            <img src={dish.dishImage ? `data:image/jpeg;base64, ${dish.dishImage}` : `https://dummyimage.com/400x200/ffffff/32750e&text=${dish.dishName}`}
                                 height="100%" width="100%" />
                         </Card>
                     </Box>

@@ -68,7 +68,7 @@ const CardList = props => {
                 {cards !== undefined && cards.map( (el, index) => {
                     if(!el.image){
                         if(!el.dishImage)
-                            el.image = 'https://dummyimage.com/300x150/ffffff/32750e&text=placeholder'
+                            el.image = `https://dummyimage.com/300x150/ffffff/32750e&text=${el.name ? el.name : el.dishName}`
                     }
                    
                     return(

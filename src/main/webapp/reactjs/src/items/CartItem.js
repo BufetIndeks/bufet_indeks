@@ -10,7 +10,7 @@ const CartItem = ({dish, addItem, removeItem}) => {
         <Grid item xs={12}>
             <Box className="marginTop" style={{border: "1px solid green"}} display="flex" justifyContent="space-around" alignItems="center">
                 <Card className="marginRight">
-                    <img height={"75px"} width={"75px"} src={'data:image/jpeg;base64,' + dish.dishImage} />
+                    <img height={"75px"} width={"75px"} src={dish.dishImage ? 'data:image/jpeg;base64,' + dish.dishImage : `https://dummyimage.com/300x150/ffffff/32750e&text=${dish.dishName}`} />
                 </Card>
                 
                 <Box flexGrow={2}><h2>{dish.dishName}</h2></Box>
