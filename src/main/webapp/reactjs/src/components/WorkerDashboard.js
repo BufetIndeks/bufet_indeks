@@ -84,10 +84,11 @@ const WorkerDashboard = props => {
         if(newStatus === {})
             return;
 
-            console.log(`/worker/changeStatus/${orderId}`)
+            console.log(`/worker/changeStatus/${orderId}`, newStatus)
         axios.post(API_URL + `/worker/changeStatus/${orderId}`, newStatus)
             .then(response => {
-
+                console.log(response)
+                getOrders();
             })
             .catch(error => {
                 console.error(error.response);

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import pl.l3.bufet.dish.Dish;
 import pl.l3.bufet.status.Status;
+import pl.l3.bufet.status.StatusRepository;
 import pl.l3.bufet.status.StatusService;
 import pl.l3.bufet.user.User;
 import pl.l3.bufet.user.UserService;
@@ -78,6 +79,7 @@ public class OrderService {
         Status statusCopy = statusService.getStatusById(status.getId());
         if (optionalOrder.isPresent()) {
             optionalOrder.get().setStatus(statusCopy);
+            orderRepository.save(optionalOrder.get());
             return ResponseEntity.ok().build();
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nie ma takiego zamówienia, bądź status jest błędny");

@@ -31,7 +31,7 @@ const ClientOrders = props => {
             setOrders(response.data.filter(order => order.login === login && order.status !== "Zrealizowane"))
         })
         .catch(error => {
-            console.error(error.response.data.message);
+            console.error(error.response);
         })
     }
 

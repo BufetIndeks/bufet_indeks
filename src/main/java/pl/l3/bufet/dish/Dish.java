@@ -32,7 +32,7 @@ public class Dish {
     @Column(name="danie_dnia",nullable = false)
     private boolean dishDay = false;
     @Column(name="usuniety",nullable = false)
-    private boolean active = false;
+    private boolean active;
 
     @NotEmpty
     @ManyToMany

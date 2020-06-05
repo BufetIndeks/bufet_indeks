@@ -39,20 +39,23 @@ const CategoryList = props => {
     const handleAdd = () => {
         setAdding(!adding);
         setFormMode('add');
+        setFormValue([null, '']);
     }
 
-    const handleUpdate = name => {
+    const handleUpdate = value => {
         setAdding(true);
         setFormMode('update');
-        setFormValue(name[0]);
-        console.log(categories.filter(el => el.name === name[0]));
-        setCategoryToUpdate(categories.filter(el => el.name === name[0])[0]);
+        if(value[0].props.src.includes('https'))
+            value[0] = null;
+        setFormValue([value[0], value[1]]);
+        console.log(categories.filter(el => el.name === value[1]));
+        setCategoryToUpdate(categories.filter(el => el.name === value[1])[0]);
     }
 
     const handleDelete = name => {
-        let id = categories.filter(el => el.name === name[0])[0].id;
+        let id = categories.filter(el => el.name === name[1])[0].id;
         console.log(id)
-        axios.post(API_URL + "/admin/deleteCategory", {id: id, name: name[0]})
+        axios.post(API_URL + "/admin/deleteCategory", {id: id, name: name[1]})
             .then(response => {
                 console.log(response);
                 getCategories();
@@ -68,7 +71,8 @@ const CategoryList = props => {
 
     const flattenData = data => {
         return data.map(el => {
-            return [el.name]
+            let src = el.categoryImage ? `data:image/jpeg;base64,${el.categoryImage}` : `https://dummyimage.com/400x200/ffffff/32750e&text=${el.name}`;
+            return [<img height="70px" width="100px" src={src} />, el.name]
         });
     }
 
@@ -81,13 +85,14 @@ const CategoryList = props => {
     const closeForm = value => {
         let url = '';
         let data = {};
+        console.log(value)
         if(formMode === 'add'){
             url = '/admin/addCategory';
-            data = {name: value};
+            data = {name: value[0], categoryImage: value[1]};
         }
         else if(formMode === 'update'){
             url = '/admin/updateCategory';
-            data = {id: categoryToUpdate.id, name: value};
+            data = {id: categoryToUpdate.id, name: value[0], categoryImage: value[1]};
         }
 
         axios.post(API_URL + url, data)
@@ -101,14 +106,14 @@ const CategoryList = props => {
             })
 
         setAdding(false);
-        setFormValue('');
+        setFormValue([null, '']);
     }
 
     return(
         <>
             <ListTable
                 data={preparedData} 
-                headers={['Nazwa']}
+                headers={["Obrazek", 'Nazwa']}
                 onAdd={handleAdd}
                 isAdding={adding}
                 onEdit={handleUpdate} 
