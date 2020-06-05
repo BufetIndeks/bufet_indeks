@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,7 +35,12 @@ public class StatusService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Nie znaleziono statusu o ID = "+id);
     }
 
-    public List<Status> getListOfStatus(){
-        return statusRepository.findAll();
+    public List<StatusDTO> getListOfStatus(){
+        List<Status> list = statusRepository.findAll();
+        List<StatusDTO> dtoList = new ArrayList<>();
+        for (Status status : list) {
+            dtoList.add(new StatusDTO(status.getId(), status.getStatus()));
+        }
+        return dtoList;
     }
 }

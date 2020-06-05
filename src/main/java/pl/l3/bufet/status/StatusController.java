@@ -18,9 +18,7 @@ public class StatusController {
         this.statusService = statusService;
     }
 
-    @GetMapping("/worker/getStatuses")
-    public List<Status> getOrders(){
-       return statusService.getListOfStatus();
-    }
+    @GetMapping(value = "/worker/getStatuses")
+    public List<StatusDTO> getStatus(){return  statusService.getListOfStatus();}
 
 }
