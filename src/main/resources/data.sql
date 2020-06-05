@@ -624,6 +624,8 @@ INSERT INTO danie_skladnik(danie_id, skladnik_id) VALUES(57,38);
 INSERT INTO danie_skladnik(danie_id, skladnik_id) VALUES(57,39);
 INSERT INTO danie_skladnik(danie_id, skladnik_id) VALUES(60,42);
 INSERT INTO danie_skladnik(danie_id, skladnik_id) VALUES(61,40);
-INSERT INTO status(status_id, status) VALUES (1, "W realizacji");
 
-
+INSERT INTO status(status_id, status) VALUES (1, "Oczekujące");
+INSERT INTO status(status_id, status) VALUES (2, "Realizowane");
+INSERT INTO status(status_id, status) VALUES (3, "Gotowe");
+INSERT INTO status(status_id, status) VALUES (4, "Zakończone");
