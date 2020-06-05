@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 import AuthenticationService from '../service/AuthenticationService';
 import {FormControlLabel, Checkbox, Button, Container, TextField, Grid, Box, Typography, Paper} from '@material-ui/core'
 import axios from 'axios';
 import { API_URL } from '../ApiUrl'
+import GlobalContext from '../context/GlobalContext';
 
 const LoginComponent = props => {
 
@@ -13,6 +14,7 @@ const LoginComponent = props => {
     const [invalid, setInvalid] = useState(false)
 
     const history = useHistory();
+    const context = useContext(GlobalContext);
 
     const handleSubmit = event => {
         event.preventDefault();
@@ -24,10 +26,14 @@ const LoginComponent = props => {
                     axios.get(API_URL + '/takeRole')
                         .then(res => {
                             console.log(res)
-                            if(res.data.authorities !== undefined)
-                                props.setRole(res.data.authorities[0].authority)
-                            else
-                                props.setRole('ROLE_GUEST')
+                            if(res.data.authorities !== undefined){
+                                console.log("Auth Service", res.data.authorities[0].authority, res.data.name)
+                                context.setLogin(res.data.name);
+                                context.setRole(res.data.authorities[0].authority);
+                            }
+                            else{
+                                context.setLogin('ROLE_GUEST');
+                            }
                             history.push('/')
                         })
                         .catch(err => {

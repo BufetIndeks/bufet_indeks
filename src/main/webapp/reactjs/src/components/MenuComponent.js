@@ -8,8 +8,10 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import PersonIcon from '@material-ui/icons/Person'
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket'
 import HomeIcon from '@material-ui/icons/Home'
+import BookmarksIcon from '@material-ui/icons/Bookmarks'
 
 import { Box, Typography, IconButton } from '@material-ui/core';
+import GlobalContext from '../context/GlobalContext';
 
 const useStyles = makeStyles( theme => ({
     buttonlink: {
@@ -30,9 +32,10 @@ const useStyles = makeStyles( theme => ({
     }
 }))
 
-const MenuComponent = ({role}) => {
+const MenuComponent = props => {
 
     const classes = useStyles();
+    const context = useContext(GlobalContext);
 
     return (
             <AppBar position="sticky" style={{background: "green"}}>
@@ -44,14 +47,20 @@ const MenuComponent = ({role}) => {
 
                     <Box flexGrow={1}></Box>
 
-                    {role === "ROLE_TABLE"  && 
-                        <Link to="/cart" className={classes.buttonlink}>
-                            <ShoppingBasketIcon />
-                        </Link>
+                    {context.role === "ROLE_TABLE"  && 
+                        <>
+                            <Link to="/cart" className={classes.buttonlink}>
+                                <ShoppingBasketIcon />
+                            </Link>
+
+                            <Link to="/order" className={classes.buttonlink}>
+                                <BookmarksIcon />
+                            </Link>
+                        </>
                     }
 
-                    <Link to={role !== 'ROLE_GUEST' ? '/logout' : '/login'} className={classes.buttonlink}>
-                        {role !== 'ROLE_GUEST' ? <ExitToAppIcon /> : <PersonIcon /> }
+                    <Link to={context.role !== 'ROLE_GUEST' ? '/logout' : '/login'} className={classes.buttonlink}>
+                        {context.role !== 'ROLE_GUEST' ? <ExitToAppIcon /> : <PersonIcon /> }
                     </Link>
                             
                     

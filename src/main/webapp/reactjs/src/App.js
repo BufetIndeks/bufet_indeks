@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import './App.css';
 import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom';
 
@@ -23,59 +23,40 @@ import About from "./components/About";
 import CardList from './components/CardList'
 import Cart from './components/Cart';
 import Payment from './components/Payment';
+import Redirecting from './components/Redirecting';
 
 import { Container } from '@material-ui/core';
 import ListTemplate from './templates/ListTemplate';
 
-import GlobalState from './context/GlobalState'
+import GlobalState from './context/GlobalState';
+import GlobalContext from './context/GlobalContext';
 
 import axios from 'axios'
 import {API_URL} from './ApiUrl.js'
 import WorkerDashboard from './components/WorkerDashboard';
+import ClientOrders from './components/ClientOrders';
 
 const App = props => {
 
-    const [role, setRole] = useState('ROLE_GUEST')
-
-    const checkRole = () => {
-        axios.get(API_URL + '/takeRole')
-            .then(res => {
-                if(res.data.authorities !== undefined)
-                    setRole(res.data.authorities[0].authority)
-                else{
-                    setRole('ROLE_GUEST');
-                }
-            })
-            .catch(err => {
-                console.error(err)
-            })
-        return role
-    }
-    
-    useEffect( () => {
-        checkRole()
-    }, [role])
-
-    useEffect( () => {
-        checkRole()
-    }, [])
+    const context = useContext(GlobalContext);
 
     return(
         <GlobalState>
             <Router>
-                <MenuComponent role={checkRole()}/>
+                <MenuComponent />
                 <Container component="main" style={{marginTop: "20px", display: "flex", justifyContent: "center", alignItems: "center"}} maxWidth="md">
                     <Switch>
                         
                         <Route exact path="/">
-                            {role === 'ROLE_ADMIN' && <AdminDashboard />}
-                            {role === 'ROLE_TABLE' && <HomeComponent />}
-                            {role === 'ROLE_WORKER' && <WorkerDashboard />}
-                            {checkRole() === 'ROLE_GUEST' && <Redirect to="/login" />}
+                            <Redirecting />
+                            {/* {console.log(context) && context.role === 'ROLE_ADMIN' && <AdminDashboard />}
+                            {context.role === 'ROLE_TABLE' && <HomeComponent />}
+                            {context.role === 'ROLE_WORKER' && <WorkerDashboard />}
+                            {context.role === 'ROLE_GUEST' && <Redirect to="/login" />} */}
                         </Route>
                         
                         <Route exact path="/login" >
-                            <LoginComponent setRole={setRole} />
+                            <LoginComponent />
                         </Route>
                         
                         <Route exact path="/cart" component={Cart} />
@@ -86,27 +67,29 @@ const App = props => {
                             <DishShowTemplate />
                         </Route>
 
-                        <Route role={role} url='/adminLogged' exact path="/logout">
-                            <LogoutComponent setRole={setRole} />
+                        <Route role={'ROLE_ADMIN'} url='/adminLogged' exact path="/logout">
+                            <LogoutComponent />
                         </Route>
-                    
-                        <AuthenticatedRoute role={role} url='/adminLogged' exact path="/allergen" component={AllergensComponent} />
+
+                        <Route role={'ROLE_ADMIN'} url='/tableLogged' exact path="/order" component={ClientOrders} />
+
+                        <AuthenticatedRoute role={'ROLE_ADMIN'} url='/adminLogged' exact path="/allergen" component={AllergensComponent} />
                         
                         <AuthenticatedRoute role={'ROLE_ADMIN'} url='/adminLogged' exact path="/admin/register" component={RegisterComponent} />
                         
                         <AuthenticatedRoute role={'ROLE_ADMIN'} url='/adminLogged' exact path="/admin/dashboard" component={AdminDashboard} />
                         
-                        <AuthenticatedRoute role={role} url='/adminLogged' exact path="/admin/dishes" component={DishList} />
+                        <AuthenticatedRoute role={'ROLE_ADMIN'} url='/adminLogged' exact path="/admin/dishes" component={DishList} />
                         
                         <AuthenticatedRoute role={'ROLE_ADMIN'} url='/adminLogged' exact path="/admin/dishes/:id" component={DishEditTemplate} />
                         
-                        <AuthenticatedRoute exact path="/admin/ingredients" role={role} url='/adminLogged' component={IngredientList} />
+                        <AuthenticatedRoute exact path="/admin/ingredients" role={'ROLE_ADMIN'} url='/adminLogged' component={IngredientList} />
                             {/* <ListTemplate url={'/admin/ingredient'} headers={['Składnik', 'Alergeny']}/> */}
 
-                        <AuthenticatedRoute exact path="/admin/categories" role={role} url='/adminLogged' component={CategoryList} />
+                        <AuthenticatedRoute exact path="/admin/categories" role={'ROLE_ADMIN'} url='/adminLogged' component={CategoryList} />
                             {/* <ListTemplate url={'/category'} headers={['Kategoria']}/> */}
 
-                        <AuthenticatedRoute exact path="/admin/allergens" role={role} url='/adminLogged' component={AllergenList} />
+                        <AuthenticatedRoute exact path="/admin/allergens" role={'ROLE_ADMIN'} url='/adminLogged' component={AllergenList} />
                             {/* <ListTemplate url={'/admin/allergen'} headers={['Alergen']}/> */}
                         
                         <Route exact path="/regulations" component={Regulamin} />

@@ -19,29 +19,7 @@ const Cart = props => {
     }
 
     const payment = () => {
-        let data = [].concat.apply([], context.order.map(el => {
-            let dishes = [];
-            let {quantity, ...newDish} = el
-            for(let i = 0; i < el.quantity; i++)
-                dishes.push(newDish);
-            return dishes;
-        }));
-        console.log(data)
-
-        axios.get(API_URL + '/takeRole')
-            .then(res => {
-                let user = res.data;
-                console.log(user)
-                axios.post(API_URL + '/addOrder', {orderDishesList: data, user: {login: user.name}})
-                    .then(res => {
-                        console.log(res);
-                    })
-                    .catch(err => {
-                        console.error(err.response);
-            })
-            })
-
-        
+        history.push('/cart/pay');
     }
 
     return(
@@ -56,7 +34,7 @@ const Cart = props => {
 
                 <Box display="flex" justifyContent="flex-end">
                     <Typography variant="h5">
-                        {context.order.length > 0 && `Łączna kwota: ${context.order.reduce((total, current) => total + current.price * current.quantity, 0)} PLN`}
+                        {context.order.length > 0 && `Łączna kwota: ${context.order.reduce((total, current) => total + current.price * current.quantity, 0).toFixed(2)} PLN`}
                     </Typography>
                 </Box>
 

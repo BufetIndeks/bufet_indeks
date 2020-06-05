@@ -25,7 +25,7 @@ const DishEditTemplate = props => {
     const [error, setError] = useState('');
 
     const history = useHistory();
-    const pattern = /[\p{L} \s , .]/gu;
+    const pattern = /[\p{L} \s , . 0-9]/gu;
 
     let editMode = false;
     let deleteMode = false;
@@ -76,7 +76,6 @@ const DishEditTemplate = props => {
         const data = {
             "id": id,
             "dishName": name,
-            //"file": image,
             "price": price,
             "description": description,
             "dishDay": dishDay,
@@ -291,8 +290,8 @@ const DishEditTemplate = props => {
                                 <Checkbox 
                                     id="dishDay"
                                     color="primary"
-                                    value={dishDay}
-                                    onChange={(e,checked) => setDishDay(checked)} 
+                                    checked={dishDay}
+                                    onChange={(e) => setDishDay(!dishDay)} 
                                     name="Danie dania" />
                         }/>
                     </Grid>

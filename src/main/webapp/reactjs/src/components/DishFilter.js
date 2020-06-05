@@ -199,6 +199,14 @@ const DishFilter = props => {
             props.setFilters(prev => ({...prev, [event.target.id]: event.target.value}))
     }
 
+    const checkPattern = (value, pattern) => {
+        let viableMatches = String(value).match(pattern)
+        if(viableMatches !== null)
+            return viableMatches.join("")
+        else
+            return ""
+    }
+
     const modal = (
         <Modal open={open} onClose={() => setOpen(false)}>
             <Container maxWidth="xs" >
@@ -217,7 +225,7 @@ const DishFilter = props => {
                                     id="priceMin"
                                     fullWidth
                                     value={props.filters.priceMin}
-                                    onChange={e => handleInput(e)}
+                                    onChange={e => handleInput(e, checkPattern(e.target.value.replace(/,/,'.'), /[0-9 , .]/gu), 'priceMin')}
                                     inputProps={{
                                         maxLength: 10
                                     }}
